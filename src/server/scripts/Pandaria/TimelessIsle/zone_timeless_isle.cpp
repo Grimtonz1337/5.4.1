@@ -18,6 +18,8 @@
 #include "GameObjectAI.h"
 #include "Unit.h"
 #include "UnitAI.h"
+#include "ScriptedGossip.h"
+#include "GossipDef.h"
 #include "timeless_isle.h"
 
 #define NIUZAO 					"Though blood floods the ground, the mountain is unmoved."
@@ -57,7 +59,6 @@ class go_time_lost_shrine_ti : public GameObjectScript
             go_time_lost_shrine_tiAI(GameObject* go) : GameObjectAI(go) {	}
 
             EventMap _events;
-            bool used;
 
             bool OnGossipHello(Player* player, GameObject* go) OVERRIDE
         	{
@@ -144,6 +145,7 @@ class go_time_lost_shrine_ti : public GameObjectScript
 
         private:
         	uint8 Choice;
+        	bool used;
         };
 
         GameObjectAI* GetAI(GameObject* go) const OVERRIDE
@@ -152,8 +154,112 @@ class go_time_lost_shrine_ti : public GameObjectScript
         }
 };
 
+class go_gleaming_crane_statue_ti : public GameObjectScript
+{
+    public:
+        go_gleaming_crane_statue_ti() : GameObjectScript("go_gleaming_crane_statue_ti") { }
+
+        struct go_gleaming_crane_statue_tiAI : public GameObjectAI
+        {
+            go_gleaming_crane_statue_tiAI(GameObject* go) : GameObjectAI(go) {	}
+
+            uint64 playerGUID;
+            uint32 WingsTimer;
+
+            bool OnGossipHello(Player* player, GameObject* go) OVERRIDE
+        	{
+            	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Touch the statue.", GOSSIP_SENDER_MAIN, 1);
+
+            	player->SEND_GOSSIP_MENU(player->GetGossipTextId(go), go->GetGUID());
+
+            	return true;
+        	}
+
+        	bool OnGossipSelect(Player* player, GameObject* go, uint32 /*sender*/, uint32 action) OVERRIDE
+        	{
+        		player->PlayerTalkClass->ClearMenus();
+        		player->CLOSE_GOSSIP_MENU();
+
+        		switch (action)
+        		{
+        			case 1:
+        				player->CastSpell(player, 144387, true); // knockback in the air
+        				playerGUID = player->GetGUID();
+        				used = true;
+        				WingsTimer = 6000;
+        				break;
+        			default:
+        				break;
+        		}
+
+        		return true;
+        	}
+
+        	void UpdateAI(uint32 diff) OVERRIDE
+            {
+                if (used == false)
+                	return;
+
+                if (WingsTimer <= diff)
+                {
+                	if (Player* player = ObjectAccessor::GetPlayer(*go, playerGUID))
+                	{
+                		player->CastSpell(player, 144385, true);
+                		used = false;
+                	}
+                }
+
+                else WingsTimer -= diff;
+            }
+
+        private:
+        	bool used;
+       	};
+
+       	GameObjectAI* GetAI(GameObject* go) const OVERRIDE
+        {
+            return new go_gleaming_crane_statue_tiAI(go);
+        }
+};
+
+class spell_timeless_isle_crane_wings : public SpellScriptLoader
+{
+    public:
+        spell_timeless_isle_crane_wings() : SpellScriptLoader("spell_timeless_isle_crane_wings") { }
+
+        class spell_timeless_isle_crane_wings_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_timeless_isle_crane_wings_AuraScript);
+
+            void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                 if (Unit* caster = GetCaster())
+                 	caster->CastSpell(caster, 144391, true);
+            }
+
+            void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                if (Unit* caster = GetCaster())
+                	caster->CastSpell(caster, 148162, true);
+            }
+
+            void Register() OVERRIDE
+            {
+            	OnEffectApply += AuraEffectApplyFn(spell_timeless_isle_crane_wings_AuraScript::OnApply, EFFECT_0, SPELL_AURA_FEATHER_FALL, AURA_EFFECT_HANDLE_REAL);
+                OnEffectRemove += AuraEffectRemoveFn(spell_timeless_isle_crane_wings_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+            }
+        };
+
+        AuraScript* GetAuraScript() const OVERRIDE
+        {
+            return new spell_timeless_isle_crane_wings_AuraScript();
+        }
+};
+
 void AddSC_zone_timeless_isle()
 {
 	new player_on_enter_ti();
     new go_time_lost_shrine_ti();
+    new go_gleaming_crane_statue_ti();
+    new spell_timeless_isle_crane_wings();
 }

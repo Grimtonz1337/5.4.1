@@ -22,10 +22,10 @@
 #include "GossipDef.h"
 #include "timeless_isle.h"
 
-#define NIUZAO 					"Though blood floods the ground, the mountain is unmoved."
-#define YULON 					"The truth shines brightest in clouded times."
-#define CHI_JI 					"Hope's fire grows when the flames come together."
-#define XUEN 					"Strength and power are as different as sun and moon."
+#define NIUZAO 					"Though blood floods the ground, the mountain is unmoved. - Niuzao"
+#define YULON 					"The truth shines brightest in clouded times. - Yu'lon"
+#define CHI_JI 					"Hope's fire grows when the flames come together. - Chi-Ji"
+#define XUEN 					"Strength and power are as different as sun and moon. - Xuen"
 #define CORRUPTED				"The shrine was corrupted by Ordos!"
 
 class player_on_enter_ti : public PlayerScript

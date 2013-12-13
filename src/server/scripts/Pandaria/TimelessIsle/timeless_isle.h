@@ -74,6 +74,14 @@ enum SharedSpells
 	SPELL_DEFENSIVE_LEAP				= 147650,
 	SPELL_POUNCE_LEAP					= 147649,
 	SPELL_POUNCE_STUN					= 147651,
+
+	SPELL_GEYSER						= 147572,
+	SPELL_SHELL_SPIN					= 147571,
+	SPELL_SNAPPING_BITE					= 147569,
+
+	SPELL_IRON_FUR						= 147368,
+	SPELL_OX_CHARGE						= 147386,
+	SPELL_OX_CHARGE_CAST				= 147385, // trigger for above spell :P
 };
 
 // Scripts information
@@ -145,4 +153,20 @@ enum WatcherOsu
 enum Tsavoka
 {
 	SPELL_GREATER_SWIPE					= 147653
+};
+
+enum SpiritOfJadefire
+{
+	SPELL_JADEFIRE_BOLT					= 147454,
+	SPELL_JADEFLAME_STRIKE				= 147456,
+};
+
+enum MonstrousSpineclaw
+{
+	SPELL_CLAW_FLURRY					= 147560;
+};
+
+enum IronFurrSteelhorn
+{
+	SPELL_HEADBUTT						= 147384,
 };

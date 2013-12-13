@@ -60,6 +60,9 @@ public:
         	if (!InCombat)
         		return;
 
+        	if (me->isDead())
+        		return;
+
         	if (MoltenInfernoTimer <= diff)
         	{
         		MoltenInfernoChoice = urand(1, 4);
@@ -136,6 +139,9 @@ public:
         	if (!InCombat)
         		return;
 
+        	if (me->isDead())
+        		return;
+
         	if (LightningBreathTimer <= diff)
         	{
         		DoCastAOE(SPELL_LIGHTNING_BREATH, false);
@@ -205,6 +211,9 @@ public:
         	if (!InCombat)
         		return;
 
+        	if (me->isDead())
+        		return;
+
         	if (HugeFangTimer <= diff)
         	{
         		DoCastVictim(SPELL_HUGE_FANG, false);
@@ -257,6 +266,9 @@ public:
         		return;
 
         	if (!InCombat)
+        		return;
+
+        	if (me->isDead())
         		return;
 
         	if (GustofWindTimer <= diff)
@@ -330,6 +342,9 @@ public:
         		return;
 
         	if (!InCombat)
+        		return;
+
+        	if (me->isDead())
         		return;
 
         	if (BoulderTimer <= diff)
@@ -415,6 +430,9 @@ public:
         		return;
 
         	if (!InCombat)
+        		return;
+
+        	if (me->isDead())
         		return;
 
         	if (FallingFlamesTimer <= diff)
@@ -505,6 +523,9 @@ public:
         	if (!InCombat)
         		return;
 
+        	if (me->isDead())
+        		return;
+
         	if (GreaterSwipeTimer <= diff)
         	{
         		DoCastAOE(SPELL_GREATER_SWIPE, false);
@@ -533,7 +554,13 @@ public:
         		LeapDone -= diff;
 
         	if (StunTimer <= diff)
-        		DoCastVictim(SPELL_POUNCE_STUN, true);
+        	{
+        		if (me->IsWithinMeleeRange(me->GetVictim()))
+        			DoCastVictim(SPELL_POUNCE_STUN, true);
+
+        		else if (!me->IsWithinMeleeRange(me->GetVictim()))
+        			return;
+        	}
 
         	else
         		StunTimer -= diff;
@@ -551,6 +578,321 @@ public:
     }
 };
 
+class npc_spirit_of_jadefire : public CreatureScript
+{
+public:
+    npc_spirit_of_jadefire() : CreatureScript("npc_spirit_of_jadefire") { }
+
+    struct npc_spirit_of_jadefireAI : public ScriptedAI
+    {
+        npc_spirit_of_jadefireAI(Creature* creature) : ScriptedAI(creature) {	}
+
+        uint32 JadefireBoltTimer;
+        uint32 JadeflameStrikeTimer;
+
+        void Reset() OVERRIDE
+        {
+        	JadefireBoltTimer = 3500;
+        	JadeflameStrikeTimer = 8000;
+
+        	InCombat = false;
+
+        	me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/)
+        {
+        	InCombat = true;
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+        	if (!UpdateVictim())
+        		return;
+
+        	if (!InCombat)
+        		return;
+
+        	if (me->isDead())
+        		return;
+
+        	if (JadefireBoltTimer <= diff)
+        	{
+        		DoCastVictim(SPELL_JADEFIRE_BOLT, false);
+
+        		JadefireBoltTimer = urand(5000, 6000);
+        	}
+
+        	else
+        		JadefireBoltTimer -= diff;
+
+        	if (JadeflameStrikeTimer <= diff)
+        	{
+        		DoCastAOE(SPELL_JADEFLAME_STRIKE, false);
+
+        		JadeflameStrikeTimer = urand(10000, 15000);
+        	}
+
+        	else
+        		JadeflameStrikeTimer -= diff;
+
+        	DoMeleeAttackIfReady();
+        }
+
+    private:
+    	bool InCombat;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_spirit_of_jadefireAI(creature);
+    }
+};
+
+class npc_monstrous_spineclaw : public CreatureScript
+{
+public:
+    npc_monstrous_spineclaw() : CreatureScript("npc_monstrous_spineclaw") { }
+
+    struct npc_monstrous_spineclawAI : public ScriptedAI
+    {
+        npc_monstrous_spineclawAI(Creature* creature) : ScriptedAI(creature) {	}
+
+        uint32 ClawFlurryTimer;
+
+        void Reset() OVERRIDE
+        {
+        	ClawFlurryTimer = urand(6000, 8000);
+
+        	InCombat = false;
+
+        	me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/) OVERRIDE
+        {
+        	InCombat = true;
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+        	if (!UpdateVictim())
+        		return;
+
+        	if (!InCombat)
+        		return;
+
+        	if (me->isDead())
+        		return;
+
+        	if (ClawFlurryTimer <= diff)
+        	{
+        		DoCastAOE(SPELL_CLAW_FLURRY, false);
+
+        		ClawFlurryTimer = urand(7000, 8000);
+        	}
+
+        	else
+        		ClawFlurryTimer -= diff;
+
+        	DoMeleeAttackIfReady();
+        }
+
+    private:
+    	bool InCombat;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_monstrous_spineclawAI(creature);
+    }
+};
+
+class npc_great_turtle_furyshell : public CreatureScript
+{
+public:
+    npc_great_turtle_furyshell() : CreatureScript("npc_great_turtle_furyshell") { }
+
+    struct npc_great_turtle_furyshellAI : public ScriptedAI
+    {
+        npc_great_turtle_furyshellAI(Creature* creature) : ScriptedAI(creature) {	}
+
+        uint32 GeyserTimer;
+        uint32 ShellSpinTimer;
+        uint32 SnappingBiteTimer;
+
+        void Reset() OVERRIDE
+        {
+        	GeyserTimer = urand(4000, 6000);
+        	ShellSpinTimer = urand(5000, 7000);
+        	SnappingBiteTimer = 12000;
+
+        	InCombat = false;
+
+        	me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/) OVERRIDE
+        {
+        	InCombat = true;
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+        	if (!UpdateVictim())
+        		return;
+
+        	if (!InCombat)
+        		return;
+
+        	if (me->isDead())
+        		return;
+
+        	if (GeyserTimer <= diff)
+        	{
+        		DoCastVictim(SPELL_GEYSER, false);
+
+        		GeyserTimer = urand(10000, 14000);
+        	}
+
+        	else
+        		GeyserTimer -= diff;
+
+        	if (ShellSpinTimer <= diff)
+        	{
+        		DoCastAOE(SPELL_SHELL_SPIN, false);
+
+        		ShellSpinTimer = urand(11000, 15000);
+        	}
+
+        	else
+        		ShellSpinTimer -= diff;
+
+        	if (SnappingBiteTimer <= diff)
+        	{
+        		DoCastVictim(SPELL_SNAPPING_BITE, false);
+
+        		SnappingBiteTimer = urand(10000, 18000);
+        	}
+
+        	else
+        		SnappingBiteTimer -= diff;
+
+        	DoMeleeAttackIfReady();
+        }
+
+    private:
+    	bool InCombat;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_great_turtle_furyshellAI(creature);
+    }
+};
+
+class npc_ironfur_steelhorn : public CreatureScript
+{
+public:
+    npc_ironfur_steelhorn() : CreatureScript("npc_ironfur_steelhorn") { }
+
+    struct npc_ironfur_steelhornAI : public ScriptedAI
+    {
+        npc_ironfur_steelhornAI(Creature* creature) : ScriptedAI(creature) {	}
+
+        uint32 HeadbuttTimer;
+        uint32 IronFurTimer;
+        uint32 OxChargeTimer;
+        uint32 OxChargeStunTimer;
+
+        void Reset() OVERRIDE
+        {
+        	HeadbuttTimer = 6000;
+        	IronFurTimer = urand(8000, 10000);
+        	OxChargeTimer = urand(7500, 12500);
+
+        	InCombat = false;
+        	Charged = false;
+
+        	me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/) OVERRIDE
+        {
+        	InCombat = true;
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+        	if (!UpdateVictim())
+        		return;
+
+        	if (!InCombat)
+        		return;
+
+        	if (me->isDead())
+        		return;
+
+        	if (HeadbuttTimer <= diff)
+        	{
+        		DoCastAOE(SPELL_HEADBUTT);
+
+        		HeadbuttTimer = urand(8000, 12000);
+        	}
+
+        	else
+        		HeadbuttTimer -= diff;
+
+        	if (IronFurTimer <= diff)
+        	{
+        		DoCast(me, SPELL_IRON_FUR);
+
+        		IronFurTimer = urand(17000, 22000);
+        	}
+
+        	else
+        		IronFurTimer -= diff;
+
+        	if (OxChargeTimer <= diff)
+        	{
+        		DoCastVictim(SPELL_OX_CHARGE, false);
+
+        		OxChargeTimer = urand(12000, 16500);
+        		OxChargeStunTimer = 3000;
+        	}
+
+        	else
+        		OxChargeTimer -= diff;
+
+        	if (OxChargeStunTimer <= diff)
+        	{
+        		if (!Charged)
+        			Charged = true;
+
+        		if (me->IsWithinMeleeRange(me->GetVictim()))
+        			DoCastVictim(SPELL_OX_CHARGE_STUN);
+
+        		else if (!me->IsWithinMeleeRange(me->GetVictim()))
+        			return;
+        	}
+
+        	else
+        		OxChargeStunTimer -= diff;
+
+        	DoMeleeAttackIfReady();
+        }
+
+    private:
+    	bool InCombat;
+    	bool Charged;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_ironfur_steelhornAI(creature);
+    }
+};
+
 void AddSC_timeless_isle()
 {
 	new npc_cinderfall();
@@ -560,4 +902,8 @@ void AddSC_timeless_isle()
 	new npc_golganarr();
 	new npc_watcher_osu();
 	new npc_tsavoka();
+	new npc_spirit_of_jadefire();
+	new npc_monstrous_spineclaw();
+	new npc_great_turtle_furyshell();
+	new npc_ironfur_steelhorn();
 }

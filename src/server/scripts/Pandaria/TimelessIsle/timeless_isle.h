@@ -163,10 +163,10 @@ enum SpiritOfJadefire
 
 enum MonstrousSpineclaw
 {
-	SPELL_CLAW_FLURRY					= 147560;
+	SPELL_CLAW_FLURRY					= 147560,
 };
 
 enum IronFurrSteelhorn
 {
-	SPELL_HEADBUTT						= 147384,
+	SPELL_HEADBUTT						= 147384
 };

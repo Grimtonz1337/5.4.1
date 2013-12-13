@@ -855,7 +855,7 @@ public:
 
         	if (OxChargeTimer <= diff)
         	{
-        		DoCastVictim(SPELL_OX_CHARGE, false);
+        		DoCastVictim(SPELL_OX_CHARGE_CAST, false);
 
         		OxChargeTimer = urand(12000, 16500);
         		OxChargeStunTimer = 3000;
@@ -870,7 +870,7 @@ public:
         			Charged = true;
 
         		if (me->IsWithinMeleeRange(me->GetVictim()))
-        			DoCastVictim(SPELL_OX_CHARGE_STUN);
+        			DoCastVictim(SPELL_OX_CHARGE);
 
         		else if (!me->IsWithinMeleeRange(me->GetVictim()))
         			return;

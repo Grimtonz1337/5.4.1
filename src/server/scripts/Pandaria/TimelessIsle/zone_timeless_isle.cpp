@@ -33,9 +33,9 @@ class player_on_enter_ti : public PlayerScript
 	public:
 		player_on_enter_ti() : PlayerScript("player_on_enter_ti") {	}
 
-		void OnUpdateZone(Player* player, uint32 newZone, uint32 newArea)
+		void OnUpdateZone(Player* player, uint32 Zone, uint32 newArea)
 		{
-			if (newZone == 6757)
+			if (Zone == 6757)
 			{
 				if (player->HasAura(145389))
 					return;
@@ -44,7 +44,7 @@ class player_on_enter_ti : public PlayerScript
 					player->CastSpell(player, 145389, true);
 			}
 
-			else if (!newZone == 6757)
+			else
 				player->RemoveAurasDueToSpell(145389);
 		}
 };

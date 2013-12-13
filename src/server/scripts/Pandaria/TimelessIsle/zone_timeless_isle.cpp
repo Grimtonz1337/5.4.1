@@ -136,6 +136,7 @@ class go_time_lost_shrine_ti : public GameObjectScript
                     {
                         case EVENT_BACK_TO_USE:
                             go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND);
+                            used = false; // this will stop/prevent it from updating it
                             break;
                         default:
                         	break;

@@ -82,6 +82,10 @@ enum SharedSpells
 	SPELL_IRON_FUR						= 147368,
 	SPELL_OX_CHARGE						= 147386,
 	SPELL_OX_CHARGE_CAST				= 147385, // trigger for above spell :P
+
+	SPELL_BLAZING_BLOW					= 148003,
+	SPELL_FIERY_CHARGE					= 147704,
+	SPELL_CONJURE_ETERNAL_KILN			= 148004,
 };
 
 // Scripts information
@@ -168,5 +172,10 @@ enum MonstrousSpineclaw
 
 enum IronFurrSteelhorn
 {
-	SPELL_HEADBUTT						= 147384
+	SPELL_HEADBUTT						= 147384,
+};
+
+enum Kilnfire
+{
+	SPELL_KILNFIRE						= 148005,
 };

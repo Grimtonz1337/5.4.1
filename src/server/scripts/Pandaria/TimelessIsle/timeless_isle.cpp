@@ -559,7 +559,7 @@ public:
         			DoCastVictim(SPELL_POUNCE_STUN, true);
 
         		else if (!me->IsWithinMeleeRange(me->GetVictim()))
-        			return;
+        			continue; // continue with the events
         	}
 
         	else
@@ -873,7 +873,7 @@ public:
         			DoCastVictim(SPELL_OX_CHARGE);
 
         		else if (!me->IsWithinMeleeRange(me->GetVictim()))
-        			return;
+        			continue;
         	}
 
         	else
@@ -893,6 +893,106 @@ public:
     }
 };
 
+class npc_flintlord_gairan : public CreatureScript
+{
+public:
+    npc_flintlord_gairan() : CreatureScript("npc_flintlord_gairan") { }
+
+    struct npc_flintlord_gairanAI : public ScriptedAI
+    {
+        npc_flintlord_gairanAI(Creature* creature) : ScriptedAI(creature) {	}
+
+        uint32 BlazingBlowTimer;
+        uint32 ConjureEternalKilnTimer;
+        uint32 FieryChargeTimer; // It can be casted from 1 to infinite seconds. Once you go out of melee range, he immediately casts it :P
+
+        void Reset() OVERRIDE
+        {
+        	BlazingBlowTimer = urand(5000, 7000);
+        	ConjureEternalKilnTimer = urand(10000, 12000);
+        	FieryChargeTimer = 5000;
+
+        	InCombat = false;
+
+        	me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/) OVERRIDE
+        {
+        	InCombat = true;
+        }
+
+        void JustSummoned(Unit* summon) OVERRIDE
+        {
+        	if (summon->GetEntry() == 73528)
+        	{
+        		summon->SetReactState(REACT_PASSIVE);
+        		summon->AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
+        		summon->AI()->DoCast(me, SPELL_KILNFIRE);
+        	}
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+        	if (!UpdateVictim())
+        		return;
+
+        	if (!InCombat)
+        		return;
+
+        	if (me->isDead())
+        		return;
+
+        	if (BlazingBlowTimer <= diff)
+        	{
+        		DoCastAOE(SPELL_BLAZING_BLOW, false);
+
+        		BlazingBlowTimer = urand(4000, 6500);
+        	}
+
+        	else
+        		BlazingBlowTimer -= diff;
+
+        	if (ConjureEternalKilnTimer <= diff)
+        	{
+        		DoCast(me, SPELL_CONJURE_ETERNAL_KILN);
+
+        		ConjureEternalKilnTimer = urand(20000, 35000);
+        	}
+
+        	else
+        		ConjureEternalKilnTimer -= diff;
+
+        	if (FieryChargeTimer <= diff)
+        	{
+        		if (!me->GetVictim()) // make sure we have a tank/victim
+        			return;
+
+        		if (me->GetDistance(me->GetVictim() < 20.0f)
+        			return;
+
+        		if (me->GetDistance(me->GetVictim() > 60.0f))
+        			return;
+
+        		else if (me->GetDistance(me->GetVictim() >= 20.0f))
+        			DoCastVictim(SPELL_FIERY_CHARGE, false);
+
+        		FieryChargeTimer = urand(3000, 6000);
+        	}
+
+        	DoMeleeAttackIfReady();
+        }
+
+    private:
+    	bool InCombat;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+    	return new npc_flintlord_gairanAI(creature);
+    }
+};
+
 void AddSC_timeless_isle()
 {
 	new npc_cinderfall();
@@ -906,4 +1006,5 @@ void AddSC_timeless_isle()
 	new npc_monstrous_spineclaw();
 	new npc_great_turtle_furyshell();
 	new npc_ironfur_steelhorn();
+	new npc_flintlord_gairan();
 }

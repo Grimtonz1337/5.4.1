@@ -18,7 +18,7 @@
 *****************************************************************************/
 #if defined(_WIN32)
 
-#undef SAFE_MUTEX            /* Avoid safe_mutex redefinitions */
+#undef SAFE_MUTEX			/* Avoid safe_mutex redefinitions */
 #include "mysys_priv.h"
 #include <m_string.h>
 #include <process.h>
@@ -327,8 +327,8 @@ int pthread_cond_wait(pthread_cond_t *cond, pthread_mutex_t *mutex)
 
 int pthread_attr_init(pthread_attr_t *connect_att)
 {
-  connect_att->dwStackSize    = 0;
-  connect_att->dwCreatingFlag    = 0;
+  connect_att->dwStackSize	= 0;
+  connect_att->dwCreatingFlag	= 0;
   return 0;
 }
 
@@ -350,7 +350,7 @@ int pthread_attr_destroy(pthread_attr_t *connect_att)
 
 struct tm *localtime_r(const time_t *timep,struct tm *tmp)
 {
-  if (*timep == (time_t) -1)            /* This will crash win32 */
+  if (*timep == (time_t) -1)			/* This will crash win32 */
   {
     bzero(tmp,sizeof(*tmp));
   }

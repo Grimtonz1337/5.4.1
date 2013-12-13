@@ -16,11 +16,11 @@
 /*
    Copyright (C) 2003  by Sathit Jittanupat
           <jsat66@hotmail.com,jsat66@yahoo.com>
-    * solving bug crash with long text field string
-    * sorting with different number of space or sign char. within string
+	* solving bug crash with long text field string
+	* sorting with different number of space or sign char. within string
 
    Copyright (C) 2001  by Korakot Chaovavanich <korakot@iname.com> and
-              Apisilp Trunganont <apisilp@pantip.inet.co.th>
+			  Apisilp Trunganont <apisilp@pantip.inet.co.th>
    Copyright (C) 1998, 1999 by Pruet Boonma <pruet@eng.cmu.ac.th>
    Copyright (C) 1998  by Theppitak Karoonboonyanan <thep@links.nectec.or.th>
    Copyright (C) 1989, 1991 by Samphan Raruenrom <samphan@thai.com>
@@ -98,20 +98,20 @@ static int t_ctype[][TOT_LEVELS] = {
     /*0x1F*/ { IGNORE, IGNORE, IGNORE, IGNORE, X },
     /*0x20*/ { IGNORE, IGNORE, L3_SPACE, IGNORE, M},
     /*0x21*/ { IGNORE, IGNORE, L3_EXCLAMATION, IGNORE, M    },
-    /*0x22*/ { IGNORE, IGNORE, L3_QUOTATION, IGNORE, M        },
-    /*0x23*/ { IGNORE, IGNORE, L3_NUMBER, IGNORE, M        },
-    /*0x24*/ { IGNORE, IGNORE, L3_DOLLAR, IGNORE, M        },
-    /*0x25*/ { IGNORE, IGNORE, L3_PERCENT, IGNORE, M        },
-    /*0x26*/ { IGNORE, IGNORE, L3_AMPERSAND, IGNORE, M        },
+    /*0x22*/ { IGNORE, IGNORE, L3_QUOTATION, IGNORE, M	    },
+    /*0x23*/ { IGNORE, IGNORE, L3_NUMBER, IGNORE, M	    },
+    /*0x24*/ { IGNORE, IGNORE, L3_DOLLAR, IGNORE, M	    },
+    /*0x25*/ { IGNORE, IGNORE, L3_PERCENT, IGNORE, M	    },
+    /*0x26*/ { IGNORE, IGNORE, L3_AMPERSAND, IGNORE, M	    },
     /*0x27*/ { IGNORE, IGNORE, L3_APOSTROPHE, IGNORE, M     },
     /*0x28*/ { IGNORE, IGNORE, L3_L_PARANTHESIS, IGNORE, M  },
     /*0x29*/ { IGNORE, IGNORE, L3_R_PARENTHESIS, IGNORE, M  },
-    /*0x2A*/ { IGNORE, IGNORE, L3_ASTERISK, IGNORE, M        },
-    /*0x2B*/ { IGNORE, IGNORE, L3_PLUS, IGNORE, M        },
-    /*0x2C*/ { IGNORE, IGNORE, L3_COMMA, IGNORE, M        },
-    /*0x2D*/ { IGNORE, IGNORE, L3_HYPHEN, IGNORE, M        },
-    /*0x2E*/ { IGNORE, IGNORE, L3_FULL_STOP, IGNORE, M        },
-    /*0x2F*/ { IGNORE, IGNORE, L3_SOLIDUS, IGNORE, M        },
+    /*0x2A*/ { IGNORE, IGNORE, L3_ASTERISK, IGNORE, M	    },
+    /*0x2B*/ { IGNORE, IGNORE, L3_PLUS, IGNORE, M	    },
+    /*0x2C*/ { IGNORE, IGNORE, L3_COMMA, IGNORE, M	    },
+    /*0x2D*/ { IGNORE, IGNORE, L3_HYPHEN, IGNORE, M	    },
+    /*0x2E*/ { IGNORE, IGNORE, L3_FULL_STOP, IGNORE, M	    },
+    /*0x2F*/ { IGNORE, IGNORE, L3_SOLIDUS, IGNORE, M	    },
     /*0x30*/ { L1_08, L2_BLANK, L3_BLANK, L4_BLANK, M  },
     /*0x31*/ { L1_18, L2_BLANK, L3_BLANK, L4_BLANK, M  },
     /*0x32*/ { L1_28, L2_BLANK, L3_BLANK, L4_BLANK, M  },
@@ -122,13 +122,13 @@ static int t_ctype[][TOT_LEVELS] = {
     /*0x37*/ { L1_78, L2_BLANK, L3_BLANK, L4_BLANK, M  },
     /*0x38*/ { L1_88, L2_BLANK, L3_BLANK, L4_BLANK, M  },
     /*0x39*/ { L1_98, L2_BLANK, L3_BLANK, L4_BLANK, M  },
-    /*0x3A*/ { IGNORE, IGNORE, L3_COLON, IGNORE, M        },
-    /*0x3B*/ { IGNORE, IGNORE, L3_SEMICOLON, IGNORE, M        },
-    /*0x3C*/ { IGNORE, IGNORE, L3_LESS_THAN, IGNORE, M        },
-    /*0x3D*/ { IGNORE, IGNORE, L3_EQUAL, IGNORE, M        },
+    /*0x3A*/ { IGNORE, IGNORE, L3_COLON, IGNORE, M	    },
+    /*0x3B*/ { IGNORE, IGNORE, L3_SEMICOLON, IGNORE, M	    },
+    /*0x3C*/ { IGNORE, IGNORE, L3_LESS_THAN, IGNORE, M	    },
+    /*0x3D*/ { IGNORE, IGNORE, L3_EQUAL, IGNORE, M	    },
     /*0x3E*/ { IGNORE, IGNORE, L3_GREATER_THAN, IGNORE, M   },
-    /*0x3F*/ { IGNORE, IGNORE, L3_QUESTION, IGNORE, M        },
-    /*0x40*/ { IGNORE, IGNORE, L3_AT, IGNORE, M            },
+    /*0x3F*/ { IGNORE, IGNORE, L3_QUESTION, IGNORE, M	    },
+    /*0x40*/ { IGNORE, IGNORE, L3_AT, IGNORE, M		    },
     /*0x41*/ { L1_A8, L2_BLANK, L3_BLANK, L4_CAP, M  },
     /*0x42*/ { L1_B8, L2_BLANK, L3_BLANK, L4_CAP, M  },
     /*0x43*/ { L1_C8, L2_BLANK, L3_BLANK, L4_CAP, M  },
@@ -155,12 +155,12 @@ static int t_ctype[][TOT_LEVELS] = {
     /*0x58*/ { L1_X8, L2_BLANK, L3_BLANK, L4_CAP, M  },
     /*0x59*/ { L1_Y8, L2_BLANK, L3_BLANK, L4_CAP, M  },
     /*0x5A*/ { L1_Z8, L2_BLANK, L3_BLANK, L4_CAP, M  },
-    /*0x5B*/ { IGNORE, IGNORE, L3_L_BRACKET, IGNORE, M        },
+    /*0x5B*/ { IGNORE, IGNORE, L3_L_BRACKET, IGNORE, M	    },
     /*0x5C*/ { IGNORE, IGNORE, L3_BK_SOLIDUS, IGNORE, M     },
-    /*0x5D*/ { IGNORE, IGNORE, L3_R_BRACKET, IGNORE, M        },
+    /*0x5D*/ { IGNORE, IGNORE, L3_R_BRACKET, IGNORE, M	    },
     /*0x5E*/ { IGNORE, IGNORE, L3_CIRCUMFLEX, IGNORE, M     },
-    /*0x5F*/ { IGNORE, IGNORE, L3_LOW_LINE, IGNORE, M        },
-    /*0x60*/ { IGNORE, IGNORE, L3_GRAVE, IGNORE, M        },
+    /*0x5F*/ { IGNORE, IGNORE, L3_LOW_LINE, IGNORE, M	    },
+    /*0x60*/ { IGNORE, IGNORE, L3_GRAVE, IGNORE, M	    },
     /*0x61*/ { L1_A8, L2_BLANK, L3_BLANK, L4_MIN, M  },
     /*0x62*/ { L1_B8, L2_BLANK, L3_BLANK, L4_MIN, M  },
     /*0x63*/ { L1_C8, L2_BLANK, L3_BLANK, L4_MIN, M  },
@@ -187,10 +187,10 @@ static int t_ctype[][TOT_LEVELS] = {
     /*0x78*/ { L1_X8, L2_BLANK, L3_BLANK, L4_MIN, M  },
     /*0x79*/ { L1_Y8, L2_BLANK, L3_BLANK, L4_MIN, M  },
     /*0x7A*/ { L1_Z8, L2_BLANK, L3_BLANK, L4_MIN, M  },
-    /*0x7B*/ { IGNORE, IGNORE, L3_L_BRACE, IGNORE, M        },
-    /*0x7C*/ { IGNORE, IGNORE, L3_V_LINE, IGNORE, M        },
-    /*0x7D*/ { IGNORE, IGNORE, L3_R_BRACE, IGNORE, M        },
-    /*0x7E*/ { IGNORE, IGNORE, L3_TILDE, IGNORE, M        },
+    /*0x7B*/ { IGNORE, IGNORE, L3_L_BRACE, IGNORE, M	    },
+    /*0x7C*/ { IGNORE, IGNORE, L3_V_LINE, IGNORE, M	    },
+    /*0x7D*/ { IGNORE, IGNORE, L3_R_BRACE, IGNORE, M	    },
+    /*0x7E*/ { IGNORE, IGNORE, L3_TILDE, IGNORE, M	    },
     /*0x7F*/ { IGNORE, IGNORE, IGNORE, IGNORE, X },
     /*0x80*/ { IGNORE, IGNORE, IGNORE, IGNORE, X },
     /*0x81*/ { IGNORE, IGNORE, IGNORE, IGNORE, X },
@@ -224,7 +224,7 @@ static int t_ctype[][TOT_LEVELS] = {
     /*0x9D*/ { IGNORE, IGNORE, IGNORE, IGNORE, X },
     /*0x9E*/ { IGNORE, IGNORE, IGNORE, IGNORE, X },
     /*0x9F*/ { IGNORE, IGNORE, IGNORE, IGNORE, X },
-    /*0xA0*/ { IGNORE, IGNORE, L3_NB_SACE, IGNORE, X        },
+    /*0xA0*/ { IGNORE, IGNORE, L3_NB_SACE, IGNORE, X	    },
     /*0xA1*/ { L1_KO_KAI, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xA2*/ { L1_KHO_KHAI, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xA3*/ { L1_KHO_KHUAT, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
@@ -236,11 +236,11 @@ static int t_ctype[][TOT_LEVELS] = {
     /*0xA9*/ { L1_CHO_CHING, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xAA*/ { L1_CHO_CHANG, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xAB*/ { L1_SO_SO, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
-    /*0xAC*/ { L1_CHO_CHOE,    L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
+    /*0xAC*/ { L1_CHO_CHOE,	L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xAD*/ { L1_YO_YING, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
-    /*0xAE*/ { L1_DO_CHADA,    L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
-    /*0xAF*/ { L1_TO_PATAK,    L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
-    /*0xB0*/ { L1_THO_THAN,    L2_BLANK,L3_BLANK, L4_BLANK, M | _consnt},
+    /*0xAE*/ { L1_DO_CHADA,	L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
+    /*0xAF*/ { L1_TO_PATAK,	L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
+    /*0xB0*/ { L1_THO_THAN,	L2_BLANK,L3_BLANK, L4_BLANK, M | _consnt},
     /*0xB1*/ { L1_THO_NANGMONTHO, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xB2*/ { L1_THO_PHUTHAO, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xB3*/ { L1_NO_NEN, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
@@ -268,7 +268,7 @@ static int t_ctype[][TOT_LEVELS] = {
     /*0xC9*/ { L1_SO_RUSI, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xCA*/ { L1_SO_SUA, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xCB*/ { L1_HO_HIP, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
-    /*0xCC*/ { L1_LO_CHULA,    L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
+    /*0xCC*/ { L1_LO_CHULA,	L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xCD*/ { L1_O_ANG, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xCE*/ { L1_HO_NOKHUK, L2_BLANK, L3_BLANK, L4_BLANK, M | _consnt},
     /*0xCF*/ { IGNORE, IGNORE, L3_PAIYAN_NOI, IGNORE, M},
@@ -291,7 +291,7 @@ static int t_ctype[][TOT_LEVELS] = {
     /*0xE0*/ { L1_SARA_E, L2_BLANK, L3_BLANK, L4_BLANK, M | _ldvowel },
     /*0xE1*/ { L1_SARA_AE, L2_BLANK, L3_BLANK, L4_BLANK, M | _ldvowel },
     /*0xE2*/ { L1_SARA_O, L2_BLANK, L3_BLANK, L4_BLANK, M | _ldvowel  },
-    /*0xE3*/ { L1_SARA_AI_MAIMUAN,    L2_BLANK, L3_BLANK, L4_BLANK, M | _ldvowel },
+    /*0xE3*/ { L1_SARA_AI_MAIMUAN,	L2_BLANK, L3_BLANK, L4_BLANK, M | _ldvowel },
     /*0xE4*/ { L1_SARA_AI_MAIMALAI, L2_BLANK, L3_BLANK, L4_BLANK, M | _ldvowel },
     /*0xE5*/ { L1_SARA_AA, L2_BLANK, L3_BLANK, L4_EXT, M  | _fllwvowel },
     /*0xE6*/ { IGNORE, IGNORE, L3_MAI_YAMOK, IGNORE, M | _stone },
@@ -325,7 +325,7 @@ static int t_ctype[][TOT_LEVELS] = {
 
 static uchar ctype_tis620[257] =
 {
-  0,                /* For standard library */
+  0,				/* For standard library */
   32,32,32,32,32,32,32,32,32,40,40,40,40,40,32,32,
   32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
   72,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
@@ -350,18 +350,18 @@ static uchar to_lower_tis620[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'a',    'b',   'c',   'd',   'e',   'f',   'g',
-  'h',     'i',    'j',   'k',   'l',   'm',   'n',   'o',
-  'p',     'q',    'r',   's',   't',   'u',   'v',   'w',
-  'x',     'y',    'z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'a',    'b',   'c',   'd',   'e',   'f',   'g',
-  'h',     'i',    'j',   'k',   'l',   'm',   'n',   'o',
-  'p',     'q',    'r',   's',   't',   'u',   'v',   'w',
-  'x',     'y',    'z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'a',	'b',   'c',   'd',   'e',   'f',   'g',
+  'h',	 'i',	'j',   'k',   'l',   'm',   'n',   'o',
+  'p',	 'q',	'r',   's',   't',   'u',   'v',   'w',
+  'x',	 'y',	'z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'a',	'b',   'c',   'd',   'e',   'f',   'g',
+  'h',	 'i',	'j',   'k',   'l',   'm',   'n',   'o',
+  'p',	 'q',	'r',   's',   't',   'u',   'v',   'w',
+  'x',	 'y',	'z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -386,18 +386,18 @@ static uchar to_upper_tis620[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -422,18 +422,18 @@ static uchar sort_order_tis620[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '\\',  ']',   '[',   '^',   '_',
-  'E',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '{',   '|',   '}',   'Y',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '\\',  ']',   '[',   '^',   '_',
+  'E',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '{',   '|',   '}',   'Y',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -458,18 +458,18 @@ static uchar sort_order_tis620[]=
 
   SYNOPSIS
     thai2sortable()
-    tstr        String to convert. Does not have to end with \0
-    len            Length of tstr
+    tstr		String to convert. Does not have to end with \0
+    len			Length of tstr
 */
 
 static size_t thai2sortable(uchar *tstr, size_t len)
 {
-  uchar    *p;
-  int    tlen;
-  uchar    l2bias;
+  uchar	*p;
+  int	tlen;
+  uchar	l2bias;
 
   tlen= len;
-  l2bias=     256 - 8;
+  l2bias= 	256 - 8;
   for (p= tstr; tlen > 0; p++, tlen--)
   {
     uchar c= *p;
@@ -477,30 +477,30 @@ static size_t thai2sortable(uchar *tstr, size_t len)
     if (isthai(c))
     {
       int *t_ctype0= t_ctype[c];
-            
+		    
       if (isconsnt(c))
-    l2bias    -= 8;
+	l2bias	-= 8;
       if (isldvowel(c) && tlen != 1 && isconsnt(p[1]))
       {
-    /* simply swap between leading-vowel and consonant */
-    *p= p[1];
-    p[1]= c;
-    tlen--;
-    p++; 
-    continue;
+	/* simply swap between leading-vowel and consonant */
+	*p= p[1];
+	p[1]= c;
+	tlen--;
+	p++; 
+	continue;
       }
 
       /* if found level 2 char (L2_GARAN,L2_TONE*,L2_TYKHU) move to last */
       if (t_ctype0[1] >= L2_GARAN)
       {
-    /*
-      l2bias use to control position weight of l2char
-      example (*=l2char) XX*X must come before X*XX
-    */
-    memmove((char*) p, (char*) (p+1), tlen-1);
-    tstr[len-1]= l2bias + t_ctype0[1]- L2_GARAN +1;
-    p--;
-    continue;
+	/*
+	  l2bias use to control position weight of l2char
+	  example (*=l2char) XX*X must come before X*XX
+	*/
+	memmove((char*) p, (char*) (p+1), tlen-1);
+	tstr[len-1]= l2bias + t_ctype0[1]- L2_GARAN +1;
+	p--;
+	continue;
       }
     }
     else
@@ -531,7 +531,7 @@ int my_strnncoll_tis620(CHARSET_INFO *cs __attribute__((unused)),
                         const uchar *s2, size_t len2,
                         my_bool s2_is_prefix)
 {
-  uchar    buf[80] ;
+  uchar	buf[80] ;
   uchar *tc1, *tc2;
   int i;
 
@@ -543,9 +543,9 @@ int my_strnncoll_tis620(CHARSET_INFO *cs __attribute__((unused)),
     tc1= (uchar*) my_str_malloc(len1+len2+2);
   tc2= tc1 + len1+1;
   memcpy((char*) tc1, (char*) s1, len1);
-  tc1[len1]= 0;        /* if length(s1)> len1, need to put 'end of string' */
+  tc1[len1]= 0;		/* if length(s1)> len1, need to put 'end of string' */
   memcpy((char *)tc2, (char *)s2, len2);
-  tc2[len2]= 0;        /* put end of string */
+  tc2[len2]= 0;		/* put end of string */
   thai2sortable(tc1, len1);
   thai2sortable(tc2, len2);
   i= strcmp((char*)tc1, (char*)tc2);
@@ -557,11 +557,11 @@ int my_strnncoll_tis620(CHARSET_INFO *cs __attribute__((unused)),
 
 static
 int my_strnncollsp_tis620(CHARSET_INFO * cs __attribute__((unused)),
-              const uchar *a0, size_t a_length, 
-              const uchar *b0, size_t b_length,
+			  const uchar *a0, size_t a_length, 
+			  const uchar *b0, size_t b_length,
                           my_bool diff_if_only_endspace_difference)
 {
-  uchar    buf[80], *end, *a, *b, *alloced= NULL;
+  uchar	buf[80], *end, *a, *b, *alloced= NULL;
   size_t length;
   int res= 0;
 
@@ -575,9 +575,9 @@ int my_strnncollsp_tis620(CHARSET_INFO * cs __attribute__((unused)),
   
   b= a + a_length+1;
   memcpy((char*) a, (char*) a0, a_length);
-  a[a_length]= 0;    /* if length(a0)> len1, need to put 'end of string' */
+  a[a_length]= 0;	/* if length(a0)> len1, need to put 'end of string' */
   memcpy((char *)b, (char *)b0, b_length);
-  b[b_length]= 0;    /* put end of string */
+  b[b_length]= 0;	/* put end of string */
   a_length= thai2sortable(a, a_length);
   b_length= thai2sortable(b, b_length);
   
@@ -604,15 +604,15 @@ int my_strnncollsp_tis620(CHARSET_INFO * cs __attribute__((unused)),
       /* put shorter key in s */
       a_length= b_length;
       a= b;
-      swap= -1;                    /* swap sign of result */
+      swap= -1;					/* swap sign of result */
       res= -res;
     }
     for (end= a + a_length-length; a < end ; a++)
     {
       if (*a != ' ')
       {
-    res= (*a < ' ') ? -swap : swap;
-    goto ret;
+	res= (*a < ' ') ? -swap : swap;
+	goto ret;
       }
     }
   }
@@ -821,9 +821,9 @@ NULL,NULL,NULL,NULL,NULL,NULL,NULL,plFF
 
 static
 int my_mb_wc_tis620(CHARSET_INFO *cs  __attribute__((unused)),
-          my_wc_t *wc,
-          const uchar *str,
-          const uchar *end __attribute__((unused)))
+		  my_wc_t *wc,
+		  const uchar *str,
+		  const uchar *end __attribute__((unused)))
 {
   if (str >= end)
     return MY_CS_TOOSMALL;
@@ -834,9 +834,9 @@ int my_mb_wc_tis620(CHARSET_INFO *cs  __attribute__((unused)),
 
 static
 int my_wc_mb_tis620(CHARSET_INFO *cs  __attribute__((unused)),
-          my_wc_t wc,
-          uchar *str,
-          uchar *end __attribute__((unused)))
+		  my_wc_t wc,
+		  uchar *str,
+		  uchar *end __attribute__((unused)))
 {
   uchar *pl;
   
@@ -851,31 +851,31 @@ int my_wc_mb_tis620(CHARSET_INFO *cs  __attribute__((unused)),
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
-    NULL,        /* init */
+    NULL,		/* init */
     my_strnncoll_tis620,
     my_strnncollsp_tis620,
     my_strnxfrm_tis620,
     my_strnxfrmlen_simple,
     my_like_range_simple,
-    my_wildcmp_8bit,    /* wildcmp   */
+    my_wildcmp_8bit,	/* wildcmp   */
     my_strcasecmp_8bit,
-    my_instr_simple,                /* QQ: To be fixed */
+    my_instr_simple,				/* QQ: To be fixed */
     my_hash_sort_simple,
     my_propagate_simple
 };
 
 static MY_CHARSET_HANDLER my_charset_handler=
 {
-    NULL,        /* init */
-    NULL,        /* ismbchar  */
-    my_mbcharlen_8bit,    /* mbcharlen */
+    NULL,		/* init */
+    NULL,		/* ismbchar  */
+    my_mbcharlen_8bit,	/* mbcharlen */
     my_numchars_8bit,
     my_charpos_8bit,
     my_well_formed_len_8bit,
     my_lengthsp_8bit,
     my_numcells_8bit,
-    my_mb_wc_tis620,    /* mb_wc     */
-    my_wc_mb_tis620,    /* wc_mb     */
+    my_mb_wc_tis620,	/* mb_wc     */
+    my_wc_mb_tis620,	/* wc_mb     */
     my_mb_ctype_8bit,
     my_caseup_str_8bit,
     my_casedn_str_8bit,
@@ -899,30 +899,30 @@ static MY_CHARSET_HANDLER my_charset_handler=
 
 CHARSET_INFO my_charset_tis620_thai_ci=
 {
-    18,0,0,        /* number    */
-    MY_CS_COMPILED|MY_CS_PRIMARY|MY_CS_STRNXFRM,    /* state     */
-    "tis620",        /* cs name    */
-    "tis620_thai_ci",    /* name      */
-    "",            /* comment   */
-    NULL,        /* tailoring */
+    18,0,0,		/* number    */
+    MY_CS_COMPILED|MY_CS_PRIMARY|MY_CS_STRNXFRM,	/* state     */
+    "tis620",		/* cs name    */
+    "tis620_thai_ci",	/* name      */
+    "",			/* comment   */
+    NULL,		/* tailoring */
     ctype_tis620,
     to_lower_tis620,
     to_upper_tis620,
     sort_order_tis620,
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    4,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    4,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen   */
-    1,            /* mbmaxlen  */
-    0,            /* min_sort_char */
-    255,        /* max_sort_char */
+    1,			/* mbminlen   */
+    1,			/* mbmaxlen  */
+    0,			/* min_sort_char */
+    255,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_handler,
@@ -931,30 +931,30 @@ CHARSET_INFO my_charset_tis620_thai_ci=
 
 CHARSET_INFO my_charset_tis620_bin=
 {
-    89,0,0,        /* number    */
-    MY_CS_COMPILED|MY_CS_BINSORT,    /* state     */
-    "tis620",        /* cs name    */
-    "tis620_bin",    /* name      */
-    "",            /* comment   */
-    NULL,        /* tailoring */
+    89,0,0,		/* number    */
+    MY_CS_COMPILED|MY_CS_BINSORT,	/* state     */
+    "tis620",		/* cs name    */
+    "tis620_bin",	/* name      */
+    "",			/* comment   */
+    NULL,		/* tailoring */
     ctype_tis620,
     to_lower_tis620,
     to_upper_tis620,
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen   */
-    1,            /* mbmaxlen  */
-    0,            /* min_sort_char */
-    255,        /* max_sort_char */
+    1,			/* mbminlen   */
+    1,			/* mbmaxlen  */
+    0,			/* min_sort_char */
+    255,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_handler,

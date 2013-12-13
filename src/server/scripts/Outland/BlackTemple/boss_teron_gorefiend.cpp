@@ -63,7 +63,7 @@ public:
 
     struct npc_doom_blossomAI : public ScriptedAI
     {
-        npc_doom_blossomAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_doom_blossomAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 CheckTeronTimer;
         uint32 ShadowBoltTimer;
@@ -76,9 +76,9 @@ public:
             TeronGUID = 0;
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
-        void AttackStart(Unit* /*who*/) OVERRIDE {}
-        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
+        void AttackStart(Unit* /*who*/) OVERRIDE { }
+        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE { }
 
 
         void Despawn()
@@ -132,7 +132,7 @@ public:
 
     struct npc_shadowy_constructAI : public ScriptedAI
     {
-        npc_shadowy_constructAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_shadowy_constructAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint64 GhostGUID;
         uint64 TeronGUID;
@@ -149,7 +149,7 @@ public:
             CheckTeronTimer = 5000;
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void MoveInLineOfSight(Unit* who) OVERRIDE
 
@@ -247,7 +247,7 @@ public:
         void Reset() OVERRIDE
         {
             if (instance)
-                instance->SetData(DATA_TERONGOREFIENDEVENT, NOT_STARTED);
+                instance->SetBossState(DATA_TERON_GOREFIEND, NOT_STARTED);
 
             IncinerateTimer = urand(20000, 31000);
             SummonDoomBlossomTimer = 12000;
@@ -266,7 +266,7 @@ public:
             Done = false;
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void MoveInLineOfSight(Unit* who) OVERRIDE
 
@@ -276,12 +276,12 @@ public:
                 if (me->IsWithinDistInMap(who, VISIBLE_RANGE) && me->IsWithinLOSInMap(who))
                 {
                     if (instance)
-                        instance->SetData(DATA_TERONGOREFIENDEVENT, IN_PROGRESS);
+                        instance->SetBossState(DATA_TERON_GOREFIEND, IN_PROGRESS);
 
                     me->GetMotionMaster()->Clear(false);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     Talk(SAY_INTRO);
-                    me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_TALK);
+                    me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_STATE_TALK);
                     AggroTargetGUID = who->GetGUID();
                     Intro = true;
                 }
@@ -298,7 +298,7 @@ public:
         void JustDied(Unit* /*killer*/) OVERRIDE
         {
             if (instance)
-                instance->SetData(DATA_TERONGOREFIENDEVENT, DONE);
+                instance->SetBossState(DATA_TERON_GOREFIEND, DONE);
 
             Talk(SAY_DEATH);
         }
@@ -390,7 +390,7 @@ public:
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
                     me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
                     Talk(SAY_AGGRO);
-                    me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
+                    me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_STATE_NONE);
                     Done = true;
                     if (AggroTargetGUID)
                     {

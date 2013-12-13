@@ -47,16 +47,6 @@ set(scripts_STAT_SRCS
   Kalimdor/CavernsOfTime/CullingOfStratholme/culling_of_stratholme.cpp
   Kalimdor/CavernsOfTime/CullingOfStratholme/instance_culling_of_stratholme.cpp
   Kalimdor/CavernsOfTime/CullingOfStratholme/culling_of_stratholme.h
-  Kalimdor/CavernsOfTime/DragonSoul/boss_hagara_the_stormbinder.cpp
-  Kalimdor/CavernsOfTime/DragonSoul/boss_morchok.cpp
-  Kalimdor/CavernsOfTime/DragonSoul/boss_warlord_zonozz.cpp
-  Kalimdor/CavernsOfTime/DragonSoul/boss_yorsahj_the_unsleeping.cpp
-  Kalimdor/CavernsOfTime/DragonSoul/dragonsoul.h
-  Kalimdor/CavernsOfTime/DragonSoul/instance_dragonsoul.cpp
-  Kalimdor/CavernsOfTime/DragonSoul/boss_madness_of_deathwing.cpp
-  Kalimdor/CavernsOfTime/DragonSoul/boss_spine_of_deathwing.cpp
-  Kalimdor/CavernsOfTime/DragonSoul/boss_ultraxion.cpp
-  Kalimdor/CavernsOfTime/DragonSoul/boss_warmaster_blackhorn.cpp
   Kalimdor/CavernsOfTime/TheBlackMorass/the_black_morass.h
   Kalimdor/CavernsOfTime/TheBlackMorass/instance_the_black_morass.cpp
   Kalimdor/CavernsOfTime/TheBlackMorass/boss_chrono_lord_deja.cpp
@@ -133,24 +123,6 @@ set(scripts_STAT_SRCS
   Kalimdor/Firelands/instance_firelands.cpp
   Kalimdor/Firelands/firelands.h
   Kalimdor/Firelands/boss_alysrazor.cpp
-  Kalimdor/Firelands/boss_baleroc_the_doorkeeper.cpp
-  Kalimdor/Firelands/boss_belthtilac.cpp
-  Kalimdor/Firelands/boss_ragnaros.cpp
-  Kalimdor/Firelands/boss_rhyolith.cpp
-  Kalimdor/Firelands/boss_majordomus.cpp
-  Kalimdor/Firelands/boss_shannox.cpp
-  Kalimdor/LostCityOfTheTolvir/instance_lost_city_of_the_tolvir.cpp
-  Kalimdor/LostCityOfTheTolvir/lost_city_of_the_tolvir.cpp
-  Kalimdor/LostCityOfTheTolvir/lost_city_of_the_tolvir.h
-  Kalimdor/LostCityOfTheTolvir/boss_lockmaw.cpp
-  Kalimdor/LostCityOfTheTolvir/boss_high_prophet_barim.cpp
-  Kalimdor/VortexPinnacle/boss_altairus.cpp
-  Kalimdor/VortexPinnacle/boss_asaad.cpp
-  Kalimdor/VortexPinnacle/boss_grand_vizier_ertan.cpp
-  Kalimdor/VortexPinnacle/instance_vortex_pinnacle.cpp
-  Kalimdor/VortexPinnacle/vortex_pinnacle.cpp
-  Kalimdor/VortexPinnacle/vortex_pinnacle.h
-  
 )
 
 message("  -> Prepared: Kalimdor")

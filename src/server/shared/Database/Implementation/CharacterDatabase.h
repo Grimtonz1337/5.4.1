@@ -25,8 +25,8 @@ class CharacterDatabaseConnection : public MySQLConnection
 {
     public:
         //- Constructors for sync and async connections
-        CharacterDatabaseConnection(MySQLConnectionInfo& connInfo) : MySQLConnection(connInfo) {}
-        CharacterDatabaseConnection(ACE_Activation_Queue* q, MySQLConnectionInfo& connInfo) : MySQLConnection(q, connInfo) {}
+        CharacterDatabaseConnection(MySQLConnectionInfo& connInfo) : MySQLConnection(connInfo) { }
+        CharacterDatabaseConnection(ACE_Activation_Queue* q, MySQLConnectionInfo& connInfo) : MySQLConnection(q, connInfo) { }
 
         //- Loads database type specific prepared statements
         void DoPrepareStatements();
@@ -410,6 +410,9 @@ enum CharacterDatabaseStatements
     CHAR_SEL_GUILD_BANK_ITEM_BY_ENTRY,
     CHAR_DEL_CHAR_ACHIEVEMENT,
     CHAR_DEL_CHAR_ACHIEVEMENT_PROGRESS,
+    CHAR_INS_CHAR_ACHIEVEMENT,
+    CHAR_DEL_CHAR_ACHIEVEMENT_PROGRESS_BY_CRITERIA,
+    CHAR_INS_CHAR_ACHIEVEMENT_PROGRESS,
     CHAR_DEL_CHAR_REPUTATION_BY_FACTION,
     CHAR_INS_CHAR_REPUTATION_BY_FACTION,
     CHAR_DEL_ITEM_REFUND_INSTANCE,

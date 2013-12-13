@@ -171,7 +171,6 @@ set(scripts_STAT_SRCS
   EasternKingdoms/ScarletMonastery/boss_herod.cpp
   EasternKingdoms/ScarletMonastery/boss_scorn.cpp
   EasternKingdoms/zone_undercity.cpp
-  EasternKingdoms/zone_silvermoon_city.cpp
   EasternKingdoms/zone_loch_modan.cpp
   EasternKingdoms/ShadowfangKeep/shadowfang_keep.cpp
   EasternKingdoms/ShadowfangKeep/instance_shadowfang_keep.cpp
@@ -207,40 +206,6 @@ set(scripts_STAT_SRCS
   EasternKingdoms/Karazhan/boss_terestian_illhoof.cpp
   EasternKingdoms/Karazhan/karazhan.h
   EasternKingdoms/TheStockade/instance_the_stockade.cpp
-  EasternKingdoms/GrimBatol/grim_batol.h
-  EasternKingdoms/GrimBatol/boss_drahga_shadowburner.cpp
-  EasternKingdoms/GrimBatol/boss_erudax.cpp
-  EasternKingdoms/GrimBatol/boss_forgemaster_throngus.cpp
-  EasternKingdoms/GrimBatol/boss_general_umbriss.cpp
-  EasternKingdoms/GrimBatol/instance_grim_batol.cpp
-  EasternKingdoms/BastionOfTwilight/instance_bastion_of_twilight.cpp
-  EasternKingdoms/BastionOfTwilight/boss_ascendant_council.cpp
-  EasternKingdoms/BastionOfTwilight/boss_halfus_wyrmbreaker.cpp
-  EasternKingdoms/BastionOfTwilight/boss_valiona_and_theralion.cpp
-  EasternKingdoms/BastionOfTwilight/boss_chogall.cpp
-  EasternKingdoms/BastionOfTwilight/boss_sinestra.cpp
-  EasternKingdoms/BastionOfTwilight/bastion_of_twilight.h
-  EasternKingdoms/ThroneOfTheTides/throne_of_the_tides.h
-  EasternKingdoms/ThroneOfTheTides/boss_commander_ulthok.cpp
-  EasternKingdoms/ThroneOfTheTides/boss_erunak_stonespeaker.cpp
-  EasternKingdoms/ThroneOfTheTides/boss_lady_nazjar.cpp
-  EasternKingdoms/ThroneOfTheTides/npc_neptulon.cpp
-  EasternKingdoms/ThroneOfTheTides/instance_throne_of_the_tides.cpp
-  EasternKingdoms/BlackrockCaverns/blackrock_caverns.h
-  EasternKingdoms/BlackrockCaverns/boss_ascendant_lord_obsidius.cpp
-  EasternKingdoms/BlackrockCaverns/boss_beauty.cpp
-  EasternKingdoms/BlackrockCaverns/boss_corla_herald_of_twilight.cpp
-  EasternKingdoms/BlackrockCaverns/boss_karsh_steelbender.cpp
-  EasternKingdoms/BlackrockCaverns/boss_romogg_bonecrusher.cpp
-  EasternKingdoms/BlackrockCaverns/instance_blackrock_caverns.cpp
-  EasternKingdoms/BlackwingDescent/instance_blackwing_descent.cpp
-  EasternKingdoms/BlackwingDescent/boss_omnotron_defense_system.cpp
-  EasternKingdoms/BlackwingDescent/boss_nefarian.cpp
-  EasternKingdoms/BlackwingDescent/boss_maloriak.cpp
-  EasternKingdoms/BlackwingDescent/boss_magmaw.cpp
-  EasternKingdoms/BlackwingDescent/boss_chimaeron.cpp
-  EasternKingdoms/BlackwingDescent/boss_atramedes.cpp
-  EasternKingdoms/BlackwingDescent/blackwing_descent.h
 )
 
 message("  -> Prepared: Eastern Kingdoms")

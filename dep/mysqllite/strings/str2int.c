@@ -16,7 +16,7 @@
 /*
   str2int(src, radix, lower, upper, &val)
   converts the string pointed to by src to an integer and stores it in
-  val.    It skips leading spaces and tabs (but not newlines, formfeeds,
+  val.	It skips leading spaces and tabs (but not newlines, formfeeds,
   backspaces), then it accepts an optional sign and a sequence of digits
   in the specified radix.  The result should satisfy lower <= *val <= upper.
   The result is a pointer to the first character after the number;
@@ -24,9 +24,9 @@
 
   If an error is detected, the result will be NullS, the value put
   in val will be 0, and errno will be set to
-    EDOM    if there are no digits
-    ERANGE    if the result would overflow or otherwise fail to lie
-        within the specified bounds.
+	EDOM	if there are no digits
+	ERANGE	if the result would overflow or otherwise fail to lie
+		within the specified bounds.
   Check that the bounds are right for your machine.
   This looks amazingly complicated for what you probably thought was an
   easy task.  Coping with integer overflow and the asymmetric range of
@@ -40,25 +40,25 @@
 #include <my_global.h>
 #include "m_string.h"
 #include "m_ctype.h"
-#include "my_sys.h"            /* defines errno */
+#include "my_sys.h"			/* defines errno */
 #include <errno.h>
 
 #define char_val(X) (X >= '0' && X <= '9' ? X-'0' :\
-             X >= 'A' && X <= 'Z' ? X-'A'+10 :\
-             X >= 'a' && X <= 'z' ? X-'a'+10 :\
-             '\177')
+		     X >= 'A' && X <= 'Z' ? X-'A'+10 :\
+		     X >= 'a' && X <= 'z' ? X-'a'+10 :\
+		     '\177')
 
 char *str2int(register const char *src, register int radix, long int lower,
-          long int upper, long int *val)
+	      long int upper, long int *val)
 {
-  int sign;            /* is number negative (+1) or positive (-1) */
-  int n;            /* number of digits yet to be converted */
-  long limit;            /* "largest" possible valid input */
-  long scale;            /* the amount to multiply next digit by */
-  long sofar;            /* the running value */
-  register int d;        /* (negative of) next digit */
+  int sign;			/* is number negative (+1) or positive (-1) */
+  int n;			/* number of digits yet to be converted */
+  long limit;			/* "largest" possible valid input */
+  long scale;			/* the amount to multiply next digit by */
+  long sofar;			/* the running value */
+  register int d;		/* (negative of) next digit */
   char *start;
-  int digits[32];        /* Room for numbers */
+  int digits[32];		/* Room for numbers */
 
   /*  Make sure *val is sensible in case of error  */
 
@@ -83,7 +83,7 @@ char *str2int(register const char *src, register int radix, long int lower,
       twos complement machines the converse is not true.  So the
       "maximum" representable number has a negative representative.
       Limit is set to min(-|lower|,-|upper|); this is the "largest"
-      number we are concerned with.    */
+      number we are concerned with.	*/
 
   /*  Calculate Limit using Scale as a scratch variable  */
 
@@ -125,7 +125,7 @@ char *str2int(register const char *src, register int radix, long int lower,
 
   /*  The invariant we want to maintain is that src is just
       to the right of n digits, we've converted k digits to
-      sofar, scale = -radix**k, and scale < sofar < 0.    Now
+      sofar, scale = -radix**k, and scale < sofar < 0.	Now
       if the final number is to be within the original
       Limit, we must have (to the left)*scale+sofar >= Limit,
       or (to the left)*scale >= Limit-sofar, i.e. the digits
@@ -146,7 +146,7 @@ char *str2int(register const char *src, register int radix, long int lower,
   }
   if (n == 0)
   {
-    if ((long) -(d=digits[n]) < limit)        /* get last digit */
+    if ((long) -(d=digits[n]) < limit)		/* get last digit */
     {
       errno=ERANGE;
       return NullS;
@@ -175,11 +175,11 @@ char *str2int(register const char *src, register int radix, long int lower,
     return NullS;
   }
   *val = sofar;
-  errno=0;            /* indicate that all went well */
+  errno=0;			/* indicate that all went well */
   return (char*) src;
 }
 
-    /* Theese are so slow compared with ordinary, optimized atoi */
+	/* Theese are so slow compared with ordinary, optimized atoi */
 
 #ifdef WANT_OUR_ATOI
 

@@ -26,15 +26,15 @@
 
 enum encrypt_dir { AES_ENCRYPT, AES_DECRYPT };
 
-#define AES_BLOCK_SIZE 16    /* Block size in bytes */
+#define AES_BLOCK_SIZE 16	/* Block size in bytes */
 
-#define AES_BAD_DATA  -1    /* If bad data discovered during decoding */
+#define AES_BAD_DATA  -1	/* If bad data discovered during decoding */
 
 
 /* The structure for key information */
 typedef struct {
-  int    nr;                /* Number of rounds */
-  uint32   rk[4*(AES_MAXNR + 1)];    /* key schedule */
+  int	nr;				/* Number of rounds */
+  uint32   rk[4*(AES_MAXNR + 1)];	/* key schedule */
 } KEYINSTANCE;
 
 
@@ -43,27 +43,27 @@ typedef struct {
 
   SYNOPSIS
     my_aes_create_key()
-    aes_key        Address of Key Instance to be created
-    direction        Direction (are we encoding or decoding)
-    key            Key to use for real key creation
-    key_length        Length of the key
+    aes_key		Address of Key Instance to be created
+    direction		Direction (are we encoding or decoding)
+    key			Key to use for real key creation
+    key_length		Length of the key
 
   DESCRIPTION
 
   RESULT
-    0    ok
-    -1    Error        Note: The current impementation never returns this
+    0	ok
+    -1	Error		Note: The current impementation never returns this
 */
 
 static int my_aes_create_key(KEYINSTANCE *aes_key,
-                 enum encrypt_dir direction, const char *key,
-                 int key_length)
+			     enum encrypt_dir direction, const char *key,
+			     int key_length)
 {
-  uint8 rkey[AES_KEY_LENGTH/8];     /* The real key to be used for encryption */
+  uint8 rkey[AES_KEY_LENGTH/8];	 /* The real key to be used for encryption */
   uint8 *rkey_end=rkey+AES_KEY_LENGTH/8; /* Real key boundary */
-  uint8 *ptr;            /* Start of the real key*/
-  const char *sptr;            /* Start of the working key */
-  const char *key_end=key+key_length;    /* Working key boundary*/
+  uint8 *ptr;			/* Start of the real key*/
+  const char *sptr;			/* Start of the working key */
+  const char *key_end=key+key_length;	/* Working key boundary*/
 
   bzero((char*) rkey,AES_KEY_LENGTH/8);      /* Set initial key  */
 
@@ -112,25 +112,25 @@ static int my_aes_create_key(KEYINSTANCE *aes_key,
 
   SYNOPSIS
      my_aes_encrypt()
-     source        Pointer to data for encryption
-     source_length    Size of encryption data
-     dest        Buffer to place encrypted data (must be large enough)
-     key        Key to be used for encryption
-     key_length        Length of the key. Will handle keys of any length
+     source		Pointer to data for encryption
+     source_length	Size of encryption data
+     dest		Buffer to place encrypted data (must be large enough)
+     key		Key to be used for encryption
+     key_length		Length of the key. Will handle keys of any length
 
   RETURN
-    >= 0    Size of encrypted data
-    < 0        Error
+    >= 0	Size of encrypted data
+    < 0		Error
 */
 
 int my_aes_encrypt(const char* source, int source_length, char* dest,
-           const char* key, int key_length)
+		   const char* key, int key_length)
 {
   KEYINSTANCE aes_key;
-  uint8 block[AES_BLOCK_SIZE];    /* 128 bit block used for padding */
-  int rc;            /* result codes */
-  int num_blocks;        /* number of complete blocks */
-  char pad_len;            /* pad size for the last block */
+  uint8 block[AES_BLOCK_SIZE];	/* 128 bit block used for padding */
+  int rc;			/* result codes */
+  int num_blocks;		/* number of complete blocks */
+  char pad_len;			/* pad size for the last block */
   int i;
 
   if ((rc= my_aes_create_key(&aes_key,AES_ENCRYPT,key,key_length)))
@@ -141,7 +141,7 @@ int my_aes_encrypt(const char* source, int source_length, char* dest,
   for (i = num_blocks; i > 0; i--)   /* Encode complete blocks */
   {
     rijndaelEncrypt(aes_key.rk, aes_key.nr, (const uint8*) source,
-            (uint8*) dest);
+		    (uint8*) dest);
     source+= AES_BLOCK_SIZE;
     dest+= AES_BLOCK_SIZE;
   }
@@ -160,25 +160,25 @@ int my_aes_encrypt(const char* source, int source_length, char* dest,
 
   SYNOPSIS
     my_aes_decrypt()
-    source        Pointer to data for decryption
-    source_length    Size of encrypted data
-    dest        Buffer to place decrypted data (must be large enough)
-    key            Key to be used for decryption
-    key_length        Length of the key. Will handle keys of any length
+    source		Pointer to data for decryption
+    source_length	Size of encrypted data
+    dest		Buffer to place decrypted data (must be large enough)
+    key			Key to be used for decryption
+    key_length		Length of the key. Will handle keys of any length
 
   RETURN
-    >= 0    Size of encrypted data
-    < 0        Error
+    >= 0	Size of encrypted data
+    < 0		Error
 */
 
 int my_aes_decrypt(const char *source, int source_length, char *dest,
-           const char *key, int key_length)
+		   const char *key, int key_length)
 {
   KEYINSTANCE aes_key;
-  uint8 block[AES_BLOCK_SIZE];    /* 128 bit block used for padding */
-  int rc;            /* Result codes */
-  int num_blocks;        /* Number of complete blocks */
-  uint pad_len;            /* Pad size for the last block */
+  uint8 block[AES_BLOCK_SIZE];	/* 128 bit block used for padding */
+  int rc;			/* Result codes */
+  int num_blocks;		/* Number of complete blocks */
+  uint pad_len;			/* Pad size for the last block */
   int i;
 
   if ((rc=my_aes_create_key(&aes_key,AES_DECRYPT,key,key_length)))
@@ -192,7 +192,7 @@ int my_aes_decrypt(const char *source, int source_length, char *dest,
   for (i = num_blocks-1; i > 0; i--)   /* Decode all but last blocks */
   {
     rijndaelDecrypt(aes_key.rk, aes_key.nr, (const uint8*) source,
-            (uint8*) dest);
+		    (uint8*) dest);
     source+= AES_BLOCK_SIZE;
     dest+= AES_BLOCK_SIZE;
   }
@@ -215,7 +215,7 @@ int my_aes_decrypt(const char *source, int source_length, char *dest,
 
   SYNOPSIS
     my_aes_get_size()
-    source_length        Length of data to be encrypted
+    source_length		Length of data to be encrypted
 
  RETURN
    Size of buffer required to store encrypted data

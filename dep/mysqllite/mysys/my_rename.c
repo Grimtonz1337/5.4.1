@@ -19,7 +19,7 @@
 #include "m_string.h"
 #undef my_rename
 
-    /* On unix rename deletes to file if it exists */
+	/* On unix rename deletes to file if it exists */
 
 int my_rename(const char *from, const char *to, myf MyFlags)
 {
@@ -28,7 +28,7 @@ int my_rename(const char *from, const char *to, myf MyFlags)
   DBUG_PRINT("my",("from %s to %s MyFlags %d", from, to, MyFlags));
 
 #if defined(HAVE_FILE_VERSIONS)
-  {                /* Check that there isn't a old file */
+  {				/* Check that there isn't a old file */
     int save_errno;
     MY_STAT my_stat_result;
     save_errno=my_errno;
@@ -37,7 +37,7 @@ int my_rename(const char *from, const char *to, myf MyFlags)
       my_errno=EEXIST;
       error= -1;
       if (MyFlags & MY_FAE+MY_WME)
-    my_error(EE_LINK, MYF(ME_BELL+ME_WAITTANG),from,to,my_errno);
+	my_error(EE_LINK, MYF(ME_BELL+ME_WAITTANG),from,to,my_errno);
       DBUG_RETURN(error);
     }
     my_errno=save_errno;

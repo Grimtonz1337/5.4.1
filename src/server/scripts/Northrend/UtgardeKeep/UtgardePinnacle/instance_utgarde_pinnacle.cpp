@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - CoalitionWoW <http://coalitionwow.no-ip.org/>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -47,7 +47,7 @@ public:
 
     struct instance_pinnacle : public InstanceScript
     {
-        instance_pinnacle(Map* map) : InstanceScript(map) {}
+        instance_pinnacle(Map* map) : InstanceScript(map) { }
 
         uint64 uiSvalaSorrowgrave;
         uint64 uiGortokPalehoof;
@@ -138,7 +138,7 @@ public:
                     if (m_auiEncounter[1] == DONE)
                     {
                         HandleGameObject(0, true, go);
-                        go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
+                        go->SetFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_NOT_SELECTABLE);
                     }
                     break;
             }

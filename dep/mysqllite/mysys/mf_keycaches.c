@@ -89,9 +89,9 @@ static uchar *safe_hash_entry_get(SAFE_HASH_ENTRY *entry, size_t *length,
 
   SYNOPSIS
     safe_hash_init()
-    hash        safe_hash handler
-    elements        Expected max number of elements
-    default_value    default value
+    hash		safe_hash handler
+    elements		Expected max number of elements
+    default_value	default value
 
   NOTES
     In case of error we set hash->default_value to 0 to allow one to call
@@ -103,7 +103,7 @@ static uchar *safe_hash_entry_get(SAFE_HASH_ENTRY *entry, size_t *length,
 */
 
 static my_bool safe_hash_init(SAFE_HASH *hash, uint elements,
-                  uchar *default_value)
+			      uchar *default_value)
 {
   DBUG_ENTER("safe_hash");
   if (my_hash_init(&hash->hash, &my_charset_bin, elements,
@@ -166,10 +166,10 @@ static uchar *safe_hash_search(SAFE_HASH *hash, const uchar *key, uint length)
 
   SYONOPSIS
     safe_hash_set()
-    hash            Hash handle
-    key                key (path to table etc..)
-    length            Length of key
-    data            data to to associate with the data
+    hash			Hash handle
+    key				key (path to table etc..)
+    length			Length of key
+    data			data to to associate with the data
 
   NOTES
     This can be used both to insert a new entry and change an existing
@@ -182,7 +182,7 @@ static uchar *safe_hash_search(SAFE_HASH *hash, const uchar *key, uint length)
 */
 
 static my_bool safe_hash_set(SAFE_HASH *hash, const uchar *key, uint length,
-                 uchar *data)
+			     uchar *data)
 {
   SAFE_HASH_ENTRY *entry;
   my_bool error= 0;
@@ -199,7 +199,7 @@ static my_bool safe_hash_set(SAFE_HASH *hash, const uchar *key, uint length,
       we can just delete the entry (if it existed) from the hash as a
       search will return the default entry
     */
-    if (!entry)                    /* nothing to do */
+    if (!entry)					/* nothing to do */
       goto end;
     /* unlink entry from list */
     if ((*entry->prev= entry->next))
@@ -215,7 +215,7 @@ static my_bool safe_hash_set(SAFE_HASH *hash, const uchar *key, uint length,
   else
   {
     if (!(entry= (SAFE_HASH_ENTRY *) my_malloc(sizeof(*entry) + length,
-                           MYF(MY_WME))))
+					       MYF(MY_WME))))
     {
       error= 1;
       goto end;
@@ -249,9 +249,9 @@ end:
 
   SYONOPSIS
     safe_hash_change()
-    hash            Hash handle
-    old_data            Old data
-    new_data            Change all 'old_data' to this
+    hash			Hash handle
+    old_data			Old data
+    new_data			Change all 'old_data' to this
 
   NOTES
     We use the linked list to traverse all elements in the hash as
@@ -275,10 +275,10 @@ static void safe_hash_change(SAFE_HASH *hash, uchar *old_data, uchar *new_data)
       {
         if ((*entry->prev= entry->next))
           entry->next->prev= entry->prev;
-    my_hash_delete(&hash->hash, (uchar*) entry);
+	my_hash_delete(&hash->hash, (uchar*) entry);
       }
       else
-    entry->data= new_data;
+	entry->data= new_data;
     }
   }
 
@@ -311,8 +311,8 @@ void multi_keycache_free(void)
 
   SYNOPSIS
     multi_key_cache_search()
-    key                key to find (usually table path)
-    uint length            Length of key.
+    key				key to find (usually table path)
+    uint length			Length of key.
 
   NOTES
     This function is coded in such a way that we will return the
@@ -337,9 +337,9 @@ KEY_CACHE *multi_key_cache_search(uchar *key, uint length)
 
   SYONOPSIS
     multi_key_cache_set()
-    key                key (path to table etc..)
-    length            Length of key
-    key_cache            cache to assococite with the table
+    key				key (path to table etc..)
+    length			Length of key
+    key_cache			cache to assococite with the table
 
   NOTES
     This can be used both to insert a new entry and change an existing
@@ -348,14 +348,14 @@ KEY_CACHE *multi_key_cache_search(uchar *key, uint length)
 
 
 my_bool multi_key_cache_set(const uchar *key, uint length,
-                KEY_CACHE *key_cache)
+			    KEY_CACHE *key_cache)
 {
   return safe_hash_set(&key_cache_hash, key, length, (uchar*) key_cache);
 }
 
 
 void multi_key_cache_change(KEY_CACHE *old_data,
-                KEY_CACHE *new_data)
+			    KEY_CACHE *new_data)
 {
   safe_hash_change(&key_cache_hash, (uchar*) old_data, (uchar*) new_data);
 }

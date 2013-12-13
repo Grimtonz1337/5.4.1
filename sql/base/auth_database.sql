@@ -1,12 +1,27 @@
-/*
- * OpenEMU Auth with IP2Nation
-*/
+-- MySQL dump 10.13  Distrib 5.6.11, for Win32 (x86)
+--
+-- Host: localhost    Database: auth
+-- ------------------------------------------------------
+-- Server version	5.6.11
 
-SET FOREIGN_KEY_CHECKS=0;
--- ----------------------------
--- Table structure for `account`
--- ----------------------------
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES UTF8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `account`
+--
+
 DROP TABLE IF EXISTS `account`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `account` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Identifier',
   `username` varchar(32) NOT NULL DEFAULT '',
@@ -14,7 +29,9 @@ CREATE TABLE `account` (
   `sessionkey` varchar(80) NOT NULL DEFAULT '',
   `v` varchar(64) NOT NULL DEFAULT '',
   `s` varchar(64) NOT NULL DEFAULT '',
-  `email` varchar(254) NOT NULL DEFAULT '',
+  `token_key` varchar(100) NOT NULL DEFAULT '',
+  `email` varchar(255) NOT NULL DEFAULT '',
+  `reg_mail` varchar(255) NOT NULL DEFAULT '',
   `joindate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `last_ip` varchar(15) NOT NULL DEFAULT '127.0.0.1',
   `failed_logins` int(10) unsigned NOT NULL DEFAULT '0',
@@ -22,7 +39,7 @@ CREATE TABLE `account` (
   `lock_country` varchar(2) NOT NULL DEFAULT '00',
   `last_login` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `online` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `expansion` tinyint(4) unsigned NOT NULL DEFAULT '4',
+  `expansion` tinyint(3) unsigned NOT NULL DEFAULT '4',
   `mutetime` bigint(20) NOT NULL DEFAULT '0',
   `mutereason` varchar(255) NOT NULL DEFAULT '',
   `muteby` varchar(50) NOT NULL DEFAULT '',
@@ -31,32 +48,49 @@ CREATE TABLE `account` (
   `recruiter` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='Account System';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Account System';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of account
--- ----------------------------
-INSERT INTO account VALUES ('5', 'ADMINS', '1B5E796ABB4ED9AA505E583CAACCCA2346D971BD', '08ED0082A77C8E85B1CF9A2B6459EB5CE01284ABC82F2BB7B14AC81071D790F8286F49419BBD7F45', '078A90EED45CE0700491D50B11B0AF6E57357B59DFB7CE25F4F70BA744558F3A', 'B1662A9FCEEF4708E1CCC2F26A53290730F6EB08F0DA7F933A0C3EC925EB1CEB', 'admin@yourserver.com', '2013-10-07 10:35:37', '127.0.0.1', '0', '0', '00', '2013-10-20 09:01:57', '0', '4', '0', '', '', '2', 'Win', '0');
+--
+-- Dumping data for table `account`
+--
 
--- ----------------------------
--- Table structure for `account_access`
--- ----------------------------
+LOCK TABLES `account` WRITE;
+/*!40000 ALTER TABLE `account` DISABLE KEYS */;
+/*!40000 ALTER TABLE `account` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `account_access`
+--
+
 DROP TABLE IF EXISTS `account_access`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `account_access` (
   `id` int(10) unsigned NOT NULL,
   `gmlevel` tinyint(3) unsigned NOT NULL,
   `RealmID` int(11) NOT NULL DEFAULT '-1',
   PRIMARY KEY (`id`,`RealmID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of account_access
--- ----------------------------
+--
+-- Dumping data for table `account_access`
+--
 
--- ----------------------------
--- Table structure for `account_banned`
--- ----------------------------
+LOCK TABLES `account_access` WRITE;
+/*!40000 ALTER TABLE `account_access` DISABLE KEYS */;
+/*!40000 ALTER TABLE `account_access` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `account_banned`
+--
+
 DROP TABLE IF EXISTS `account_banned`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `account_banned` (
   `id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Account id',
   `bandate` int(10) unsigned NOT NULL DEFAULT '0',
@@ -66,15 +100,24 @@ CREATE TABLE `account_banned` (
   `active` tinyint(3) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`,`bandate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Ban List';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of account_banned
--- ----------------------------
+--
+-- Dumping data for table `account_banned`
+--
 
--- ----------------------------
--- Table structure for `autobroadcast`
--- ----------------------------
+LOCK TABLES `account_banned` WRITE;
+/*!40000 ALTER TABLE `account_banned` DISABLE KEYS */;
+/*!40000 ALTER TABLE `account_banned` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `autobroadcast`
+--
+
 DROP TABLE IF EXISTS `autobroadcast`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `autobroadcast` (
   `realmid` int(11) NOT NULL DEFAULT '-1',
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
@@ -82,29 +125,47 @@ CREATE TABLE `autobroadcast` (
   `text` longtext NOT NULL,
   PRIMARY KEY (`id`,`realmid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of autobroadcast
--- ----------------------------
+--
+-- Dumping data for table `autobroadcast`
+--
 
--- ----------------------------
--- Table structure for `ip2nation`
--- ----------------------------
+LOCK TABLES `autobroadcast` WRITE;
+/*!40000 ALTER TABLE `autobroadcast` DISABLE KEYS */;
+/*!40000 ALTER TABLE `autobroadcast` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ip2nation`
+--
+
 DROP TABLE IF EXISTS `ip2nation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ip2nation` (
   `ip` int(11) unsigned NOT NULL DEFAULT '0',
   `country` char(2) NOT NULL DEFAULT '',
   KEY `ip` (`ip`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of ip2nation
--- ----------------------------
-INSERT INTO ip2nation VALUES ('0', 'us');
--- ----------------------------
--- Table structure for `ip2nationcountries`
--- ----------------------------
+--
+-- Dumping data for table `ip2nation`
+--
+
+LOCK TABLES `ip2nation` WRITE;
+/*!40000 ALTER TABLE `ip2nation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ip2nation` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ip2nationcountries`
+--
+
 DROP TABLE IF EXISTS `ip2nationcountries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ip2nationcountries` (
   `code` varchar(4) NOT NULL DEFAULT '',
   `iso_code_2` varchar(2) NOT NULL DEFAULT '',
@@ -115,262 +176,25 @@ CREATE TABLE `ip2nationcountries` (
   `lon` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`code`),
   KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of ip2nationcountries
--- ----------------------------
-INSERT INTO ip2nationcountries VALUES ('01', '', '', '', 'Private', '0', '0');
-INSERT INTO ip2nationcountries VALUES ('ad', 'AN', 'AND', 'Andorra', 'Andorra', '42.3', '1.3');
-INSERT INTO ip2nationcountries VALUES ('ae', 'AR', 'ARE', 'United Arab Emirates', 'United Arab Emirates', '24', '54');
-INSERT INTO ip2nationcountries VALUES ('af', 'AF', 'AFG', 'Afghanistan', 'Afghanistan', '33', '65');
-INSERT INTO ip2nationcountries VALUES ('ag', 'AT', 'ATG', 'Antigua and Barbuda', 'Antigua and Barbuda', '17.03', '-61.48');
-INSERT INTO ip2nationcountries VALUES ('ai', 'AI', 'AIA', 'Anguilla', 'Anguilla', '18.15', '-63.1');
-INSERT INTO ip2nationcountries VALUES ('al', 'AL', 'ALB', 'Albania', 'Albania', '41', '20');
-INSERT INTO ip2nationcountries VALUES ('am', 'AR', 'ARM', 'Armenia', 'Armenia', '40', '45');
-INSERT INTO ip2nationcountries VALUES ('an', 'AN', 'ANT', 'Netherlands Antilles', 'Netherlands Antilles', '12.15', '-68.45');
-INSERT INTO ip2nationcountries VALUES ('ao', 'AG', 'AGO', 'Angola', 'Angola', '-12.3', '18.3');
-INSERT INTO ip2nationcountries VALUES ('ap', '', '', '', 'Asia-Pacific', '-2.81', '128.5');
-INSERT INTO ip2nationcountries VALUES ('aq', 'AT', 'ATA', 'Antarctica', 'Antarctica', '-90', '0');
-INSERT INTO ip2nationcountries VALUES ('ar', 'AR', 'ARG', 'Argentina', 'Argentina', '-34', '-64');
-INSERT INTO ip2nationcountries VALUES ('as', 'AS', 'ASM', 'American Samoa', 'American Samoa', '-14.2', '-170');
-INSERT INTO ip2nationcountries VALUES ('at', 'AU', 'AUT', 'Austria', 'Austria', '47.2', '13.2');
-INSERT INTO ip2nationcountries VALUES ('au', 'AU', 'AUS', 'Australia', 'Australia', '-27', '133');
-INSERT INTO ip2nationcountries VALUES ('aw', 'AB', 'ABW', 'Aruba', 'Aruba', '12.3', '-69.58');
-INSERT INTO ip2nationcountries VALUES ('ax', 'AX', 'ALA', 'Aland Islands', 'Aland Islands', '60.21', '20.16');
-INSERT INTO ip2nationcountries VALUES ('az', 'AZ', 'AZE', 'Azerbaijan', 'Azerbaijan', '40.3', '47.3');
-INSERT INTO ip2nationcountries VALUES ('ba', 'BI', 'BIH', 'Bosnia and Herzegovina', 'Bosnia and Herzegovina', '44', '18');
-INSERT INTO ip2nationcountries VALUES ('bb', 'BR', 'BRB', 'Barbados', 'Barbados', '13.1', '-59.32');
-INSERT INTO ip2nationcountries VALUES ('bd', 'BG', 'BGD', 'Bangladesh', 'Bangladesh', '24', '90');
-INSERT INTO ip2nationcountries VALUES ('be', 'BE', 'BEL', 'Belgium', 'Belgium', '50.5', '4');
-INSERT INTO ip2nationcountries VALUES ('bf', 'BF', 'BFA', 'Burkina Faso', 'Burkina Faso', '13', '-2');
-INSERT INTO ip2nationcountries VALUES ('bg', 'BG', 'BGR', 'Bulgaria', 'Bulgaria', '43', '25');
-INSERT INTO ip2nationcountries VALUES ('bh', 'BH', 'BHR', 'Bahrain', 'Bahrain', '26', '50.33');
-INSERT INTO ip2nationcountries VALUES ('bi', 'BD', 'BDI', 'Burundi', 'Burundi', '-3.3', '30');
-INSERT INTO ip2nationcountries VALUES ('bj', 'BE', 'BEN', 'Benin', 'Benin', '9.3', '2.15');
-INSERT INTO ip2nationcountries VALUES ('bm', 'BM', 'BMU', 'Bermuda', 'Bermuda', '32.2', '-64.45');
-INSERT INTO ip2nationcountries VALUES ('bn', 'BR', 'BRN', 'Brunei Darussalam', 'Brunei Darussalam', '4.3', '114.4');
-INSERT INTO ip2nationcountries VALUES ('bo', 'BO', 'BOL', 'Bolivia', 'Bolivia', '-17', '-65');
-INSERT INTO ip2nationcountries VALUES ('br', 'BR', 'BRA', 'Brazil', 'Brazil', '-10', '-55');
-INSERT INTO ip2nationcountries VALUES ('bs', 'BH', 'BHS', 'Bahamas', 'Bahamas', '24.15', '-76');
-INSERT INTO ip2nationcountries VALUES ('bt', 'BT', 'BTN', 'Bhutan', 'Bhutan', '27.3', '90.3');
-INSERT INTO ip2nationcountries VALUES ('bv', 'BV', 'BVT', 'Bouvet Island', 'Bouvet Island', '-54.26', '3.24');
-INSERT INTO ip2nationcountries VALUES ('bw', 'BW', 'BWA', 'Botswana', 'Botswana', '-22', '24');
-INSERT INTO ip2nationcountries VALUES ('by', 'BL', 'BLR', 'Belarus', 'Belarus', '53', '28');
-INSERT INTO ip2nationcountries VALUES ('bz', 'BL', 'BLZ', 'Belize', 'Belize', '17.15', '-88.45');
-INSERT INTO ip2nationcountries VALUES ('ca', 'CA', 'CAN', 'Canada', 'Canada', '60', '-95');
-INSERT INTO ip2nationcountries VALUES ('cc', 'CC', 'CCK', 'Cocos (Keeling) Islands', 'Cocos (Keeling) Islands', '-12.3', '96.5');
-INSERT INTO ip2nationcountries VALUES ('cd', 'CD', 'COD', 'Congo, Democratic Republic of the', 'Democratic Republic of Congo', '-4.04', '30.75');
-INSERT INTO ip2nationcountries VALUES ('cf', 'CA', 'CAF', 'Central African Republic', 'Central African Republic', '7', '21');
-INSERT INTO ip2nationcountries VALUES ('cg', 'CO', 'COG', 'Congo', 'Congo', '0', '25');
-INSERT INTO ip2nationcountries VALUES ('ch', 'CH', 'CHE', 'Switzerland', 'Switzerland', '47', '8');
-INSERT INTO ip2nationcountries VALUES ('ci', 'CI', 'CIV', 'Cote D’ivoire', 'Ivory Coast', '7.64', '-4.93');
-INSERT INTO ip2nationcountries VALUES ('ck', 'CO', 'COK', 'Cook Islands', 'Cook Islands', '-21.14', '-159.46');
-INSERT INTO ip2nationcountries VALUES ('cl', 'CH', 'CHL', 'Chile', 'Chile', '-30', '-71');
-INSERT INTO ip2nationcountries VALUES ('cm', 'CM', 'CMR', 'Cameroon', 'Cameroon', '6', '12');
-INSERT INTO ip2nationcountries VALUES ('cn', 'CH', 'CHN', 'China', 'China', '35', '105');
-INSERT INTO ip2nationcountries VALUES ('co', 'CO', 'COL', 'Colombia', 'Colombia', '4', '-72');
-INSERT INTO ip2nationcountries VALUES ('cr', 'CR', 'CRI', 'Costa Rica', 'Costa Rica', '10', '-84');
-INSERT INTO ip2nationcountries VALUES ('cs', 'SC', 'SCG', 'Serbia and Montenegro', 'Serbia and Montenegro', '43.57', '21.41');
-INSERT INTO ip2nationcountries VALUES ('cu', 'CU', 'CUB', 'Cuba', 'Cuba', '21.3', '-80');
-INSERT INTO ip2nationcountries VALUES ('cv', 'CP', 'CPV', 'Cape Verde', 'Cape Verde', '16', '-24');
-INSERT INTO ip2nationcountries VALUES ('cx', 'CX', 'CXR', 'Christmas Island', 'Christmas Island', '-10.3', '105.4');
-INSERT INTO ip2nationcountries VALUES ('cy', 'CY', 'CYP', 'Cyprus', 'Cyprus', '35', '33');
-INSERT INTO ip2nationcountries VALUES ('cz', 'CZ', 'CZE', 'Czech Republic', 'Czech Republic', '49.45', '15.3');
-INSERT INTO ip2nationcountries VALUES ('de', 'DE', 'DEU', 'Germany', 'Germany', '51', '9');
-INSERT INTO ip2nationcountries VALUES ('dj', 'DJ', 'DJI', 'Djibouti', 'Djibouti', '11.3', '43');
-INSERT INTO ip2nationcountries VALUES ('dk', 'DN', 'DNK', 'Denmark', 'Denmark', '56', '10');
-INSERT INTO ip2nationcountries VALUES ('dm', 'DM', 'DMA', 'Dominica', 'Dominica', '15.25', '-61.2');
-INSERT INTO ip2nationcountries VALUES ('do', 'DO', 'DOM', 'Dominican Republic', 'Dominican Republic', '19', '-70.4');
-INSERT INTO ip2nationcountries VALUES ('dz', 'DZ', 'DZA', 'Algeria', 'Algeria', '28', '3');
-INSERT INTO ip2nationcountries VALUES ('ec', 'EC', 'ECU', 'Ecuador', 'Ecuador', '-2', '-77.3');
-INSERT INTO ip2nationcountries VALUES ('ee', 'ES', 'EST', 'Estonia', 'Estonia', '59', '26');
-INSERT INTO ip2nationcountries VALUES ('eg', 'EG', 'EGY', 'Egypt', 'Egypt', '27', '30');
-INSERT INTO ip2nationcountries VALUES ('eh', 'ES', 'ESH', 'Western Sahara', 'Western Sahara', '24.3', '-13');
-INSERT INTO ip2nationcountries VALUES ('er', 'ER', 'ERI', 'Eritrea', 'Eritrea', '15', '39');
-INSERT INTO ip2nationcountries VALUES ('es', 'ES', 'ESP', 'Spain', 'Spain', '40', '-4');
-INSERT INTO ip2nationcountries VALUES ('et', 'ET', 'ETH', 'Ethiopia', 'Ethiopia', '8', '38');
-INSERT INTO ip2nationcountries VALUES ('eu', '', '', '', 'Europe', '0', '0');
-INSERT INTO ip2nationcountries VALUES ('fi', 'FI', 'FIN', 'Finland', 'Finland', '64', '26');
-INSERT INTO ip2nationcountries VALUES ('fj', 'FJ', 'FJI', 'Fiji', 'Fiji', '-18', '175');
-INSERT INTO ip2nationcountries VALUES ('fk', 'FL', 'FLK', 'Falkland Islands (Malvinas)', 'Falkland Islands (Malvinas)', '-51.45', '-59');
-INSERT INTO ip2nationcountries VALUES ('fm', 'FS', 'FSM', 'Micronesia', 'Micronesia', '6.55', '158.15');
-INSERT INTO ip2nationcountries VALUES ('fo', 'FR', 'FRO', 'Faroe Islands', 'Faroe Islands', '62', '-7');
-INSERT INTO ip2nationcountries VALUES ('fr', 'FR', 'FRA', 'France', 'France', '46', '2');
-INSERT INTO ip2nationcountries VALUES ('ga', 'GA', 'GAB', 'Gabon', 'Gabon', '-1', '11.45');
-INSERT INTO ip2nationcountries VALUES ('gd', 'GR', 'GRD', 'Grenada', 'Grenada', '12.07', '-61.4');
-INSERT INTO ip2nationcountries VALUES ('ge', 'GE', 'GEO', 'Georgia', 'Georgia', '42', '43.3');
-INSERT INTO ip2nationcountries VALUES ('gf', 'GU', 'GUF', 'French Guiana', 'French Guiana', '4', '-53');
-INSERT INTO ip2nationcountries VALUES ('gh', 'GH', 'GHA', 'Ghana', 'Ghana', '8', '-2');
-INSERT INTO ip2nationcountries VALUES ('gi', 'GI', 'GIB', 'Gibraltar', 'Gibraltar', '36.8', '-5.21');
-INSERT INTO ip2nationcountries VALUES ('gl', 'GR', 'GRL', 'Greenland', 'Greenland', '72', '-40');
-INSERT INTO ip2nationcountries VALUES ('gm', 'GM', 'GMB', 'Gambia', 'Gambia', '13.28', '-16.34');
-INSERT INTO ip2nationcountries VALUES ('gn', 'GI', 'GIN', 'Guinea', 'Guinea', '11', '-10');
-INSERT INTO ip2nationcountries VALUES ('gp', 'GL', 'GLP', 'Guadeloupe', 'Guadeloupe', '16.15', '-61.35');
-INSERT INTO ip2nationcountries VALUES ('gq', 'GN', 'GNQ', 'Equatorial Guinea', 'Equatorial Guinea', '2', '10');
-INSERT INTO ip2nationcountries VALUES ('gr', 'GR', 'GRC', 'Greece', 'Greece', '39', '22');
-INSERT INTO ip2nationcountries VALUES ('gs', 'SG', 'SGS', 'South Georgia and the South Sandwich Islands', 'S. Georgia and S. Sandwich Isls.', '-54.3', '-37');
-INSERT INTO ip2nationcountries VALUES ('gt', 'GT', 'GTM', 'Guatemala', 'Guatemala', '15.3', '-90.15');
-INSERT INTO ip2nationcountries VALUES ('gu', 'GU', 'GUM', 'Guam', 'Guam', '13.28', '144.47');
-INSERT INTO ip2nationcountries VALUES ('gw', 'GN', 'GNB', 'Guinea-Bissau', 'Guinea-Bissau', '12', '-15');
-INSERT INTO ip2nationcountries VALUES ('gy', 'GU', 'GUY', 'Guyana', 'Guyana', '5', '-59');
-INSERT INTO ip2nationcountries VALUES ('hk', 'HK', 'HKG', 'Hong Kong', 'Hong Kong', '22.15', '114.1');
-INSERT INTO ip2nationcountries VALUES ('hm', 'HM', 'HMD', 'Heard Island and Mcdonald Islands', 'Heard and McDonald Islands', '-53.06', '72.31');
-INSERT INTO ip2nationcountries VALUES ('hn', 'HN', 'HND', 'Honduras', 'Honduras', '15', '-86.3');
-INSERT INTO ip2nationcountries VALUES ('hr', 'HR', 'HRV', 'Croatia (Hrvatska)', 'Croatia (Hrvatska)', '45.1', '15.3');
-INSERT INTO ip2nationcountries VALUES ('ht', 'HT', 'HTI', 'Haiti', 'Haiti', '19', '-72.25');
-INSERT INTO ip2nationcountries VALUES ('hu', 'HU', 'HUN', 'Hungary', 'Hungary', '47', '20');
-INSERT INTO ip2nationcountries VALUES ('id', 'ID', 'IDN', 'Indonesia', 'Indonesia', '-5', '120');
-INSERT INTO ip2nationcountries VALUES ('ie', 'IR', 'IRL', 'Ireland', 'Ireland', '53', '-8');
-INSERT INTO ip2nationcountries VALUES ('il', 'IS', 'ISR', 'Israel', 'Israel', '31.3', '34.45');
-INSERT INTO ip2nationcountries VALUES ('in', 'IN', 'IND', 'India', 'India', '20', '77');
-INSERT INTO ip2nationcountries VALUES ('io', 'IO', 'IOT', 'British Indian Ocean Territory', 'British Indian Ocean Territory', '-6', '71.3');
-INSERT INTO ip2nationcountries VALUES ('iq', 'IR', 'IRQ', 'Iraq', 'Iraq', '33', '44');
-INSERT INTO ip2nationcountries VALUES ('ir', 'IR', 'IRN', 'Iran, Islamic Republic of', 'Iran', '32', '53');
-INSERT INTO ip2nationcountries VALUES ('is', 'IS', 'ISL', 'Iceland', 'Iceland', '65', '-18');
-INSERT INTO ip2nationcountries VALUES ('it', 'IT', 'ITA', 'Italy', 'Italy', '42.5', '12.5');
-INSERT INTO ip2nationcountries VALUES ('jm', 'JA', 'JAM', 'Jamaica', 'Jamaica', '18.15', '-77.3');
-INSERT INTO ip2nationcountries VALUES ('jo', 'JO', 'JOR', 'Jordan', 'Jordan', '31', '36');
-INSERT INTO ip2nationcountries VALUES ('jp', 'JP', 'JPN', 'Japan', 'Japan', '36', '138');
-INSERT INTO ip2nationcountries VALUES ('ke', 'KE', 'KEN', 'Kenya', 'Kenya', '1', '38');
-INSERT INTO ip2nationcountries VALUES ('kg', 'KG', 'KGZ', 'Kyrgyzstan', 'Kyrgyzstan', '41', '75');
-INSERT INTO ip2nationcountries VALUES ('kh', 'KH', 'KHM', 'Cambodia', 'Cambodia', '13', '105');
-INSERT INTO ip2nationcountries VALUES ('ki', 'KI', 'KIR', 'Kiribati', 'Kiribati', '1.25', '173');
-INSERT INTO ip2nationcountries VALUES ('km', 'CO', 'COM', 'Comoros', 'Comoros', '-12.1', '44.15');
-INSERT INTO ip2nationcountries VALUES ('kn', 'KN', 'KNA', 'Saint Kitts and Nevis', 'Saint Kitts and Nevis', '17.2', '-62.45');
-INSERT INTO ip2nationcountries VALUES ('kp', 'PR', 'PRK', 'Korea, Democratic People’s Republic of (North)', 'Korea (North)', '40', '127');
-INSERT INTO ip2nationcountries VALUES ('kr', 'KO', 'KOR', 'Korea, Republic of (South)', 'Korea (South)', '37', '127.3');
-INSERT INTO ip2nationcountries VALUES ('kw', 'KW', 'KWT', 'Kuwait', 'Kuwait', '29.3', '45.45');
-INSERT INTO ip2nationcountries VALUES ('ky', 'CY', 'CYM', 'Cayman Islands', 'Cayman Islands', '19.3', '-80.3');
-INSERT INTO ip2nationcountries VALUES ('kz', 'KA', 'KAZ', 'Kazakhstan', 'Kazakhstan', '48', '68');
-INSERT INTO ip2nationcountries VALUES ('la', 'LA', 'LAO', 'Lao People’s Democratic Republic', 'Laos', '18', '105');
-INSERT INTO ip2nationcountries VALUES ('lb', 'LB', 'LBN', 'Lebanon', 'Lebanon', '33.5', '35.5');
-INSERT INTO ip2nationcountries VALUES ('lc', 'LC', 'LCA', 'Saint Lucia', 'Saint Lucia', '13.53', '-60.68');
-INSERT INTO ip2nationcountries VALUES ('li', 'LI', 'LIE', 'Liechtenstein', 'Liechtenstein', '47.16', '9.32');
-INSERT INTO ip2nationcountries VALUES ('lk', 'LK', 'LKA', 'Sri Lanka', 'Sri Lanka', '7', '81');
-INSERT INTO ip2nationcountries VALUES ('lr', 'LB', 'LBR', 'Liberia', 'Liberia', '6.3', '-9.3');
-INSERT INTO ip2nationcountries VALUES ('ls', 'LS', 'LSO', 'Lesotho', 'Lesotho', '-29.3', '28.3');
-INSERT INTO ip2nationcountries VALUES ('lt', 'LT', 'LTU', 'Lithuania', 'Lithuania', '56', '24');
-INSERT INTO ip2nationcountries VALUES ('lu', 'LU', 'LUX', 'Luxembourg', 'Luxembourg', '49.45', '6.1');
-INSERT INTO ip2nationcountries VALUES ('lv', 'LV', 'LVA', 'Latvia', 'Latvia', '57', '25');
-INSERT INTO ip2nationcountries VALUES ('ly', 'LB', 'LBY', 'Libyan Arab Jamahiriya', 'Libya', '25', '17');
-INSERT INTO ip2nationcountries VALUES ('ma', 'MA', 'MAR', 'Morocco', 'Morocco', '32', '-5');
-INSERT INTO ip2nationcountries VALUES ('mc', 'MC', 'MCO', 'Monaco', 'Monaco', '43.44', '7.24');
-INSERT INTO ip2nationcountries VALUES ('md', 'MD', 'MDA', 'Moldova', 'Moldova', '47', '29');
-INSERT INTO ip2nationcountries VALUES ('me', 'ME', 'MNE', 'Montenegro', 'Montenegro', '42.74', '19.31');
-INSERT INTO ip2nationcountries VALUES ('mg', 'MD', 'MDG', 'Madagascar', 'Madagascar', '-20', '47');
-INSERT INTO ip2nationcountries VALUES ('mh', 'MH', 'MHL', 'Marshall Islands', 'Marshall Islands', '9', '168');
-INSERT INTO ip2nationcountries VALUES ('mk', 'MK', 'MKD', 'Macedonia, the Former Yugoslav Republic of', 'Macedonia', '41.5', '22');
-INSERT INTO ip2nationcountries VALUES ('ml', 'ML', 'MLI', 'Mali', 'Mali', '17', '-4');
-INSERT INTO ip2nationcountries VALUES ('mm', 'MM', 'MMR', 'Myanmar', 'Burma (Myanmar)', '22', '98');
-INSERT INTO ip2nationcountries VALUES ('mn', 'MN', 'MNG', 'Mongolia', 'Mongolia', '46', '105');
-INSERT INTO ip2nationcountries VALUES ('mo', 'MO', 'MAC', 'Macau', 'Macau', '22.1', '113.33');
-INSERT INTO ip2nationcountries VALUES ('mp', 'MN', 'MNP', 'Northern Mariana Islands', 'Northern Mariana Islands', '15.12', '145.45');
-INSERT INTO ip2nationcountries VALUES ('mq', 'MT', 'MTQ', 'Martinique', 'Martinique', '14.4', '-61');
-INSERT INTO ip2nationcountries VALUES ('mr', 'MR', 'MRT', 'Mauritania', 'Mauritania', '20', '-12');
-INSERT INTO ip2nationcountries VALUES ('ms', 'MS', 'MSR', 'Montserrat', 'Montserrat', '16.45', '-62.12');
-INSERT INTO ip2nationcountries VALUES ('mt', 'ML', 'MLT', 'Malta', 'Malta', '35.5', '14.35');
-INSERT INTO ip2nationcountries VALUES ('mu', 'MU', 'MUS', 'Mauritius', 'Mauritius', '-20.17', '57.33');
-INSERT INTO ip2nationcountries VALUES ('mv', 'MD', 'MDV', 'Maldives', 'Maldives', '3.15', '73');
-INSERT INTO ip2nationcountries VALUES ('mw', 'MW', 'MWI', 'Malawi', 'Malawi', '-13.3', '34');
-INSERT INTO ip2nationcountries VALUES ('mx', 'ME', 'MEX', 'Mexico', 'Mexico', '23', '-102');
-INSERT INTO ip2nationcountries VALUES ('my', 'MY', 'MYS', 'Malaysia', 'Malaysia', '2.3', '112.3');
-INSERT INTO ip2nationcountries VALUES ('mz', 'MZ', 'MOZ', 'Mozambique', 'Mozambique', '-18.15', '35');
-INSERT INTO ip2nationcountries VALUES ('na', 'NA', 'NAM', 'Namibia', 'Namibia', '-22', '17');
-INSERT INTO ip2nationcountries VALUES ('nc', 'NC', 'NCL', 'New Caledonia', 'New Caledonia', '-21.3', '165.3');
-INSERT INTO ip2nationcountries VALUES ('ne', 'NE', 'NER', 'Niger', 'Niger', '16', '8');
-INSERT INTO ip2nationcountries VALUES ('nf', 'NF', 'NFK', 'Norfolk Island', 'Norfolk Island', '-29.02', '167.57');
-INSERT INTO ip2nationcountries VALUES ('ng', 'NG', 'NGA', 'Nigeria', 'Nigeria', '10', '8');
-INSERT INTO ip2nationcountries VALUES ('ni', 'NI', 'NIC', 'Nicaragua', 'Nicaragua', '13', '-85');
-INSERT INTO ip2nationcountries VALUES ('nl', 'NL', 'NLD', 'Netherlands', 'Netherlands', '52.3', '5.45');
-INSERT INTO ip2nationcountries VALUES ('no', 'NO', 'NOR', 'Norway', 'Norway', '62', '10');
-INSERT INTO ip2nationcountries VALUES ('np', 'NP', 'NPL', 'Nepal', 'Nepal', '28', '84');
-INSERT INTO ip2nationcountries VALUES ('nr', 'NR', 'NRU', 'Nauru', 'Nauru', '-0.32', '166.55');
-INSERT INTO ip2nationcountries VALUES ('nt', 'NT', 'NTZ', 'Neutral Zone', 'Neutral Zone', '0', '0');
-INSERT INTO ip2nationcountries VALUES ('nu', 'NI', 'NIU', 'Niue', 'Niue', '-19.02', '-169.52');
-INSERT INTO ip2nationcountries VALUES ('nz', 'NZ', 'NZL', 'New Zealand', 'New Zealand (Aotearoa)', '-41', '174');
-INSERT INTO ip2nationcountries VALUES ('om', 'OM', 'OMN', 'Oman', 'Oman', '21', '57');
-INSERT INTO ip2nationcountries VALUES ('pa', 'PA', 'PAN', 'Panama', 'Panama', '9', '-80');
-INSERT INTO ip2nationcountries VALUES ('pe', 'PE', 'PER', 'Peru', 'Peru', '-10', '-76');
-INSERT INTO ip2nationcountries VALUES ('pf', 'PY', 'PYF', 'French Polynesia', 'French Polynesia', '-15', '-140');
-INSERT INTO ip2nationcountries VALUES ('pg', 'PN', 'PNG', 'Papua New Guinea', 'Papua New Guinea', '-6', '147');
-INSERT INTO ip2nationcountries VALUES ('ph', 'PH', 'PHL', 'Philippines', 'Philippines', '13', '122');
-INSERT INTO ip2nationcountries VALUES ('pk', 'PA', 'PAK', 'Pakistan', 'Pakistan', '30', '70');
-INSERT INTO ip2nationcountries VALUES ('pl', 'PO', 'POL', 'Poland', 'Poland', '52', '20');
-INSERT INTO ip2nationcountries VALUES ('pm', 'SP', 'SPM', 'Saint Pierre and Miquelon', 'St. Pierre and Miquelon', '46.5', '-56.2');
-INSERT INTO ip2nationcountries VALUES ('pn', 'PC', 'PCN', 'Pitcairn', 'Pitcairn', '-25.04', '-130.06');
-INSERT INTO ip2nationcountries VALUES ('pr', 'PR', 'PRI', 'Puerto Rico', 'Puerto Rico', '18.15', '-66.3');
-INSERT INTO ip2nationcountries VALUES ('ps', 'PS', 'PSE', 'Palestinian Territory, Occupied', 'Palestinian Territory, Occupied', '31.89', '34.9');
-INSERT INTO ip2nationcountries VALUES ('pt', 'PR', 'PRT', 'Portugal', 'Portugal', '39.3', '-8');
-INSERT INTO ip2nationcountries VALUES ('pw', 'PL', 'PLW', 'Palau', 'Palau', '7.3', '134.3');
-INSERT INTO ip2nationcountries VALUES ('py', 'PR', 'PRY', 'Paraguay', 'Paraguay', '-23', '-58');
-INSERT INTO ip2nationcountries VALUES ('qa', 'QA', 'QAT', 'Qatar', 'Qatar', '25.3', '51.15');
-INSERT INTO ip2nationcountries VALUES ('re', 'RE', 'REU', 'Reunion', 'Reunion', '-21.06', '55.36');
-INSERT INTO ip2nationcountries VALUES ('ro', 'RO', 'ROU', 'Romania', 'Romania', '46', '25');
-INSERT INTO ip2nationcountries VALUES ('rs', 'SR', 'SRB', 'Serbia', 'Republic of Serbia', '44.02', '21.01');
-INSERT INTO ip2nationcountries VALUES ('ru', 'RU', 'RUS', 'Russian Federation', 'Russia', '60', '100');
-INSERT INTO ip2nationcountries VALUES ('rw', 'RW', 'RWA', 'Rwanda', 'Rwanda', '-2', '30');
-INSERT INTO ip2nationcountries VALUES ('sa', 'SA', 'SAU', 'Saudi Arabia', 'Saudi Arabia', '25', '45');
-INSERT INTO ip2nationcountries VALUES ('sb', 'SL', 'SLB', 'Solomon Islands', 'Solomon Islands', '-8', '159');
-INSERT INTO ip2nationcountries VALUES ('sc', 'SY', 'SYC', 'Seychelles', 'Seychelles', '-4.35', '55.4');
-INSERT INTO ip2nationcountries VALUES ('sd', 'SD', 'SDN', 'Sudan', 'Sudan', '15', '30');
-INSERT INTO ip2nationcountries VALUES ('se', 'SW', 'SWE', 'Sweden', 'Sweden', '62', '15');
-INSERT INTO ip2nationcountries VALUES ('sg', 'SG', 'SGP', 'Singapore', 'Singapore', '1.22', '103.48');
-INSERT INTO ip2nationcountries VALUES ('sh', 'SH', 'SHN', 'Saint Helena', 'St. Helena', '-15.56', '-5.42');
-INSERT INTO ip2nationcountries VALUES ('si', 'SV', 'SVN', 'Slovenia', 'Slovenia', '46.07', '14.49');
-INSERT INTO ip2nationcountries VALUES ('sj', 'SJ', 'SJM', 'Svalbard and Jan Mayen Islands', 'Svalbard and Jan Mayen Islands', '78', '20');
-INSERT INTO ip2nationcountries VALUES ('sk', 'SV', 'SVK', 'Slovakia', 'Slovak Republic', '48.4', '19.3');
-INSERT INTO ip2nationcountries VALUES ('sl', 'SL', 'SLE', 'Sierra Leone', 'Sierra Leone', '8.3', '-11.3');
-INSERT INTO ip2nationcountries VALUES ('sm', 'SM', 'SMR', 'San Marino', 'San Marino', '43.46', '12.25');
-INSERT INTO ip2nationcountries VALUES ('sn', 'SE', 'SEN', 'Senegal', 'Senegal', '14', '-14');
-INSERT INTO ip2nationcountries VALUES ('so', 'SO', 'SOM', 'Somalia', 'Somalia', '10', '49');
-INSERT INTO ip2nationcountries VALUES ('sr', 'SU', 'SUR', 'Suriname', 'Suriname', '4', '-56');
-INSERT INTO ip2nationcountries VALUES ('st', 'ST', 'STP', 'Sao Tome and Principe', 'Sao Tome and Principe', '1', '7');
-INSERT INTO ip2nationcountries VALUES ('sv', 'SL', 'SLV', 'El Salvador', 'El Salvador', '13.5', '-88.55');
-INSERT INTO ip2nationcountries VALUES ('sy', 'SY', 'SYC', 'Seychelles', 'Syria', '35', '38');
-INSERT INTO ip2nationcountries VALUES ('sz', 'SW', 'SWZ', 'Swaziland', 'Swaziland', '-26.3', '31.3');
-INSERT INTO ip2nationcountries VALUES ('tc', 'TC', 'TCA', 'Turks and Caicos Islands', 'Turks and Caicos Islands', '21.45', '-71.35');
-INSERT INTO ip2nationcountries VALUES ('td', 'TC', 'TCD', 'Chad', 'Chad', '15', '19');
-INSERT INTO ip2nationcountries VALUES ('tf', 'AT', 'ATF', 'French Southern Territories', 'French Southern Territories', '-43', '67');
-INSERT INTO ip2nationcountries VALUES ('tg', 'TG', 'TGO', 'Togo', 'Togo', '8', '1.1');
-INSERT INTO ip2nationcountries VALUES ('th', 'TH', 'THA', 'Thailand', 'Thailand', '15', '100');
-INSERT INTO ip2nationcountries VALUES ('tj', 'TJ', 'TJK', 'Tajikistan', 'Tajikistan', '39', '71');
-INSERT INTO ip2nationcountries VALUES ('tk', 'TK', 'TKL', 'Tokelau', 'Tokelau', '-9', '-172');
-INSERT INTO ip2nationcountries VALUES ('tl', 'TL', 'TLS', 'Timor-Leste', 'East Timor', '-8.5', '125.55');
-INSERT INTO ip2nationcountries VALUES ('tm', 'TK', 'TKM', 'Turkmenistan', 'Turkmenistan', '40', '60');
-INSERT INTO ip2nationcountries VALUES ('tn', 'TU', 'TUN', 'Tunisia', 'Tunisia', '34', '9');
-INSERT INTO ip2nationcountries VALUES ('to', 'TO', 'TON', 'Tonga', 'Tonga', '-20', '-175');
-INSERT INTO ip2nationcountries VALUES ('tr', 'TU', 'TUR', 'Turkey', 'Turkey', '39', '35');
-INSERT INTO ip2nationcountries VALUES ('tt', 'TT', 'TTO', 'Trinidad and Tobago', 'Trinidad and Tobago', '11', '-61');
-INSERT INTO ip2nationcountries VALUES ('tv', 'TU', 'TUV', 'Tuvalu', 'Tuvalu', '-8', '178');
-INSERT INTO ip2nationcountries VALUES ('tw', 'TW', 'TWN', 'Taiwan', 'Taiwan', '23.3', '121');
-INSERT INTO ip2nationcountries VALUES ('tz', 'TZ', 'TZA', 'Tanzania, United Republic of', 'Tanzania', '-6', '35');
-INSERT INTO ip2nationcountries VALUES ('ua', 'UK', 'UKR', 'Ukraine', 'Ukraine', '49', '32');
-INSERT INTO ip2nationcountries VALUES ('ug', 'UG', 'UGA', 'Uganda', 'Uganda', '1', '32');
-INSERT INTO ip2nationcountries VALUES ('uk', 'GB', 'GBR', 'United Kingdom', 'United Kingdom', '54', '-2');
-INSERT INTO ip2nationcountries VALUES ('us', 'US', 'USA', 'United States', 'United States', '38', '-97');
-INSERT INTO ip2nationcountries VALUES ('uy', 'UR', 'URY', 'Uruguay', 'Uruguay', '-33', '-56');
-INSERT INTO ip2nationcountries VALUES ('uz', 'UZ', 'UZB', 'Uzbekistan', 'Uzbekistan', '41', '64');
-INSERT INTO ip2nationcountries VALUES ('va', 'VA', 'VAT', 'Vatican City State', 'Vatican City State (Holy See)', '41.54', '12.27');
-INSERT INTO ip2nationcountries VALUES ('vc', 'VC', 'VCT', 'Saint Vincent and the Grenadines', 'Saint Vincent and the Grenadines', '13.15', '-61.12');
-INSERT INTO ip2nationcountries VALUES ('ve', 'VE', 'VEN', 'Venezuela', 'Venezuela', '8', '-66');
-INSERT INTO ip2nationcountries VALUES ('vg', 'VG', 'VGB', 'Virgin Islands, British', 'Virgin Islands (British)', '18.2', '-64.5');
-INSERT INTO ip2nationcountries VALUES ('vi', 'VI', 'VIR', 'Virgin Islands, U.S.', 'Virgin Islands (U.S.)', '18.2', '-64.5');
-INSERT INTO ip2nationcountries VALUES ('vn', 'VN', 'VNM', 'Viet Nam', 'Viet Nam', '16', '106');
-INSERT INTO ip2nationcountries VALUES ('vu', 'VU', 'VUT', 'Vanuatu', 'Vanuatu', '-16', '167');
-INSERT INTO ip2nationcountries VALUES ('wf', 'WL', 'WLF', 'Wallis and Futuna Islands', 'Wallis and Futuna Islands', '-13.18', '-176.12');
-INSERT INTO ip2nationcountries VALUES ('ws', 'WS', 'WSM', 'Samoa', 'Samoa', '-13.35', '-172.2');
-INSERT INTO ip2nationcountries VALUES ('ye', 'YE', 'YEM', 'Yemen', 'Yemen', '15', '48');
-INSERT INTO ip2nationcountries VALUES ('yt', 'MY', 'MYT', 'Mayotte', 'Mayotte', '-12.5', '45.1');
-INSERT INTO ip2nationcountries VALUES ('yu', 'YU', 'YUG', 'Yugoslavia', 'Yugoslavia', '44', '21');
-INSERT INTO ip2nationcountries VALUES ('za', 'ZA', 'ZAF', 'South Africa', 'South Africa', '-29', '24');
-INSERT INTO ip2nationcountries VALUES ('zm', 'ZM', 'ZMB', 'Zambia', 'Zambia', '-15', '30');
-INSERT INTO ip2nationcountries VALUES ('zw', 'ZW', 'ZWE', 'Zimbabwe', 'Zimbabwe', '-20', '30');
+--
+-- Dumping data for table `ip2nationcountries`
+--
 
--- ----------------------------
--- Table structure for `ip_banned`
--- ----------------------------
+LOCK TABLES `ip2nationcountries` WRITE;
+/*!40000 ALTER TABLE `ip2nationcountries` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ip2nationcountries` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ip_banned`
+--
+
 DROP TABLE IF EXISTS `ip_banned`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `ip_banned` (
   `ip` varchar(15) NOT NULL DEFAULT '127.0.0.1',
   `bandate` int(10) unsigned NOT NULL,
@@ -379,15 +203,24 @@ CREATE TABLE `ip_banned` (
   `banreason` varchar(255) NOT NULL DEFAULT 'no reason',
   PRIMARY KEY (`ip`,`bandate`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Banned IPs';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of ip_banned
--- ----------------------------
+--
+-- Dumping data for table `ip_banned`
+--
 
--- ----------------------------
--- Table structure for `logs`
--- ----------------------------
+LOCK TABLES `ip_banned` WRITE;
+/*!40000 ALTER TABLE `ip_banned` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ip_banned` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `logs`
+--
+
 DROP TABLE IF EXISTS `logs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `logs` (
   `time` int(10) unsigned NOT NULL,
   `realm` int(10) unsigned NOT NULL,
@@ -395,33 +228,24 @@ CREATE TABLE `logs` (
   `level` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `string` text CHARACTER SET latin1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of logs
--- ----------------------------
+--
+-- Dumping data for table `logs`
+--
 
--- ----------------------------
--- Table structure for `rbac_account_groups`
--- ----------------------------
-DROP TABLE IF EXISTS `rbac_account_groups`;
-CREATE TABLE `rbac_account_groups` (
-  `accountId` int(10) unsigned NOT NULL COMMENT 'Account id',
-  `groupId` int(10) unsigned NOT NULL COMMENT 'Group id',
-  `realmId` int(11) NOT NULL DEFAULT '-1' COMMENT 'Realm Id, -1 means all',
-  PRIMARY KEY (`accountId`,`groupId`,`realmId`),
-  KEY `fk__rbac_account_groups__rbac_groups` (`groupId`),
-  CONSTRAINT `fk__rbac_account_groups__account` FOREIGN KEY (`accountId`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk__rbac_account_groups__rbac_groups` FOREIGN KEY (`groupId`) REFERENCES `rbac_groups` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Account-Group relation';
+LOCK TABLES `logs` WRITE;
+/*!40000 ALTER TABLE `logs` DISABLE KEYS */;
+/*!40000 ALTER TABLE `logs` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- ----------------------------
--- Records of rbac_account_groups
--- ----------------------------
+--
+-- Table structure for table `rbac_account_permissions`
+--
 
--- ----------------------------
--- Table structure for `rbac_account_permissions`
--- ----------------------------
 DROP TABLE IF EXISTS `rbac_account_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rbac_account_permissions` (
   `accountId` int(10) unsigned NOT NULL COMMENT 'Account id',
   `permissionId` int(10) unsigned NOT NULL COMMENT 'Permission id',
@@ -432,366 +256,152 @@ CREATE TABLE `rbac_account_permissions` (
   CONSTRAINT `fk__rbac_account_permissions__account` FOREIGN KEY (`accountId`) REFERENCES `account` (`id`) ON DELETE CASCADE,
   CONSTRAINT `fk__rbac_account_roles__rbac_permissions` FOREIGN KEY (`permissionId`) REFERENCES `rbac_permissions` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Account-Permission relation';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of rbac_account_permissions
--- ----------------------------
+--
+-- Dumping data for table `rbac_account_permissions`
+--
 
--- ----------------------------
--- Table structure for `rbac_account_roles`
--- ----------------------------
-DROP TABLE IF EXISTS `rbac_account_roles`;
-CREATE TABLE `rbac_account_roles` (
-  `accountId` int(10) unsigned NOT NULL COMMENT 'Account id',
-  `roleId` int(10) unsigned NOT NULL COMMENT 'Role id',
-  `granted` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Granted = 1, Denied = 0',
-  `realmId` int(11) NOT NULL DEFAULT '-1' COMMENT 'Realm Id, -1 means all',
-  PRIMARY KEY (`accountId`,`roleId`,`realmId`),
-  KEY `fk__rbac_account_roles__rbac_roles` (`roleId`),
-  CONSTRAINT `fk__rbac_account_roles__account` FOREIGN KEY (`accountId`) REFERENCES `account` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk__rbac_account_roles__rbac_roles` FOREIGN KEY (`roleId`) REFERENCES `rbac_roles` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Account-Role relation';
+LOCK TABLES `rbac_account_permissions` WRITE;
+/*!40000 ALTER TABLE `rbac_account_permissions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `rbac_account_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- ----------------------------
--- Records of rbac_account_roles
--- ----------------------------
+--
+-- Table structure for table `rbac_default_permissions`
+--
 
--- ----------------------------
--- Table structure for `rbac_groups`
--- ----------------------------
-DROP TABLE IF EXISTS `rbac_groups`;
-CREATE TABLE `rbac_groups` (
-  `id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Group id',
-  `name` varchar(100) NOT NULL COMMENT 'Group name',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Group List';
+DROP TABLE IF EXISTS `rbac_default_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rbac_default_permissions` (
+  `secId` int(10) unsigned NOT NULL COMMENT 'Security Level id',
+  `permissionId` int(10) unsigned NOT NULL COMMENT 'permission id',
+  PRIMARY KEY (`secId`,`permissionId`),
+  KEY `fk__rbac_default_permissions__rbac_permissions` (`permissionId`),
+  CONSTRAINT `fk__rbac_default_permissions__rbac_permissions` FOREIGN KEY (`permissionId`) REFERENCES `rbac_permissions` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Default permission to assign to different account security levels';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of rbac_groups
--- ----------------------------
-INSERT INTO rbac_groups VALUES ('1', 'Player');
-INSERT INTO rbac_groups VALUES ('2', 'Moderator');
-INSERT INTO rbac_groups VALUES ('3', 'GameMaster');
-INSERT INTO rbac_groups VALUES ('4', 'Administrator');
+--
+-- Dumping data for table `rbac_default_permissions`
+--
 
--- ----------------------------
--- Table structure for `rbac_group_roles`
--- ----------------------------
-DROP TABLE IF EXISTS `rbac_group_roles`;
-CREATE TABLE `rbac_group_roles` (
-  `groupId` int(10) unsigned NOT NULL COMMENT 'group id',
-  `roleId` int(10) unsigned NOT NULL COMMENT 'Role id',
-  PRIMARY KEY (`groupId`,`roleId`),
-  KEY `fk__rbac_group_roles__rbac_roles` (`roleId`),
-  CONSTRAINT `fk__rbac_group_roles__rbac_groups` FOREIGN KEY (`groupId`) REFERENCES `rbac_groups` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk__rbac_group_roles__rbac_roles` FOREIGN KEY (`roleId`) REFERENCES `rbac_roles` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Group Role relation';
+LOCK TABLES `rbac_default_permissions` WRITE;
+/*!40000 ALTER TABLE `rbac_default_permissions` DISABLE KEYS */;
+INSERT INTO `rbac_default_permissions` VALUES (3,192),(2,193),(1,194),(0,195);
+/*!40000 ALTER TABLE `rbac_default_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- ----------------------------
--- Records of rbac_group_roles
--- ----------------------------
-INSERT INTO rbac_group_roles VALUES ('1', '1');
-INSERT INTO rbac_group_roles VALUES ('2', '2');
-INSERT INTO rbac_group_roles VALUES ('3', '3');
-INSERT INTO rbac_group_roles VALUES ('4', '4');
-INSERT INTO rbac_group_roles VALUES ('2', '5');
-INSERT INTO rbac_group_roles VALUES ('1', '6');
-INSERT INTO rbac_group_roles VALUES ('1', '7');
-INSERT INTO rbac_group_roles VALUES ('2', '8');
-INSERT INTO rbac_group_roles VALUES ('3', '8');
-INSERT INTO rbac_group_roles VALUES ('4', '8');
-INSERT INTO rbac_group_roles VALUES ('2', '9');
-INSERT INTO rbac_group_roles VALUES ('3', '9');
-INSERT INTO rbac_group_roles VALUES ('4', '9');
-INSERT INTO rbac_group_roles VALUES ('2', '10');
-INSERT INTO rbac_group_roles VALUES ('3', '10');
-INSERT INTO rbac_group_roles VALUES ('4', '10');
-INSERT INTO rbac_group_roles VALUES ('2', '11');
-INSERT INTO rbac_group_roles VALUES ('3', '11');
-INSERT INTO rbac_group_roles VALUES ('4', '11');
-INSERT INTO rbac_group_roles VALUES ('2', '12');
-INSERT INTO rbac_group_roles VALUES ('3', '12');
-INSERT INTO rbac_group_roles VALUES ('4', '12');
-INSERT INTO rbac_group_roles VALUES ('2', '13');
-INSERT INTO rbac_group_roles VALUES ('3', '13');
-INSERT INTO rbac_group_roles VALUES ('4', '13');
-INSERT INTO rbac_group_roles VALUES ('2', '14');
-INSERT INTO rbac_group_roles VALUES ('3', '14');
-INSERT INTO rbac_group_roles VALUES ('4', '14');
-INSERT INTO rbac_group_roles VALUES ('2', '15');
-INSERT INTO rbac_group_roles VALUES ('3', '15');
-INSERT INTO rbac_group_roles VALUES ('4', '15');
-INSERT INTO rbac_group_roles VALUES ('2', '16');
-INSERT INTO rbac_group_roles VALUES ('3', '16');
-INSERT INTO rbac_group_roles VALUES ('4', '16');
-INSERT INTO rbac_group_roles VALUES ('2', '17');
-INSERT INTO rbac_group_roles VALUES ('3', '17');
-INSERT INTO rbac_group_roles VALUES ('4', '17');
-INSERT INTO rbac_group_roles VALUES ('4', '18');
-INSERT INTO rbac_group_roles VALUES ('2', '19');
-INSERT INTO rbac_group_roles VALUES ('3', '19');
-INSERT INTO rbac_group_roles VALUES ('4', '19');
-INSERT INTO rbac_group_roles VALUES ('2', '20');
-INSERT INTO rbac_group_roles VALUES ('3', '20');
-INSERT INTO rbac_group_roles VALUES ('4', '20');
-INSERT INTO rbac_group_roles VALUES ('2', '21');
-INSERT INTO rbac_group_roles VALUES ('3', '21');
-INSERT INTO rbac_group_roles VALUES ('4', '21');
-INSERT INTO rbac_group_roles VALUES ('2', '22');
-INSERT INTO rbac_group_roles VALUES ('3', '22');
-INSERT INTO rbac_group_roles VALUES ('4', '22');
-INSERT INTO rbac_group_roles VALUES ('4', '23');
-INSERT INTO rbac_group_roles VALUES ('2', '24');
-INSERT INTO rbac_group_roles VALUES ('3', '24');
-INSERT INTO rbac_group_roles VALUES ('4', '24');
-INSERT INTO rbac_group_roles VALUES ('2', '25');
-INSERT INTO rbac_group_roles VALUES ('3', '25');
-INSERT INTO rbac_group_roles VALUES ('4', '25');
-INSERT INTO rbac_group_roles VALUES ('2', '26');
-INSERT INTO rbac_group_roles VALUES ('3', '26');
-INSERT INTO rbac_group_roles VALUES ('4', '26');
-INSERT INTO rbac_group_roles VALUES ('2', '27');
-INSERT INTO rbac_group_roles VALUES ('3', '27');
-INSERT INTO rbac_group_roles VALUES ('4', '27');
-INSERT INTO rbac_group_roles VALUES ('2', '28');
-INSERT INTO rbac_group_roles VALUES ('3', '28');
-INSERT INTO rbac_group_roles VALUES ('4', '28');
-INSERT INTO rbac_group_roles VALUES ('2', '29');
-INSERT INTO rbac_group_roles VALUES ('3', '29');
-INSERT INTO rbac_group_roles VALUES ('4', '29');
-INSERT INTO rbac_group_roles VALUES ('2', '30');
-INSERT INTO rbac_group_roles VALUES ('3', '30');
-INSERT INTO rbac_group_roles VALUES ('4', '30');
-INSERT INTO rbac_group_roles VALUES ('2', '32');
-INSERT INTO rbac_group_roles VALUES ('3', '32');
-INSERT INTO rbac_group_roles VALUES ('4', '32');
-INSERT INTO rbac_group_roles VALUES ('2', '33');
-INSERT INTO rbac_group_roles VALUES ('3', '33');
-INSERT INTO rbac_group_roles VALUES ('4', '33');
-INSERT INTO rbac_group_roles VALUES ('1', '34');
-INSERT INTO rbac_group_roles VALUES ('2', '35');
-INSERT INTO rbac_group_roles VALUES ('3', '35');
-INSERT INTO rbac_group_roles VALUES ('4', '35');
-INSERT INTO rbac_group_roles VALUES ('2', '36');
-INSERT INTO rbac_group_roles VALUES ('3', '36');
-INSERT INTO rbac_group_roles VALUES ('4', '36');
-INSERT INTO rbac_group_roles VALUES ('2', '37');
-INSERT INTO rbac_group_roles VALUES ('3', '37');
-INSERT INTO rbac_group_roles VALUES ('4', '37');
-INSERT INTO rbac_group_roles VALUES ('2', '38');
-INSERT INTO rbac_group_roles VALUES ('3', '38');
-INSERT INTO rbac_group_roles VALUES ('4', '38');
-INSERT INTO rbac_group_roles VALUES ('3', '39');
-INSERT INTO rbac_group_roles VALUES ('4', '39');
+--
+-- Table structure for table `rbac_linked_permissions`
+--
 
--- ----------------------------
--- Table structure for `rbac_permissions`
--- ----------------------------
+DROP TABLE IF EXISTS `rbac_linked_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rbac_linked_permissions` (
+  `id` int(10) unsigned NOT NULL COMMENT 'Permission id',
+  `linkedId` int(10) unsigned NOT NULL COMMENT 'Linked Permission id',
+  PRIMARY KEY (`id`,`linkedId`),
+  KEY `fk__rbac_linked_permissions__rbac_permissions1` (`id`),
+  KEY `fk__rbac_linked_permissions__rbac_permissions2` (`linkedId`),
+  CONSTRAINT `fk__rbac_linked_permissions__rbac_permissions1` FOREIGN KEY (`id`) REFERENCES `rbac_permissions` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk__rbac_linked_permissions__rbac_permissions2` FOREIGN KEY (`linkedId`) REFERENCES `rbac_permissions` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Permission - Linked Permission relation';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rbac_linked_permissions`
+--
+
+LOCK TABLES `rbac_linked_permissions` WRITE;
+/*!40000 ALTER TABLE `rbac_linked_permissions` DISABLE KEYS */;
+INSERT INTO `rbac_linked_permissions` VALUES (192,21),(192,42),(192,43),(192,193),(192,196),(193,48),(193,194),(193,197),(194,1),(194,2),(194,11),(194,13),(194,14),(194,15),(194,16),(194,17),(194,18),(194,19),(194,20),(194,22),(194,23),(194,25),(194,26),(194,27),(194,28),(194,29),(194,30),(194,31),(194,32),(194,33),(194,34),(194,35),(194,36),(194,37),(194,38),(194,39),(194,40),(194,41),(194,44),(194,46),(194,47),(194,195),(194,198),(195,3),(195,4),(195,5),(195,6),(195,24),(195,49),(195,199),(196,200),(196,201),(196,226),(196,227),(196,230),(196,231),(196,233),(196,234),(196,235),(196,238),(196,239),(196,240),(196,241),(196,242),(196,243),(196,244),(196,245),(196,246),(196,247),(196,248),(196,249),(196,250),(196,251),(196,252),(196,253),(196,254),(196,255),(196,256),(196,257),(196,258),(196,259),(196,260),(196,261),(196,262),(196,264),(196,265),(196,266),(196,267),(196,268),(196,269),(196,270),(196,271),(196,272),(196,279),(196,280),(196,283),(196,287),(196,288),(196,289),(196,290),(196,291),(196,292),(196,293),(196,294),(196,295),(196,296),(196,297),(196,298),(196,299),(196,302),(196,303),(196,304),(196,305),(196,306),(196,307),(196,308),(196,309),(196,310),(196,313),(196,314),(196,319),(196,320),(196,321),(196,322),(196,323),(196,324),(196,325),(196,326),(196,327),(196,328),(196,329),(196,330),(196,331),(196,332),(196,333),(196,334),(196,335),(196,336),(196,337),(196,338),(196,339),(196,340),(196,341),(196,342),(196,343),(196,344),(196,345),(196,346),(196,347),(196,348),(196,349),(196,350),(196,351),(196,352),(196,353),(196,354),(196,355),(196,356),(196,357),(196,358),(196,359),(196,360),(196,361),(196,362),(196,363),(196,364),(196,365),(196,366),(196,373),(196,375),(196,400),(196,401),(196,402),(196,403),(196,404),(196,405),(196,406),(196,407),(196,417),(196,418),(196,419),(196,420),(196,421),(196,422),(196,423),(196,424),(196,425),(196,426),(196,427),(196,428),(196,429),(196,434),(196,435),(196,436),(196,437),(196,438),(196,439),(196,440),(196,441),(196,442),(196,443),(196,444),(196,445),(196,446),(196,447),(196,448),(196,449),(196,450),(196,451),(196,452),(196,453),(196,454),(196,455),(196,456),(196,457),(196,458),(196,459),(196,461),(196,463),(196,464),(196,465),(196,472),(196,473),(196,474),(196,475),(196,476),(196,477),(196,478),(196,488),(196,489),(196,491),(196,492),(196,493),(196,495),(196,497),(196,498),(196,499),(196,500),(196,502),(196,503),(196,505),(196,508),(196,511),(196,513),(196,514),(196,516),(196,519),(196,522),(196,523),(196,526),(196,527),(196,529),(196,530),(196,533),(196,535),(196,536),(196,537),(196,538),(196,539),(196,540),(196,541),(196,556),(196,581),(196,582),(196,592),(196,593),(196,596),(196,602),(196,603),(196,604),(196,605),(196,606),(196,607),(196,608),(196,609),(196,610),(196,611),(196,612),(196,613),(196,614),(196,615),(196,616),(196,617),(196,618),(196,619),(196,620),(196,621),(196,622),(196,623),(196,624),(196,625),(196,626),(196,627),(196,628),(196,629),(196,630),(196,631),(196,632),(196,633),(196,634),(196,635),(196,636),(196,637),(196,638),(196,639),(196,640),(196,641),(196,642),(196,643),(196,644),(196,645),(196,646),(196,647),(196,648),(196,649),(196,650),(196,651),(196,652),(196,653),(196,654),(196,655),(196,656),(196,657),(196,658),(196,659),(196,660),(196,661),(196,662),(196,663),(196,664),(196,665),(196,666),(196,667),(196,668),(196,669),(196,670),(196,671),(196,672),(196,673),(196,674),(196,675),(196,676),(196,677),(196,678),(196,679),(196,680),(196,681),(196,682),(196,683),(196,684),(196,685),(196,686),(196,687),(196,688),(196,689),(196,690),(196,691),(196,692),(196,693),(196,694),(196,695),(196,696),(196,697),(196,698),(196,699),(196,700),(196,701),(196,702),(196,703),(196,704),(196,705),(196,706),(196,707),(196,708),(196,709),(196,710),(196,711),(196,712),(196,713),(196,714),(196,715),(196,716),(196,717),(196,718),(196,719),(196,721),(196,722),(196,723),(196,724),(196,725),(196,726),(196,727),(196,728),(196,729),(196,730),(196,733),(196,734),(196,735),(196,736),(196,738),(196,739),(196,748),(196,753),(196,757),(196,773),(197,232),(197,236),(197,237),(197,273),(197,274),(197,275),(197,276),(197,277),(197,284),(197,285),(197,286),(197,301),(197,311),(197,387),(197,388),(197,389),(197,390),(197,391),(197,392),(197,393),(197,394),(197,395),(197,396),(197,397),(197,398),(197,399),(197,479),(197,480),(197,481),(197,482),(197,485),(197,486),(197,487),(197,494),(197,506),(197,509),(197,510),(197,517),(197,518),(197,521),(197,542),(197,543),(197,550),(197,558),(197,568),(197,571),(197,572),(197,573),(197,574),(197,575),(197,576),(197,577),(197,578),(197,579),(197,580),(197,583),(197,584),(197,585),(197,586),(197,587),(197,588),(197,589),(197,590),(197,591),(197,594),(197,595),(197,601),(197,743),(197,750),(197,758),(197,761),(197,762),(197,763),(197,764),(197,765),(197,766),(197,767),(197,768),(197,769),(197,770),(197,771),(197,772),(197,774),(198,218),(198,300),(198,312),(198,315),(198,316),(198,317),(198,318),(198,367),(198,368),(198,369),(198,370),(198,371),(198,372),(198,374),(198,376),(198,377),(198,378),(198,379),(198,380),(198,381),(198,382),(198,383),(198,384),(198,385),(198,386),(198,408),(198,409),(198,410),(198,411),(198,412),(198,413),(198,414),(198,415),(198,416),(198,430),(198,431),(198,432),(198,433),(198,462),(198,466),(198,467),(198,468),(198,469),(198,470),(198,471),(198,483),(198,484),(198,490),(198,504),(198,512),(198,515),(198,520),(198,524),(198,528),(198,531),(198,532),(198,544),(198,545),(198,546),(198,547),(198,548),(198,549),(198,551),(198,552),(198,553),(198,554),(198,555),(198,557),(198,559),(198,560),(198,561),(198,562),(198,563),(198,564),(198,565),(198,566),(198,567),(198,569),(198,570),(198,597),(198,598),(198,599),(198,600),(198,737),(198,740),(198,741),(198,742),(198,744),(198,745),(198,746),(198,747),(198,749),(198,751),(198,752),(198,754),(198,755),(198,756),(198,759),(198,760),(199,217),(199,221),(199,222),(199,223),(199,225),(199,263),(199,496),(199,501),(199,507),(199,525),(199,534);
+/*!40000 ALTER TABLE `rbac_linked_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rbac_permissions`
+--
+
 DROP TABLE IF EXISTS `rbac_permissions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rbac_permissions` (
   `id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Permission id',
   `name` varchar(100) NOT NULL COMMENT 'Permission name',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Permission List';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of rbac_permissions
--- ----------------------------
-INSERT INTO rbac_permissions VALUES ('1', 'Instant logout');
-INSERT INTO rbac_permissions VALUES ('2', 'Skip Queue');
-INSERT INTO rbac_permissions VALUES ('3', 'Join Normal Battleground');
-INSERT INTO rbac_permissions VALUES ('4', 'Join Random Battleground');
-INSERT INTO rbac_permissions VALUES ('5', 'Join Arenas');
-INSERT INTO rbac_permissions VALUES ('6', 'Join Dungeon Finder');
-INSERT INTO rbac_permissions VALUES ('7', 'Player Commands (Temporal till commands moved to rbac)');
-INSERT INTO rbac_permissions VALUES ('8', 'Moderator Commands (Temporal till commands moved to rbac)');
-INSERT INTO rbac_permissions VALUES ('9', 'GameMaster Commands (Temporal till commands moved to rbac)');
-INSERT INTO rbac_permissions VALUES ('10', 'Administrator Commands (Temporal till commands moved to rbac)');
-INSERT INTO rbac_permissions VALUES ('11', 'Log GM trades');
-INSERT INTO rbac_permissions VALUES ('13', 'Skip Instance required bosses check');
-INSERT INTO rbac_permissions VALUES ('14', 'Skip character creation team mask check');
-INSERT INTO rbac_permissions VALUES ('15', 'Skip character creation class mask check');
-INSERT INTO rbac_permissions VALUES ('16', 'Skip character creation race mask check');
-INSERT INTO rbac_permissions VALUES ('17', 'Skip character creation reserved name check');
-INSERT INTO rbac_permissions VALUES ('18', 'Skip character creation heroic min level check');
-INSERT INTO rbac_permissions VALUES ('19', 'Skip needed requirements to use channel check');
-INSERT INTO rbac_permissions VALUES ('20', 'Skip disable map check');
-INSERT INTO rbac_permissions VALUES ('21', 'Skip reset talents when used more than allowed check');
-INSERT INTO rbac_permissions VALUES ('22', 'Skip spam chat check');
-INSERT INTO rbac_permissions VALUES ('23', 'Skip over-speed ping check');
-INSERT INTO rbac_permissions VALUES ('24', 'Two side faction characters on the same account');
-INSERT INTO rbac_permissions VALUES ('25', 'Allow say chat between factions');
-INSERT INTO rbac_permissions VALUES ('26', 'Allow channel chat between factions');
-INSERT INTO rbac_permissions VALUES ('27', 'Two side mail interaction');
-INSERT INTO rbac_permissions VALUES ('28', 'See two side who list');
-INSERT INTO rbac_permissions VALUES ('29', 'Add friends of other faction');
-INSERT INTO rbac_permissions VALUES ('30', 'Save character without delay with .save command');
-INSERT INTO rbac_permissions VALUES ('31', 'Use params with .unstuck command');
-INSERT INTO rbac_permissions VALUES ('32', 'Can be assigned tickets with .assign ticket command');
-INSERT INTO rbac_permissions VALUES ('33', 'Notify if a command was not found');
-INSERT INTO rbac_permissions VALUES ('34', 'Check if should appear in list using .gm ingame command');
-INSERT INTO rbac_permissions VALUES ('35', 'See all security levels with who command');
-INSERT INTO rbac_permissions VALUES ('36', 'Filter whispers');
-INSERT INTO rbac_permissions VALUES ('37', 'Use staff badge in chat');
-INSERT INTO rbac_permissions VALUES ('38', 'Resurrect with full Health Points');
-INSERT INTO rbac_permissions VALUES ('39', 'Restore saved gm setting states');
-INSERT INTO rbac_permissions VALUES ('40', 'Allows to add a gm to friend list');
-INSERT INTO rbac_permissions VALUES ('41', 'Use Config option START_GM_LEVEL to assign new character level');
-INSERT INTO rbac_permissions VALUES ('42', 'Allows to use CMSG_WORLD_TELEPORT opcode');
-INSERT INTO rbac_permissions VALUES ('43', 'Allows to use CMSG_WHOIS opcode');
-INSERT INTO rbac_permissions VALUES ('44', 'Receive global GM messages/texts');
-INSERT INTO rbac_permissions VALUES ('45', 'Join channels without announce');
-INSERT INTO rbac_permissions VALUES ('46', 'Change channel settings without being channel moderator');
-INSERT INTO rbac_permissions VALUES ('47', 'Enables lower security than target check');
-INSERT INTO rbac_permissions VALUES ('48', 'Enable IP, Last Login and EMail output in pinfo');
+--
+-- Dumping data for table `rbac_permissions`
+--
 
--- ----------------------------
--- Table structure for `rbac_roles`
--- ----------------------------
-DROP TABLE IF EXISTS `rbac_roles`;
-CREATE TABLE `rbac_roles` (
-  `id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'Role id',
-  `name` varchar(100) NOT NULL COMMENT 'Role name',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Roles List';
+LOCK TABLES `rbac_permissions` WRITE;
+/*!40000 ALTER TABLE `rbac_permissions` DISABLE KEYS */;
+INSERT INTO `rbac_permissions` VALUES (1,'Instant logout'),(2,'Skip Queue'),(3,'Join Normal Battleground'),(4,'Join Random Battleground'),(5,'Join Arenas'),(6,'Join Dungeon Finder'),(11,'Log GM trades'),(13,'Skip Instance required bosses check'),(14,'Skip character creation team mask check'),(15,'Skip character creation class mask check'),(16,'Skip character creation race mask check'),(17,'Skip character creation reserved name check'),(18,'Skip character creation heroic min level check'),(19,'Skip needed requirements to use channel check'),(20,'Skip disable map check'),(21,'Skip reset talents when used more than allowed check'),(22,'Skip spam chat check'),(23,'Skip over-speed ping check'),(24,'Two side faction characters on the same account'),(25,'Allow say chat between factions'),(26,'Allow channel chat between factions'),(27,'Two side mail interaction'),(28,'See two side who list'),(29,'Add friends of other faction'),(30,'Save character without delay with .save command'),(31,'Use params with .unstuck command'),(32,'Can be assigned tickets with .assign ticket command'),(33,'Notify if a command was not found'),(34,'Check if should appear in list using .gm ingame command'),(35,'See all security levels with who command'),(36,'Filter whispers'),(37,'Use staff badge in chat'),(38,'Resurrect with full Health Points'),(39,'Restore saved gm setting states'),(40,'Allows to add a gm to friend list'),(41,'Use Config option START_GM_LEVEL to assign new character level'),(42,'Allows to use CMSG_WORLD_TELEPORT opcode'),(43,'Allows to use CMSG_WHOIS opcode'),(44,'Receive global GM messages/texts'),(45,'Join channels without announce'),(46,'Change channel settings without being channel moderator'),(47,'Enables lower security than target check'),(48,'Enable IP, Last Login and EMail output in pinfo'),(49,'Forces to enter the email for confirmation on password change'),(50,'Allow user to check his own email with .account'),(192,'Role: Sec Level Administrator'),(193,'Role: Sec Level Gamemaster'),(194,'Role: Sec Level Moderator'),(195,'Role: Sec Level Player'),(196,'Role: Administrator Commands'),(197,'Role: Gamemaster Commands'),(198,'Role: Moderator Commands'),(199,'Role: Player Commands'),(200,'Command: rbac'),(201,'Command: rbac account'),(202,'Command: rbac account list'),(203,'Command: rbac account grant'),(204,'Command: rbac account deny'),(205,'Command: rbac account revoke'),(206,'Command: rbac list'),(217,'Command: account'),(218,'Command: account addon'),(219,'Command: account create'),(220,'Command: account delete'),(221,'Command: account lock'),(222,'Command: account lock country'),(223,'Command: account lock ip'),(224,'Command: account onlinelist'),(225,'Command: account password'),(226,'Command: account set'),(227,'Command: account set addon'),(228,'Command: account set gmlevel'),(229,'Command: account set password'),(230,'Command: achievement'),(231,'Command: achievement add'),(232,'Command: arena'),(233,'Command: arena captain'),(234,'Command: arena create'),(235,'Command: arena disband'),(236,'Command: arena info'),(237,'Command: arena lookup'),(238,'Command: arena rename'),(239,'Command: ban'),(240,'Command: ban account'),(241,'Command: ban character'),(242,'Command: ban ip'),(243,'Command: ban playeraccount'),(244,'Command: baninfo'),(245,'Command: baninfo account'),(246,'Command: baninfo character'),(247,'Command: baninfo ip'),(248,'Command: banlist'),(249,'Command: banlist account'),(250,'Command: banlist character'),(251,'Command: banlist ip'),(252,'Command: unban'),(253,'Command: unban account'),(254,'Command: unban character'),(255,'Command: unban ip'),(256,'Command: unban playeraccount'),(257,'Command: bf'),(258,'Command: bf start'),(259,'Command: bf stop'),(260,'Command: bf switch'),(261,'Command: bf timer'),(262,'Command: bf enable'),(263,'Command: account email'),(264,'Command: account set sec'),(265,'Command: account set sec email'),(266,'Command: account set sec regmail'),(267,'Command: cast'),(268,'Command: cast back'),(269,'Command: cast dist'),(270,'Command: cast self'),(271,'Command: cast target'),(272,'Command: cast dest'),(273,'Command: character'),(274,'Command: character customize'),(275,'Command: character changefaction'),(276,'Command: character changerace'),(277,'Command: character deleted'),(279,'Command: character deleted list'),(280,'Command: character deleted restore'),(283,'Command: character level'),(284,'Command: character rename'),(285,'Command: character reputation'),(286,'Command: character titles'),(287,'Command: levelup'),(288,'Command: pdump'),(289,'Command: pdump load'),(290,'Command: pdump write'),(291,'Command: cheat'),(292,'Command: cheat casttime'),(293,'Command: cheat cooldown'),(294,'Command: cheat explore'),(295,'Command: cheat god'),(296,'Command: cheat power'),(297,'Command: cheat status'),(298,'Command: cheat taxi'),(299,'Command: cheat waterwalk'),(300,'Command: debug'),(301,'Command: debug anim'),(302,'Command: debug areatriggers'),(303,'Command: debug arena'),(304,'Command: debug bg'),(305,'Command: debug entervehicle'),(306,'Command: debug getitemstate'),(307,'Command: debug getitemvalue'),(308,'Command: debug getvalue'),(309,'Command: debug hostil'),(310,'Command: debug itemexpire'),(311,'Command: debug lootrecipient'),(312,'Command: debug los'),(313,'Command: debug mod32value'),(314,'Command: debug moveflags'),(315,'Command: debug play'),(316,'Command: debug play cinematics'),(317,'Command: debug play movie'),(318,'Command: debug play sound'),(319,'Command: debug send'),(320,'Command: debug send buyerror'),(321,'Command: debug send channelnotify'),(322,'Command: debug send chatmessage'),(323,'Command: debug send equiperror'),(324,'Command: debug send largepacket'),(325,'Command: debug send opcode'),(326,'Command: debug send qinvalidmsg'),(327,'Command: debug send qpartymsg'),(328,'Command: debug send sellerror'),(329,'Command: debug send setphaseshift'),(330,'Command: debug send spellfail'),(331,'Command: debug setaurastate'),(332,'Command: debug setbit'),(333,'Command: debug setitemvalue'),(334,'Command: debug setvalue'),(335,'Command: debug setvid'),(336,'Command: debug spawnvehicle'),(337,'Command: debug threat'),(338,'Command: debug update'),(339,'Command: debug uws'),(340,'Command: wpgps'),(341,'Command: deserter'),(342,'Command: deserter bg'),(343,'Command: deserter bg add'),(344,'Command: deserter bg remove'),(345,'Command: deserter instance'),(346,'Command: deserter instance add'),(347,'Command: deserter instance remove'),(348,'Command: disable'),(349,'Command: disable add'),(350,'Command: disable add achievement_criteria'),(351,'Command: disable add battleground'),(352,'Command: disable add map'),(353,'Command: disable add mmap'),(354,'Command: disable add outdoorpvp'),(355,'Command: disable add quest'),(356,'Command: disable add spell'),(357,'Command: disable add vmap'),(358,'Command: disable remove'),(359,'Command: disable remove achievement_criteria'),(360,'Command: disable remove battleground'),(361,'Command: disable remove map'),(362,'Command: disable remove mmap'),(363,'Command: disable remove outdoorpvp'),(364,'Command: disable remove quest'),(365,'Command: disable remove spell'),(366,'Command: disable remove vmap'),(367,'Command: event'),(368,'Command: event activelist'),(369,'Command: event start'),(370,'Command: event stop'),(371,'Command: gm'),(372,'Command: gm chat'),(373,'Command: gm fly'),(374,'Command: gm ingame'),(375,'Command: gm list'),(376,'Command: gm visible'),(377,'Command: go'),(378,'Command: go creature'),(379,'Command: go graveyard'),(380,'Command: go grid'),(381,'Command: go object'),(382,'Command: go taxinode'),(383,'Command: go ticket'),(384,'Command: go trigger'),(385,'Command: go xyz'),(386,'Command: go zonexy'),(387,'Command: gobject'),(388,'Command: gobject activate'),(389,'Command: gobject add'),(390,'Command: gobject add temp'),(391,'Command: gobject delete'),(392,'Command: gobject info'),(393,'Command: gobject move'),(394,'Command: gobject near'),(395,'Command: gobject set'),(396,'Command: gobject set phase'),(397,'Command: gobject set state'),(398,'Command: gobject target'),(399,'Command: gobject turn'),(400,'debug transport'),(401,'Command: guild'),(402,'Command: guild create'),(403,'Command: guild delete'),(404,'Command: guild invite'),(405,'Command: guild uninvite'),(406,'Command: guild rank'),(407,'Command: guild rename'),(408,'Command: honor'),(409,'Command: honor add'),(410,'Command: honor add kill'),(411,'Command: honor update'),(412,'Command: instance'),(413,'Command: instance listbinds'),(414,'Command: instance unbind'),(415,'Command: instance stats'),(416,'Command: instance savedata'),(417,'Command: learn'),(418,'Command: learn all'),(419,'Command: learn all my'),(420,'Command: learn all my class'),(421,'Command: learn all my pettalents'),(422,'Command: learn all my spells'),(423,'Command: learn all my talents'),(424,'Command: learn all gm'),(425,'Command: learn all crafts'),(426,'Command: learn all default'),(427,'Command: learn all lang'),(428,'Command: learn all recipes'),(429,'Command: unlearn'),(430,'Command: lfg'),(431,'Command: lfg player'),(432,'Command: lfg group'),(433,'Command: lfg queue'),(434,'Command: lfg clean'),(435,'Command: lfg options'),(436,'Command: list'),(437,'Command: list creature'),(438,'Command: list item'),(439,'Command: list object'),(440,'Command: list auras'),(441,'Command: list mail'),(442,'Command: lookup'),(443,'Command: lookup area'),(444,'Command: lookup creature'),(445,'Command: lookup event'),(446,'Command: lookup faction'),(447,'Command: lookup item'),(448,'Command: lookup itemset'),(449,'Command: lookup object'),(450,'Command: lookup quest'),(451,'Command: lookup player'),(452,'Command: lookup player ip'),(453,'Command: lookup player account'),(454,'Command: lookup player email'),(455,'Command: lookup skill'),(456,'Command: lookup spell'),(457,'Command: lookup spell id'),(458,'Command: lookup taxinode'),(459,'Command: lookup tele'),(460,'Command: lookup title'),(461,'Command: lookup map'),(462,'Command: announce'),(463,'Command: channel'),(464,'Command: channel set'),(465,'Command: channel set ownership'),(466,'Command: gmannounce'),(467,'Command: gmnameannounce'),(468,'Command: gmnotify'),(469,'Command: nameannounce'),(470,'Command: notify'),(471,'Command: whispers'),(472,'Command: group'),(473,'Command: group leader'),(474,'Command: group disband'),(475,'Command: group remove'),(476,'Command: group join'),(477,'Command: group list'),(478,'Command: group summon'),(479,'Command: pet'),(480,'Command: pet create'),(481,'Command: pet learn'),(482,'Command: pet unlearn'),(483,'Command: send'),(484,'Command: send items'),(485,'Command: send mail'),(486,'Command: send message'),(487,'Command: send money'),(488,'Command: additem'),(489,'Command: additemset'),(490,'Command: appear'),(491,'Command: aura'),(492,'Command: bank'),(493,'Command: bindsight'),(494,'Command: combatstop'),(495,'Command: cometome'),(496,'Command: commands'),(497,'Command: cooldown'),(498,'Command: damage'),(499,'Command: dev'),(500,'Command: die'),(501,'Command: dismount'),(502,'Command: distance'),(503,'Command: flusharenapoints'),(504,'Command: freeze'),(505,'Command: gps'),(506,'Command: guid'),(507,'Command: help'),(508,'Command: hidearea'),(509,'Command: itemmove'),(510,'Command: kick'),(511,'Command: linkgrave'),(512,'Command: listfreeze'),(513,'Command: maxskill'),(514,'Command: movegens'),(515,'Command: mute'),(516,'Command: neargrave'),(517,'Command: pinfo'),(518,'Command: playall'),(519,'Command: possess'),(520,'Command: recall'),(521,'Command: repairitems'),(522,'Command: respawn'),(523,'Command: revive'),(524,'Command: saveall'),(525,'Command: save'),(526,'Command: setskill'),(527,'Command: showarea'),(528,'Command: summon'),(529,'Command: unaura'),(530,'Command: unbindsight'),(531,'Command: unfreeze'),(532,'Command: unmute'),(533,'Command: unpossess'),(534,'Command: unstuck'),(535,'Command: wchange'),(536,'Command: mmap'),(537,'Command: mmap loadedtiles'),(538,'Command: mmap loc'),(539,'Command: mmap path'),(540,'Command: mmap stats'),(541,'Command: mmap testarea'),(542,'Command: morph'),(543,'Command: demorph'),(544,'Command: modify'),(545,'Command: modify arenapoints'),(546,'Command: modify bit'),(547,'Command: modify drunk'),(548,'Command: modify energy'),(549,'Command: modify faction'),(550,'Command: modify gender'),(551,'Command: modify honor'),(552,'Command: modify hp'),(553,'Command: modify mana'),(554,'Command: modify money'),(555,'Command: modify mount'),(556,'Command: modify phase'),(557,'Command: modify rage'),(558,'Command: modify reputation'),(559,'Command: modify runicpower'),(560,'Command: modify scale'),(561,'Command: modify speed'),(562,'Command: modify speed all'),(563,'Command: modify speed backwalk'),(564,'Command: modify speed fly'),(565,'Command: modify speed walk'),(566,'Command: modify speed swim'),(567,'Command: modify spell'),(568,'Command: modify standstate'),(569,'Command: modify talentpoints'),(570,'Command: npc'),(571,'Command: npc add'),(572,'Command: npc add formation'),(573,'Command: npc add item'),(574,'Command: npc add move'),(575,'Command: npc add temp'),(576,'Command: npc add delete'),(577,'Command: npc add delete item'),(578,'Command: npc add follow'),(579,'Command: npc add follow stop'),(580,'Command: npc set'),(581,'Command: npc set allowmove'),(582,'Command: npc set entry'),(583,'Command: npc set factionid'),(584,'Command: npc set flag'),(585,'Command: npc set level'),(586,'Command: npc set link'),(587,'Command: npc set model'),(588,'Command: npc set movetype'),(589,'Command: npc set phase'),(590,'Command: npc set spawndist'),(591,'Command: npc set spawntime'),(592,'Command: npc set data'),(593,'Command: npc info'),(594,'Command: npc near'),(595,'Command: npc move'),(596,'Command: npc playemote'),(597,'Command: npc say'),(598,'Command: npc textemote'),(599,'Command: npc whisper'),(600,'Command: npc yell'),(601,'Command: npc tame'),(602,'Command: quest'),(603,'Command: quest add'),(604,'Command: quest complete'),(605,'Command: quest remove'),(606,'Command: quest reward'),(607,'Command: reload'),(608,'Command: reload access_requirement'),(609,'Command: reload achievement_criteria_data'),(610,'Command: reload achievement_reward'),(611,'Command: reload all'),(612,'Command: reload all achievement'),(613,'Command: reload all area'),(614,'Command: reload all eventai'),(615,'Command: reload all gossips'),(616,'Command: reload all item'),(617,'Command: reload all locales'),(618,'Command: reload all loot'),(619,'Command: reload all npc'),(620,'Command: reload all quest'),(621,'Command: reload all scripts'),(622,'Command: reload all spell'),(623,'Command: reload areatrigger_involvedrelation'),(624,'Command: reload areatrigger_tavern'),(625,'Command: reload areatrigger_teleport'),(626,'Command: reload auctions'),(627,'Command: reload autobroadcast'),(628,'Command: reload command'),(629,'Command: reload conditions'),(630,'Command: reload config'),(631,'Command: reload creature_text'),(632,'Command: reload creature_ai_scripts'),(633,'Command: reload creature_ai_texts'),(634,'Command: reload creature_questender'),(635,'Command: reload creature_linked_respawn'),(636,'Command: reload creature_loot_template'),(637,'Command: reload creature_onkill_reputation'),(638,'Command: reload creature_queststarter'),(639,'Command: reload creature_summon_groups'),(640,'Command: reload creature_template'),(641,'Command: reload disables'),(642,'Command: reload disenchant_loot_template'),(643,'Command: reload event_scripts'),(644,'Command: reload fishing_loot_template'),(645,'Command: reload game_graveyard_zone'),(646,'Command: reload game_tele'),(647,'Command: reload gameobject_questender'),(648,'Command: reload gameobject_loot_template'),(649,'Command: reload gameobject_queststarter'),(650,'Command: reload gm_tickets'),(651,'Command: reload gossip_menu'),(652,'Command: reload gossip_menu_option'),(653,'Command: reload item_enchantment_template'),(654,'Command: reload item_loot_template'),(655,'Command: reload item_set_names'),(656,'Command: reload lfg_dungeon_rewards'),(657,'Command: reload locales_achievement_reward'),(658,'Command: reload locales_creature'),(659,'Command: reload locales_creature_text'),(660,'Command: reload locales_gameobject'),(661,'Command: reload locales_gossip_menu_option'),(662,'Command: reload locales_item'),(663,'Command: reload locales_item_set_name'),(664,'Command: reload locales_npc_text'),(665,'Command: reload locales_page_text'),(666,'Command: reload locales_points_of_interest'),(667,'Command: reload locales_quest'),(668,'Command: reload mail_level_reward'),(669,'Command: reload mail_loot_template'),(670,'Command: reload milling_loot_template'),(671,'Command: reload npc_spellclick_spells'),(672,'Command: reload npc_trainer'),(673,'Command: reload npc_vendor'),(674,'Command: reload page_text'),(675,'Command: reload pickpocketing_loot_template'),(676,'Command: reload points_of_interest'),(677,'Command: reload prospecting_loot_template'),(678,'Command: reload quest_poi'),(679,'Command: reload quest_template'),(680,'Command: reload rbac'),(681,'Command: reload reference_loot_template'),(682,'Command: reload reserved_name'),(683,'Command: reload reputation_reward_rate'),(684,'Command: reload reputation_spillover_template'),(685,'Command: reload skill_discovery_template'),(686,'Command: reload skill_extra_item_template'),(687,'Command: reload skill_fishing_base_level'),(688,'Command: reload skinning_loot_template'),(689,'Command: reload smart_scripts'),(690,'Command: reload spell_required'),(691,'Command: reload spell_area'),(692,'Command: reload spell_bonus_data'),(693,'Command: reload spell_group'),(694,'Command: reload spell_learn_spell'),(695,'Command: reload spell_loot_template'),(696,'Command: reload spell_linked_spell'),(697,'Command: reload spell_pet_auras'),(698,'Command: reload spell_proc_event'),(699,'Command: reload spell_proc'),(700,'Command: reload spell_scripts'),(701,'Command: reload spell_target_position'),(702,'Command: reload spell_threats'),(703,'Command: reload spell_group_stack_rules'),(704,'Command: reload trinity_string'),(705,'Command: reload warden_action'),(706,'Command: reload waypoint_scripts'),(707,'Command: reload waypoint_data'),(708,'Command: reload vehicle_accessory'),(709,'Command: reload vehicle_template_accessory'),(710,'Command: reset'),(711,'Command: reset achievements'),(712,'Command: reset honor'),(713,'Command: reset level'),(714,'Command: reset spells'),(715,'Command: reset stats'),(716,'Command: reset talents'),(717,'Command: reset all'),(718,'Command: server'),(719,'Command: server corpses'),(720,'Command: server exit'),(721,'Command: server idlerestart'),(722,'Command: server idlerestart cancel'),(723,'Command: server idleshutdown'),(724,'Command: server idleshutdown cancel'),(725,'Command: server info'),(726,'Command: server plimit'),(727,'Command: server restart'),(728,'Command: server restart cancel'),(729,'Command: server set'),(730,'Command: server set closed'),(731,'Command: server set difftime'),(732,'Command: server set loglevel'),(733,'Command: server set motd'),(734,'Command: server shutdown'),(735,'Command: server shutdown cancel'),(736,'Command: server motd'),(737,'Command: tele'),(738,'Command: tele add'),(739,'Command: tele del'),(740,'Command: tele name'),(741,'Command: tele group'),(742,'Command: ticket'),(743,'Command: ticket assign'),(744,'Command: ticket close'),(745,'Command: ticket closedlist'),(746,'Command: ticket comment'),(747,'Command: ticket complete'),(748,'Command: ticket delete'),(749,'Command: ticket escalate'),(750,'Command: ticket escalatedlist'),(751,'Command: ticket list'),(752,'Command: ticket onlinelist'),(753,'Command: ticket reset'),(754,'Command: ticket response'),(755,'Command: ticket response append'),(756,'Command: ticket response appendln'),(757,'Command: ticket togglesystem'),(758,'Command: ticket unassign'),(759,'Command: ticket viewid'),(760,'Command: ticket viewname'),(761,'Command: titles'),(762,'Command: titles add'),(763,'Command: titles current'),(764,'Command: titles remove'),(765,'Command: titles set'),(766,'Command: titles set mask'),(767,'Command: wp'),(768,'Command: wp add'),(769,'Command: wp event'),(770,'Command: wp load'),(771,'Command: wp modify'),(772,'Command: wp unload'),(773,'Command: wp reload'),(774,'Command: wp show');
+/*!40000 ALTER TABLE `rbac_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- ----------------------------
--- Records of rbac_roles
--- ----------------------------
-INSERT INTO rbac_roles VALUES ('1', 'Player Commands');
-INSERT INTO rbac_roles VALUES ('2', 'Moderator Commands');
-INSERT INTO rbac_roles VALUES ('3', 'GameMaster Commands');
-INSERT INTO rbac_roles VALUES ('4', 'Administrator Commands');
-INSERT INTO rbac_roles VALUES ('5', 'Quick Login/Logout');
-INSERT INTO rbac_roles VALUES ('6', 'Use Battleground/Arenas');
-INSERT INTO rbac_roles VALUES ('7', 'Use Dungeon Finder');
-INSERT INTO rbac_roles VALUES ('8', 'Log GM trades');
-INSERT INTO rbac_roles VALUES ('9', 'Skip Instance required bosses check');
-INSERT INTO rbac_roles VALUES ('10', 'Ticket management');
-INSERT INTO rbac_roles VALUES ('11', 'Instant .save');
-INSERT INTO rbac_roles VALUES ('12', 'Allow params with .unstuck');
-INSERT INTO rbac_roles VALUES ('13', 'Full HP after resurrect');
-INSERT INTO rbac_roles VALUES ('14', 'Appear in GM ingame list');
-INSERT INTO rbac_roles VALUES ('15', 'Use staff badge in chat');
-INSERT INTO rbac_roles VALUES ('16', 'Receive global GM messages/texts');
-INSERT INTO rbac_roles VALUES ('17', 'Skip over-speed ping check');
-INSERT INTO rbac_roles VALUES ('18', 'Allows Admin Opcodes');
-INSERT INTO rbac_roles VALUES ('19', 'Two side mail interaction');
-INSERT INTO rbac_roles VALUES ('20', 'Notify if a command was not found');
-INSERT INTO rbac_roles VALUES ('21', 'Enables lower security than target check');
-INSERT INTO rbac_roles VALUES ('22', 'Skip disable map check');
-INSERT INTO rbac_roles VALUES ('23', 'Skip reset talents when used more than allowed check');
-INSERT INTO rbac_roles VALUES ('24', 'Skip spam chat check');
-INSERT INTO rbac_roles VALUES ('25', 'Restore saved gm setting states');
-INSERT INTO rbac_roles VALUES ('26', 'Use Config option START_GM_LEVEL to assign new character level');
-INSERT INTO rbac_roles VALUES ('27', 'Skip needed requirements to use channel check');
-INSERT INTO rbac_roles VALUES ('28', 'Allow say chat between factions');
-INSERT INTO rbac_roles VALUES ('29', 'Filter whispers');
-INSERT INTO rbac_roles VALUES ('30', 'Allow channel chat between factions');
-INSERT INTO rbac_roles VALUES ('31', 'Join channels without announce');
-INSERT INTO rbac_roles VALUES ('32', 'Change channel settings without being channel moderator');
-INSERT INTO rbac_roles VALUES ('33', 'Skip character creation checks');
-INSERT INTO rbac_roles VALUES ('34', 'Two side faction characters on the same account');
-INSERT INTO rbac_roles VALUES ('35', 'See two side who list');
-INSERT INTO rbac_roles VALUES ('36', 'Add friends of other faction');
-INSERT INTO rbac_roles VALUES ('37', 'See all security levels with who command');
-INSERT INTO rbac_roles VALUES ('38', 'Allows to add a gm to friend list');
-INSERT INTO rbac_roles VALUES ('39', 'Enable IP, Last Login and EMail output in pinfo');
+--
+-- Table structure for table `realm_classes`
+--
 
--- ----------------------------
--- Table structure for `rbac_role_permissions`
--- ----------------------------
-DROP TABLE IF EXISTS `rbac_role_permissions`;
-CREATE TABLE `rbac_role_permissions` (
-  `roleId` int(10) unsigned NOT NULL COMMENT 'Role id',
-  `permissionId` int(10) unsigned NOT NULL COMMENT 'Permission id',
-  PRIMARY KEY (`roleId`,`permissionId`),
-  KEY `fk__role_permissions__rbac_permissions` (`permissionId`),
-  CONSTRAINT `fk__role_permissions__rbac_permissions` FOREIGN KEY (`permissionId`) REFERENCES `rbac_permissions` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk__role_permissions__rbac_roles` FOREIGN KEY (`roleId`) REFERENCES `rbac_roles` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Role Permission relation';
+DROP TABLE IF EXISTS `realm_classes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `realm_classes` (
+  `realmId` int(11) NOT NULL,
+  `class` tinyint(4) NOT NULL COMMENT 'Class Id',
+  `expansion` tinyint(4) NOT NULL COMMENT 'Expansion for class activation',
+  PRIMARY KEY (`realmId`,`class`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of rbac_role_permissions
--- ----------------------------
-INSERT INTO rbac_role_permissions VALUES ('5', '1');
-INSERT INTO rbac_role_permissions VALUES ('5', '2');
-INSERT INTO rbac_role_permissions VALUES ('6', '3');
-INSERT INTO rbac_role_permissions VALUES ('6', '4');
-INSERT INTO rbac_role_permissions VALUES ('6', '5');
-INSERT INTO rbac_role_permissions VALUES ('7', '6');
-INSERT INTO rbac_role_permissions VALUES ('1', '7');
-INSERT INTO rbac_role_permissions VALUES ('2', '8');
-INSERT INTO rbac_role_permissions VALUES ('3', '9');
-INSERT INTO rbac_role_permissions VALUES ('4', '10');
-INSERT INTO rbac_role_permissions VALUES ('8', '11');
-INSERT INTO rbac_role_permissions VALUES ('9', '13');
-INSERT INTO rbac_role_permissions VALUES ('33', '14');
-INSERT INTO rbac_role_permissions VALUES ('33', '15');
-INSERT INTO rbac_role_permissions VALUES ('33', '16');
-INSERT INTO rbac_role_permissions VALUES ('33', '17');
-INSERT INTO rbac_role_permissions VALUES ('33', '18');
-INSERT INTO rbac_role_permissions VALUES ('27', '19');
-INSERT INTO rbac_role_permissions VALUES ('22', '20');
-INSERT INTO rbac_role_permissions VALUES ('23', '21');
-INSERT INTO rbac_role_permissions VALUES ('24', '22');
-INSERT INTO rbac_role_permissions VALUES ('17', '23');
-INSERT INTO rbac_role_permissions VALUES ('34', '24');
-INSERT INTO rbac_role_permissions VALUES ('28', '25');
-INSERT INTO rbac_role_permissions VALUES ('30', '26');
-INSERT INTO rbac_role_permissions VALUES ('19', '27');
-INSERT INTO rbac_role_permissions VALUES ('35', '28');
-INSERT INTO rbac_role_permissions VALUES ('36', '29');
-INSERT INTO rbac_role_permissions VALUES ('11', '30');
-INSERT INTO rbac_role_permissions VALUES ('12', '31');
-INSERT INTO rbac_role_permissions VALUES ('10', '32');
-INSERT INTO rbac_role_permissions VALUES ('20', '33');
-INSERT INTO rbac_role_permissions VALUES ('14', '34');
-INSERT INTO rbac_role_permissions VALUES ('37', '35');
-INSERT INTO rbac_role_permissions VALUES ('29', '36');
-INSERT INTO rbac_role_permissions VALUES ('15', '37');
-INSERT INTO rbac_role_permissions VALUES ('13', '38');
-INSERT INTO rbac_role_permissions VALUES ('25', '39');
-INSERT INTO rbac_role_permissions VALUES ('38', '40');
-INSERT INTO rbac_role_permissions VALUES ('26', '41');
-INSERT INTO rbac_role_permissions VALUES ('18', '42');
-INSERT INTO rbac_role_permissions VALUES ('18', '43');
-INSERT INTO rbac_role_permissions VALUES ('16', '44');
-INSERT INTO rbac_role_permissions VALUES ('31', '45');
-INSERT INTO rbac_role_permissions VALUES ('32', '46');
-INSERT INTO rbac_role_permissions VALUES ('21', '47');
-INSERT INTO rbac_role_permissions VALUES ('39', '48');
+--
+-- Dumping data for table `realm_classes`
+--
 
--- ----------------------------
--- Table structure for `rbac_security_level_groups`
--- ----------------------------
-DROP TABLE IF EXISTS `rbac_security_level_groups`;
-CREATE TABLE `rbac_security_level_groups` (
-  `secId` int(10) unsigned NOT NULL COMMENT 'Security Level id',
-  `groupId` int(10) unsigned NOT NULL COMMENT 'group id',
-  PRIMARY KEY (`secId`,`groupId`),
-  KEY `fk__rbac_security_level_groups__rbac_groups` (`groupId`),
-  CONSTRAINT `fk__rbac_security_level_groups__rbac_groups` FOREIGN KEY (`groupId`) REFERENCES `rbac_groups` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Default groups to assign when an account is set gm level';
+LOCK TABLES `realm_classes` WRITE;
+/*!40000 ALTER TABLE `realm_classes` DISABLE KEYS */;
+INSERT INTO `realm_classes` VALUES (1,1,0),(1,2,0),(1,3,0),(1,4,0),(1,5,0),(1,6,2),(1,7,0),(1,8,0),(1,9,0),(1,10,4),(1,11,0);
+/*!40000 ALTER TABLE `realm_classes` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- ----------------------------
--- Records of rbac_security_level_groups
--- ----------------------------
-INSERT INTO rbac_security_level_groups VALUES ('0', '1');
-INSERT INTO rbac_security_level_groups VALUES ('1', '1');
-INSERT INTO rbac_security_level_groups VALUES ('2', '1');
-INSERT INTO rbac_security_level_groups VALUES ('3', '1');
-INSERT INTO rbac_security_level_groups VALUES ('1', '2');
-INSERT INTO rbac_security_level_groups VALUES ('2', '2');
-INSERT INTO rbac_security_level_groups VALUES ('3', '2');
-INSERT INTO rbac_security_level_groups VALUES ('2', '3');
-INSERT INTO rbac_security_level_groups VALUES ('3', '3');
-INSERT INTO rbac_security_level_groups VALUES ('3', '4');
+--
+-- Table structure for table `realm_races`
+--
 
--- ----------------------------
--- Table structure for `realmcharacters`
--- ----------------------------
+DROP TABLE IF EXISTS `realm_races`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `realm_races` (
+  `realmId` int(11) NOT NULL,
+  `race` tinyint(4) NOT NULL COMMENT 'Race Id',
+  `expansion` tinyint(4) NOT NULL COMMENT 'Expansion for race activation',
+  PRIMARY KEY (`realmId`,`race`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `realm_races`
+--
+
+LOCK TABLES `realm_races` WRITE;
+/*!40000 ALTER TABLE `realm_races` DISABLE KEYS */;
+INSERT INTO `realm_races` VALUES (1,1,0),(1,2,0),(1,3,0),(1,4,0),(1,5,0),(1,6,0),(1,7,0),(1,8,0),(1,9,3),(1,10,1),(1,11,1),(1,22,3),(1,24,4),(1,25,4),(1,26,4);
+/*!40000 ALTER TABLE `realm_races` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `realmcharacters`
+--
+
 DROP TABLE IF EXISTS `realmcharacters`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `realmcharacters` (
   `realmid` int(10) unsigned NOT NULL DEFAULT '0',
   `acctid` int(10) unsigned NOT NULL,
@@ -799,19 +409,27 @@ CREATE TABLE `realmcharacters` (
   PRIMARY KEY (`realmid`,`acctid`),
   KEY `acctid` (`acctid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Realm Character Tracker';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of realmcharacters
--- ----------------------------
-INSERT INTO realmcharacters VALUES ('1', '5', '3');
+--
+-- Dumping data for table `realmcharacters`
+--
 
--- ----------------------------
--- Table structure for `realmlist`
--- ----------------------------
+LOCK TABLES `realmcharacters` WRITE;
+/*!40000 ALTER TABLE `realmcharacters` DISABLE KEYS */;
+/*!40000 ALTER TABLE `realmcharacters` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `realmlist`
+--
+
 DROP TABLE IF EXISTS `realmlist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `realmlist` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(32) NOT NULL DEFAULT 'BurstEmu',
+  `name` varchar(32) NOT NULL DEFAULT '',
   `address` varchar(255) NOT NULL DEFAULT '127.0.0.1',
   `localAddress` varchar(255) NOT NULL DEFAULT '127.0.0.1',
   `localSubnetMask` varchar(255) NOT NULL DEFAULT '255.255.255.0',
@@ -821,81 +439,55 @@ CREATE TABLE `realmlist` (
   `timezone` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `allowedSecurityLevel` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `population` float unsigned NOT NULL DEFAULT '0',
-  `gamebuild` int(10) unsigned NOT NULL DEFAULT '17371',
+  `gamebuild` int(10) unsigned NOT NULL DEFAULT '17538',
   PRIMARY KEY (`id`),
   UNIQUE KEY `idx_name` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='Realm System';
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- ----------------------------
--- Records of realmlist
--- ----------------------------
-INSERT INTO realmlist VALUES ('1', 'OpenEmu 5.4.0', '127.0.0.1', '127.0.0.1', '255.255.255.0', '8085', '0', '0', '1', '0', '0', '17399');
+--
+-- Dumping data for table `realmlist`
+--
 
--- ----------------------------
--- Table structure for `realm_classes`
--- ----------------------------
-DROP TABLE IF EXISTS `realm_classes`;
-CREATE TABLE `realm_classes` (
-  `realmId` int(11) NOT NULL,
-  `class` tinyint(4) NOT NULL COMMENT 'Class Id',
-  `expansion` tinyint(4) NOT NULL COMMENT 'Expansion for class activation',
-  PRIMARY KEY (`realmId`,`class`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+LOCK TABLES `realmlist` WRITE;
+/*!40000 ALTER TABLE `realmlist` DISABLE KEYS */;
+INSERT INTO `realmlist` VALUES (1,'Skyfire MoP','127.0.0.1','127.0.0.1','255.255.255.0',8085,1,0,1,0,0,17538);
+/*!40000 ALTER TABLE `realmlist` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- ----------------------------
--- Records of realm_classes
--- ----------------------------
-INSERT INTO realm_classes VALUES ('1', '1', '0');
-INSERT INTO realm_classes VALUES ('1', '2', '0');
-INSERT INTO realm_classes VALUES ('1', '3', '0');
-INSERT INTO realm_classes VALUES ('1', '4', '0');
-INSERT INTO realm_classes VALUES ('1', '5', '0');
-INSERT INTO realm_classes VALUES ('1', '6', '2');
-INSERT INTO realm_classes VALUES ('1', '7', '0');
-INSERT INTO realm_classes VALUES ('1', '8', '0');
-INSERT INTO realm_classes VALUES ('1', '9', '0');
-INSERT INTO realm_classes VALUES ('1', '10', '4');
-INSERT INTO realm_classes VALUES ('1', '11', '0');
+--
+-- Table structure for table `uptime`
+--
 
--- ----------------------------
--- Table structure for `realm_races`
--- ----------------------------
-DROP TABLE IF EXISTS `realm_races`;
-CREATE TABLE `realm_races` (
-  `realmId` int(11) NOT NULL,
-  `race` tinyint(4) NOT NULL COMMENT 'Race Id',
-  `expansion` tinyint(4) NOT NULL COMMENT 'Expansion for race activation',
-  PRIMARY KEY (`realmId`,`race`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of realm_races
--- ----------------------------
-INSERT INTO realm_races VALUES ('1', '1', '0');
-INSERT INTO realm_races VALUES ('1', '2', '0');
-INSERT INTO realm_races VALUES ('1', '3', '0');
-INSERT INTO realm_races VALUES ('1', '4', '0');
-INSERT INTO realm_races VALUES ('1', '5', '0');
-INSERT INTO realm_races VALUES ('1', '6', '0');
-INSERT INTO realm_races VALUES ('1', '7', '0');
-INSERT INTO realm_races VALUES ('1', '8', '0');
-INSERT INTO realm_races VALUES ('1', '9', '3');
-INSERT INTO realm_races VALUES ('1', '10', '1');
-INSERT INTO realm_races VALUES ('1', '11', '1');
-INSERT INTO realm_races VALUES ('1', '22', '3');
-INSERT INTO realm_races VALUES ('1', '24', '4');
-INSERT INTO realm_races VALUES ('1', '25', '4');
-INSERT INTO realm_races VALUES ('1', '26', '4');
-
--- ----------------------------
--- Table structure for `uptime`
--- ----------------------------
 DROP TABLE IF EXISTS `uptime`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `uptime` (
   `realmid` int(10) unsigned NOT NULL,
   `starttime` int(10) unsigned NOT NULL DEFAULT '0',
   `uptime` int(10) unsigned NOT NULL DEFAULT '0',
   `maxplayers` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `revision` varchar(255) NOT NULL DEFAULT 'BurstEmu',
+  `revision` varchar(255) NOT NULL DEFAULT 'SkyFire',
   PRIMARY KEY (`realmid`,`starttime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Uptime system';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `uptime`
+--
+
+LOCK TABLES `uptime` WRITE;
+/*!40000 ALTER TABLE `uptime` DISABLE KEYS */;
+/*!40000 ALTER TABLE `uptime` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2013-11-28  9:33:52

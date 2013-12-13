@@ -221,7 +221,7 @@ public:
 
     struct npc_slad_ran_constrictorAI : public ScriptedAI
     {
-        npc_slad_ran_constrictorAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_slad_ran_constrictorAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiGripOfSladRanTimer;
 
@@ -256,8 +256,6 @@ public:
                 }
             } else uiGripOfSladRanTimer -= diff;
         }
-
-        InstanceScript* instance;
     };
 
 };
@@ -274,11 +272,9 @@ public:
 
     struct npc_slad_ran_viperAI : public ScriptedAI
     {
-        npc_slad_ran_viperAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_slad_ran_viperAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiVenomousBiteTimer;
-
-        InstanceScript* instance;
 
         void Reset() OVERRIDE
         {

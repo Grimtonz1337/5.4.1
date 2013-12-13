@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -75,7 +75,7 @@ public:
 
     struct boss_pyroguard_emberseerAI : public BossAI
     {
-        boss_pyroguard_emberseerAI(Creature* creature) : BossAI(creature, DATA_PYROGAURD_EMBERSEER) {}
+        boss_pyroguard_emberseerAI(Creature* creature) : BossAI(creature, DATA_PYROGAURD_EMBERSEER) { }
 
         void Reset() OVERRIDE
         {
@@ -340,7 +340,7 @@ public:
 
     struct npc_blackhand_incarceratorAI : public ScriptedAI
     {
-        npc_blackhand_incarceratorAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_blackhand_incarceratorAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {

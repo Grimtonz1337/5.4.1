@@ -68,7 +68,7 @@ public:
 
     struct npc_aeranasAI : public ScriptedAI
     {
-        npc_aeranasAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_aeranasAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 Faction_Timer;
         uint32 EnvelopingWinds_Timer;
@@ -80,7 +80,7 @@ public:
             EnvelopingWinds_Timer = 9000;
             Shock_Timer = 5000;
 
-            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+            me->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
             me->setFaction(FACTION_FRIENDLY);
 
             Talk(SAY_SUMMON);
@@ -103,7 +103,7 @@ public:
             if (HealthBelowPct(30))
             {
                 me->setFaction(FACTION_FRIENDLY);
-                me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
                 me->RemoveAllAuras();
                 me->DeleteThreatList();
                 me->CombatStop(true);
@@ -160,7 +160,7 @@ public:
             if (creature->GetOwner() && creature->GetOwner()->GetTypeId() == TYPEID_PLAYER)
                 Start(false, false, creature->GetOwner()->GetGUID());
             else
-                TC_LOG_ERROR(LOG_FILTER_TSCR, "TRINITY: npc_ancestral_wolf can not obtain owner or owner is not a player.");
+                TC_LOG_ERROR("scripts", "TRINITY: npc_ancestral_wolf can not obtain owner or owner is not a player.");
 
             creature->SetSpeed(MOVE_WALK, 1.5f);
             Reset();
@@ -388,7 +388,7 @@ public:
 
     struct npc_wounded_blood_elfAI : public npc_escortAI
     {
-        npc_wounded_blood_elfAI(Creature* creature) : npc_escortAI(creature) {}
+        npc_wounded_blood_elfAI(Creature* creature) : npc_escortAI(creature) { }
 
         void WaypointReached(uint32 waypointId) OVERRIDE
         {
@@ -424,7 +424,7 @@ public:
             }
         }
 
-        void Reset() OVERRIDE {}
+        void Reset() OVERRIDE { }
 
         void EnterCombat(Unit* /*who*/) OVERRIDE
         {
@@ -462,7 +462,7 @@ public:
 
     struct npc_fel_guard_houndAI : public ScriptedAI
     {
-        npc_fel_guard_houndAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_fel_guard_houndAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiCheckTimer;
         uint64 uiHelboarGUID;

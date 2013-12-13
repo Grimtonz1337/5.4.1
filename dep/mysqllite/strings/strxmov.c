@@ -45,6 +45,6 @@ char *strxmov(char *dst,const char *src, ...)
     src = va_arg(pvar, char *);
   }
   va_end(pvar);
-  *dst = 0;            /* there might have been no sources! */
+  *dst = 0;			/* there might have been no sources! */
   return dst;
 }

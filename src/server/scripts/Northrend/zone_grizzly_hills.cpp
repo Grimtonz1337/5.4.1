@@ -217,9 +217,9 @@ public:
 
     struct npc_mrfloppyAI : public ScriptedAI
     {
-        npc_mrfloppyAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_mrfloppyAI(Creature* creature) : ScriptedAI(creature) { }
 
-        void Reset() OVERRIDE {}
+        void Reset() OVERRIDE { }
 
         void EnterCombat(Unit* Who) OVERRIDE
         {
@@ -239,9 +239,9 @@ public:
             }
         }
 
-        void EnterEvadeMode() OVERRIDE {}
+        void EnterEvadeMode() OVERRIDE { }
 
-        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE {}
+        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE { }
 
 
         void UpdateAI(uint32 /*diff*/) OVERRIDE
@@ -279,7 +279,7 @@ public:
 
     struct npc_outhouse_bunnyAI : public ScriptedAI
     {
-        npc_outhouse_bunnyAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_outhouse_bunnyAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
@@ -341,7 +341,7 @@ public:
 
     struct npc_tallhorn_stagAI : public ScriptedAI
     {
-        npc_tallhorn_stagAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_tallhorn_stagAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
@@ -356,7 +356,7 @@ public:
                 {
                     me->SetStandState(UNIT_STAND_STATE_DEAD);
                     me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC);
-                    me->SetUInt32Value(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
+                    me->SetUInt32Value(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_DEAD);
                 }
                 _phase = 0;
             }
@@ -393,13 +393,13 @@ public:
 
     struct npc_amberpine_woodsmanAI : public ScriptedAI
     {
-        npc_amberpine_woodsmanAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_amberpine_woodsmanAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
             if (me->FindNearestCreature(NPC_TALLHORN_STAG, 0.2f))
             {
-                me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_USE_STANDING);
+                me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_STATE_USE_STANDING);
             }
             else
                 _events.ScheduleEvent(EVENT_WOODSMAN_1, 0);
@@ -414,11 +414,11 @@ public:
                 switch (eventId)
                 {
                     case EVENT_WOODSMAN_1:
-                        me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_LOOT);
+                        me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_STATE_LOOT);
                         _events.ScheduleEvent(EVENT_WOODSMAN_2, 3000);
                         break;
                     case EVENT_WOODSMAN_2:
-                        me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_ATTACK1H);
+                        me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_ONESHOT_ATTACK1H);
                         _events.ScheduleEvent(EVENT_WOODSMAN_1, 4000);
                         break;
                     default:
@@ -459,7 +459,7 @@ public:
 
     struct npc_wounded_skirmisherAI : public ScriptedAI
     {
-        npc_wounded_skirmisherAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_wounded_skirmisherAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
@@ -505,87 +505,6 @@ public:
     CreatureAI* GetAI(Creature* creature) const OVERRIDE
     {
         return new npc_wounded_skirmisherAI(creature);
-    }
-};
-
-/*Lightning Sentry - if you kill it when you have your Minion with you, you will get a quest credit*/
-enum Sentry
-{
-    //Creature
-    NPC_LIGHTNING_SENTRY                   = 26407,
-    NPC_WAR_GOLEM                          = 27017,
-    // Quest
-    QUEST_OR_MAYBE_WE_DONT_A               = 12138,
-    QUEST_OR_MAYBE_WE_DONT_H               = 12198,
-    // Spell
-    SPELL_CHARGED_SENTRY_TOTEM             = 52703,
-    SPELL_WAR_GOLEM_CHARGE_CREDIT          = 47797,
-};
-
-enum SentryEvents
-{
-    EVENT_SENTRY                           = 1
-};
-
-class npc_lightning_sentry : public CreatureScript
-{
-public:
-    npc_lightning_sentry() : CreatureScript("npc_lightning_sentry") { }
-
-    struct npc_lightning_sentryAI : public ScriptedAI
-    {
-        npc_lightning_sentryAI(Creature* creature) : ScriptedAI(creature) { }
-
-        void Reset() OVERRIDE
-        {
-            _events.ScheduleEvent(EVENT_SENTRY, urand(10000, 12000));
-        }
-
-        void UpdateAI(uint32 diff) OVERRIDE
-        {
-            if (!UpdateVictim())
-                return;
-
-            _events.Update(diff);
-
-            while (uint32 eventId = _events.ExecuteEvent())
-            {
-                switch (eventId)
-                {
-                    case EVENT_SENTRY:
-                        DoCast(SPELL_CHARGED_SENTRY_TOTEM);
-                        _events.ScheduleEvent(EVENT_SENTRY, urand(10000, 12000));
-                        break;
-                    default:
-                        break;
-                }
-            }
-
-            if (!UpdateVictim())
-                return;
-
-            DoMeleeAttackIfReady();
-        }
-
-        void JustDied(Unit* killer) OVERRIDE
-        {
-            if (killer->ToPlayer() && killer->ToPlayer()->GetTypeId() == TYPEID_PLAYER)
-            {
-                if (me->FindNearestCreature(NPC_WAR_GOLEM, 10.0f, true))
-                {
-                    if (killer->ToPlayer()->GetQuestStatus(QUEST_OR_MAYBE_WE_DONT_A) == QUEST_STATUS_INCOMPLETE ||
-                        killer->ToPlayer()->GetQuestStatus(QUEST_OR_MAYBE_WE_DONT_H) == QUEST_STATUS_INCOMPLETE)
-                        DoCast(killer, SPELL_WAR_GOLEM_CHARGE_CREDIT);
-                }
-            }
-        }
-        private:
-            EventMap _events;
-    };
-
-    CreatureAI* GetAI(Creature* creature) const OVERRIDE
-    {
-        return new npc_lightning_sentryAI(creature);
     }
 };
 
@@ -638,7 +557,7 @@ public:
                 switch (eventId)
                 {
                     case EVENT_STRAGGLER_1:
-                        if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                        if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGUID))
                              DoCast(player, SPELL_VENTURE_STRAGGLER_CREDIT);
                          me->GetMotionMaster()->MovePoint(0, me->GetPositionX()-7, me->GetPositionY()+7, me->GetPositionZ());
                          _events.ScheduleEvent(EVENT_STRAGGLER_2, 2500);
@@ -741,7 +660,7 @@ public:
                 _following = false;
                 _runningScript = false;
                 if (me->GetEntry() == NPC_LAKE_FROG_QUEST)
-                    me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                    me->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             }
 
             void UpdateAI(uint32 diff) OVERRIDE
@@ -766,11 +685,11 @@ public:
                             _events.ScheduleEvent(EVENT_LAKEFROG_3, 3000);
                             break;
                         case EVENT_LAKEFROG_3:
-                            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                            me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                             _events.ScheduleEvent(EVENT_LAKEFROG_4, 25000);
                             break;
                         case EVENT_LAKEFROG_4:
-                            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                            me->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                             _events.ScheduleEvent(EVENT_LAKEFROG_5, 2000);
                             break;
                         case EVENT_LAKEFROG_5:
@@ -838,7 +757,6 @@ void AddSC_grizzly_hills()
     new npc_tallhorn_stag();
     new npc_amberpine_woodsman();
     new npc_wounded_skirmisher();
-    new npc_lightning_sentry();
     new npc_venture_co_straggler();
     new npc_lake_frog();
 }

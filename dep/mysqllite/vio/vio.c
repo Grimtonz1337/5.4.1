@@ -63,9 +63,9 @@ static void vio_init(Vio* vio, enum enum_vio_type type,
   flags&= ~VIO_BUFFERED_READ;
 #endif
   bzero((char*) vio, sizeof(*vio));
-  vio->type    = type;
-  vio->sd    = sd;
-  vio->hPipe    = hPipe;
+  vio->type	= type;
+  vio->sd	= sd;
+  vio->hPipe	= hPipe;
   vio->localhost= flags & VIO_LOCALHOST;
   if ((flags & VIO_BUFFERED_READ) &&
       !(vio->read_buffer= (char*)my_malloc(VIO_READ_BUFFER_SIZE, MYF(MY_WME))))
@@ -73,18 +73,18 @@ static void vio_init(Vio* vio, enum enum_vio_type type,
 #ifdef _WIN32
   if (type == VIO_TYPE_NAMEDPIPE)
   {
-    vio->viodelete    =vio_delete;
-    vio->vioerrno    =vio_errno;
+    vio->viodelete	=vio_delete;
+    vio->vioerrno	=vio_errno;
     vio->read           =vio_read_pipe;
     vio->write          =vio_write_pipe;
-    vio->fastsend    =vio_fastsend;
-    vio->viokeepalive    =vio_keepalive;
-    vio->should_retry    =vio_should_retry;
+    vio->fastsend	=vio_fastsend;
+    vio->viokeepalive	=vio_keepalive;
+    vio->should_retry	=vio_should_retry;
     vio->was_interrupted=vio_was_interrupted;
-    vio->vioclose    =vio_close_pipe;
-    vio->peer_addr    =vio_peer_addr;
-    vio->vioblocking    =vio_blocking;
-    vio->is_blocking    =vio_is_blocking;
+    vio->vioclose	=vio_close_pipe;
+    vio->peer_addr	=vio_peer_addr;
+    vio->vioblocking	=vio_blocking;
+    vio->is_blocking	=vio_is_blocking;
 
     vio->poll_read      =no_poll_read;
     vio->is_connected   =vio_is_connected_pipe;
@@ -101,18 +101,18 @@ static void vio_init(Vio* vio, enum enum_vio_type type,
 #ifdef HAVE_SMEM 
   if (type == VIO_TYPE_SHARED_MEMORY)
   {
-    vio->viodelete    =vio_delete;
-    vio->vioerrno    =vio_errno;
+    vio->viodelete	=vio_delete;
+    vio->vioerrno	=vio_errno;
     vio->read           =vio_read_shared_memory;
     vio->write          =vio_write_shared_memory;
-    vio->fastsend    =vio_fastsend;
-    vio->viokeepalive    =vio_keepalive;
-    vio->should_retry    =vio_should_retry;
+    vio->fastsend	=vio_fastsend;
+    vio->viokeepalive	=vio_keepalive;
+    vio->should_retry	=vio_should_retry;
     vio->was_interrupted=vio_was_interrupted;
-    vio->vioclose    =vio_close_shared_memory;
-    vio->peer_addr    =vio_peer_addr;
-    vio->vioblocking    =vio_blocking;
-    vio->is_blocking    =vio_is_blocking;
+    vio->vioclose	=vio_close_shared_memory;
+    vio->peer_addr	=vio_peer_addr;
+    vio->vioblocking	=vio_blocking;
+    vio->is_blocking	=vio_is_blocking;
 
     vio->poll_read      =no_poll_read;
     vio->is_connected   =vio_is_connected_shared_memory;
@@ -129,19 +129,19 @@ static void vio_init(Vio* vio, enum enum_vio_type type,
 #ifdef HAVE_OPENSSL 
   if (type == VIO_TYPE_SSL)
   {
-    vio->viodelete    =vio_ssl_delete;
-    vio->vioerrno    =vio_errno;
-    vio->read        =vio_ssl_read;
-    vio->write        =vio_ssl_write;
-    vio->fastsend    =vio_fastsend;
-    vio->viokeepalive    =vio_keepalive;
-    vio->should_retry    =vio_should_retry;
+    vio->viodelete	=vio_ssl_delete;
+    vio->vioerrno	=vio_errno;
+    vio->read		=vio_ssl_read;
+    vio->write		=vio_ssl_write;
+    vio->fastsend	=vio_fastsend;
+    vio->viokeepalive	=vio_keepalive;
+    vio->should_retry	=vio_should_retry;
     vio->was_interrupted=vio_was_interrupted;
-    vio->vioclose    =vio_ssl_close;
-    vio->peer_addr    =vio_peer_addr;
-    vio->vioblocking    =vio_ssl_blocking;
-    vio->is_blocking    =vio_is_blocking;
-    vio->timeout    =vio_timeout;
+    vio->vioclose	=vio_ssl_close;
+    vio->peer_addr	=vio_peer_addr;
+    vio->vioblocking	=vio_ssl_blocking;
+    vio->is_blocking	=vio_is_blocking;
+    vio->timeout	=vio_timeout;
     vio->poll_read      =vio_poll_read;
     vio->is_connected   =vio_is_connected;
     vio->has_data       =vio_ssl_has_data;
@@ -190,8 +190,8 @@ Vio *vio_new(my_socket sd, enum enum_vio_type type, uint flags)
   {
     vio_init(vio, type, sd, 0, flags);
     sprintf(vio->desc,
-        (vio->type == VIO_TYPE_SOCKET ? "socket (%d)" : "TCP/IP (%d)"),
-        vio->sd);
+	    (vio->type == VIO_TYPE_SOCKET ? "socket (%d)" : "TCP/IP (%d)"),
+	    vio->sd);
 #if !defined(__WIN__)
 #if !defined(NO_FCNTL_NONBLOCK)
     /*
@@ -206,7 +206,7 @@ Vio *vio_new(my_socket sd, enum enum_vio_type type, uint flags)
     */
     fcntl(sd, F_SETFL, 0);
     vio->fcntl_mode= fcntl(sd, F_GETFL);
-#elif defined(HAVE_SYS_IOCTL_H)            /* hpux */
+#elif defined(HAVE_SYS_IOCTL_H)			/* hpux */
     /* Non blocking sockets doesn't work good on HPUX 11.0 */
     (void) ioctl(sd,FIOSNBIO,0);
     vio->fcntl_mode &= ~O_NONBLOCK;

@@ -24,6 +24,7 @@
 #include "SpellScript.h"
 #include "SpellAuras.h"
 #include "SpellAuraEffects.h"
+#include "Vehicle.h"
 
 /*####
 ## npc_drakuru_shackles
@@ -46,7 +47,7 @@ public:
 
     struct npc_drakuru_shacklesAI : public ScriptedAI
     {
-        npc_drakuru_shacklesAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_drakuru_shacklesAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
@@ -132,7 +133,7 @@ public:
 
     struct npc_captured_rageclawAI : public ScriptedAI
     {
-        npc_captured_rageclawAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_captured_rageclawAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
@@ -140,7 +141,7 @@ public:
             DoCast(me, SPELL_KNEEL, true); // Little Hack for kneel - Thanks Illy :P
         }
 
-        void MoveInLineOfSight(Unit* /*who*/)OVERRIDE {}
+        void MoveInLineOfSight(Unit* /*who*/)OVERRIDE { }
 
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* spell) OVERRIDE
@@ -198,6 +199,9 @@ enum Gurgthock
     EMOTE_YGGDRAS_SPAWN                           = 4,
     SAY_STINKBEARD_SPAWN                          = 5,
     SAY_GURGTHOCK_ELEMENTAL_SPAWN                 = 6,
+    SAY_GURGTHOCK_7                               = 7,
+    SAY_QUEST_AMPHITHEATER_ANGUISH_YGGDRAS        = 8,
+    SAY_GURGTHOCK_9                               = 9,
 
     SAY_CALL_FOR_HELP                             = 0,
     SAY_RECRUIT                                   = 0,
@@ -263,14 +267,14 @@ public:
 
     struct npc_gurgthockAI : public ScriptedAI
     {
-        npc_gurgthockAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_gurgthockAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
             _summonGUID = 0;
             _playerGUID = 0;
 
-            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+            me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
             uiTimer = 0;
             uiPhase = 0;
             uiQuest = 0;
@@ -289,7 +293,7 @@ public:
         void SetData(uint32 type, uint32 data) OVERRIDE
         {
             _removeFlag = true;
-            me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+            me->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
 
             switch (type)
             {
@@ -319,9 +323,9 @@ public:
                             uiTimer = 2000;
                             uiPhase = 12;
                             break;
-                   }
-                        break;
-                }
+                    }
+                    break;
+            }
         }
 
         void UpdateAI(uint32 diff) OVERRIDE
@@ -332,7 +336,7 @@ public:
             {
                 if (uiRemoveFlagTimer <= diff)
                 {
-                    me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                    me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
                     _removeFlag = false;
 
                     uiRemoveFlagTimer = 10000;
@@ -341,8 +345,6 @@ public:
 
             if (uiPhase)
             {
-                Player* player = me->GetPlayer(*me, _playerGUID);
-
                 if (uiTimer <= diff)
                 {
                     switch (uiPhase)
@@ -371,27 +373,14 @@ public:
                             uiPhase = 0;
                             break;
                         case 6:
-                            {
-                                if (!player)
-                                    return;
-
-                                std::string sText = ("The grand Amphitheater of Anguish awaits, " + std::string(player->GetName()) + ". Remember, once a battle starts you have to stay in the area. WIN OR DIE!");
-
-                                me->MonsterSay(sText.c_str(), LANG_UNIVERSAL, 0);
-                                uiTimer = 5000;
-                                uiPhase = 9;
-                            }
+                            Talk(SAY_GURGTHOCK_7, _playerGUID);
+                            uiTimer = 5000;
+                            uiPhase = 9;
                             break;
                         case 7:
-                            {
-                               if (!player)
-                                   return;
-
-                                std::string sText = ("Prepare to make you stand, " + std::string(player->GetName()) + "! Get in the Amphitheater and stand ready! Remember, you and your opponent must stay in the arena at all times or you will be disqualified!");
-                                me->MonsterSay(sText.c_str(), LANG_UNIVERSAL, 0);
-                                uiTimer = 3000;
-                                uiPhase = 8;
-                            }
+                            Talk(SAY_GURGTHOCK_9, _playerGUID);
+                            uiTimer = 3000;
+                            uiPhase = 8;
                             break;
                         case 8:
                             Talk(SAY_QUEST_ACCEPT_MAGNATAUR);
@@ -399,15 +388,9 @@ public:
                             uiPhase = 11;
                             break;
                         case 9:
-                            {
-                                if (!player)
-                                    return;
-
-                                std::string sText = ("Here we are once again, ladies and gentlemen. The epic struggle between life and death in the Amphitheater of Anguish! For this round we have " + std::string(player->GetName()) + " versus the hulking jormungar, Yg... Yggd? Yggdoze? Who comes up with these names?! " + std::string(player->GetName()) + " versus big worm!");
-                                me->MonsterYell(sText.c_str(), LANG_UNIVERSAL, 0);
-                                uiTimer = 10000;
-                                uiPhase = 10;
-                            }
+                            Talk(SAY_QUEST_AMPHITHEATER_ANGUISH_YGGDRAS, _playerGUID);
+                            uiTimer = 10000;
+                            uiPhase = 10;
                             break;
                         case 10:
                             me->SummonCreature(NPC_YGGDRAS, SpawnPosition[1], TEMPSUMMON_CORPSE_DESPAWN, 1000);
@@ -420,16 +403,10 @@ public:
                             uiPhase = 0;
                             break;
                         case 12:
-                        {
-                            if (!player)
-                                return;
-
-                            std::string sText = ("Prepare to make you stand, " + std::string(player->GetName()) + "! Get in the Amphitheater and stand ready! Remember, you and your opponent must stay in the arena at all times or you will be disqualified!");
-                            me->MonsterSay(sText.c_str(), LANG_UNIVERSAL, 0);
+                            Talk(SAY_GURGTHOCK_9, _playerGUID);
                             uiTimer = 5000;
                             uiPhase = 13;
-                        }
-                        break;
+                            break;
                         case 13:
                             Talk(SAY_GURGTHOCK_ELEMENTAL_SPAWN);
                             uiTimer = 3000;
@@ -443,7 +420,8 @@ public:
                             break;
                     }
                 }
-                else uiTimer -= diff;
+                else
+                    uiTimer -= diff;
             }
         }
 
@@ -748,7 +726,7 @@ public:
 
     struct npc_yggdrasAI : public ScriptedAI
     {
-        npc_yggdrasAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_yggdrasAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
@@ -965,7 +943,7 @@ public:
 
     struct npc_elemental_lordAI : public ScriptedAI
     {
-        npc_elemental_lordAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_elemental_lordAI(Creature* creature) : ScriptedAI(creature) { }
 
         std::list<uint64> SummonList;
 
@@ -1110,7 +1088,7 @@ public:
 
     struct npc_fiend_elementalAI : public ScriptedAI
     {
-        npc_fiend_elementalAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_fiend_elementalAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
@@ -1176,7 +1154,7 @@ public:
 
     struct npc_released_offspring_harkoaAI : public ScriptedAI
     {
-        npc_released_offspring_harkoaAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_released_offspring_harkoaAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
@@ -1222,12 +1200,12 @@ public:
 
     struct npc_crusade_recruitAI : public ScriptedAI
     {
-        npc_crusade_recruitAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_crusade_recruitAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
-            me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-            me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_COWER);
+            me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_STATE_COWER);
             _heading = me->GetOrientation();
         }
 
@@ -1240,8 +1218,8 @@ public:
                 switch (eventId)
                 {
                     case EVENT_RECRUIT_1:
-                        me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                        me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_ONESHOT_NONE);
+                        me->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                        me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_ONESHOT_NONE);
                         Talk(SAY_RECRUIT);
                         _events.ScheduleEvent(EVENT_RECRUIT_2, 3000);
                         break;
@@ -1460,9 +1438,9 @@ public:
                 _events.ScheduleEvent(EVENT_TURN_TO_POT, urand(15000, 26000));
             }
 
-            void SetData(uint32 Type, uint32 Data) OVERRIDE
+            void SetData(uint32 type, uint32 data) OVERRIDE
             {
-                if (Type == 1 && Data == 1)
+                if (type == 1 && data == 1)
                     switch (_getingredienttry)
                    {
                         case 2:
@@ -1493,16 +1471,16 @@ public:
                     {
                         case EVENT_TURN_TO_POT:
                             me->SetFacingTo(6.230825f);
-                            me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_USE_STANDING_NO_SHEATHE);
+                            me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_STATE_USE_STANDING_NO_SHEATHE);
                             _events.ScheduleEvent(EVENT_TURN_BACK, 11000);
                             break;
                         case EVENT_TURN_BACK:
                             me->SetFacingTo(4.886922f);
-                            me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
+                            me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_STATE_NONE);
                             _events.ScheduleEvent(EVENT_TURN_TO_POT, urand(25000, 41000));
                             break;
                         case EVENT_EASY_123:
-                            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                            if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGUID))
                             {
                                 Talk(SAY_EASY_123, _playerGUID);
                                 DoCast(player, SPELL_RANDOM_INGREDIENT_EASY_AURA);
@@ -1510,7 +1488,7 @@ public:
                             }
                             break;
                         case EVENT_MEDIUM_4:
-                            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                            if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGUID))
                             {
                                 Talk(SAY_MEDIUM_4, _playerGUID);
                                 DoCast(player, SPELL_RANDOM_INGREDIENT_MEDIUM_AURA);
@@ -1518,7 +1496,7 @@ public:
                             }
                             break;
                         case EVENT_MEDIUM_5:
-                            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                            if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGUID))
                             {
                                 Talk(SAY_MEDIUM_5, _playerGUID);
                                 DoCast(player, SPELL_RANDOM_INGREDIENT_MEDIUM_AURA);
@@ -1526,7 +1504,7 @@ public:
                             }
                             break;
                         case EVENT_HARD_6:
-                            if (Player* player = Unit::GetPlayer(*me, _playerGUID))
+                            if (Player* player = ObjectAccessor::GetPlayer(*me, _playerGUID))
                             {
                                 Talk(SAY_HARD_6, _playerGUID);
                                 DoCast(player, SPELL_RANDOM_INGREDIENT_HARD_AURA);
@@ -1609,7 +1587,7 @@ class spell_random_ingredient_aura : public SpellScriptLoader
         {
             PrepareAuraScript(spell_random_ingredient_aura_AuraScript);
 
-            bool Validate(SpellInfo const* /*spellEntry*/) OVERRIDE
+            bool Validate(SpellInfo const* /*spellInfo*/) OVERRIDE
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_RANDOM_INGREDIENT_EASY) || !sSpellMgr->GetSpellInfo(SPELL_RANDOM_INGREDIENT_MEDIUM) || !sSpellMgr->GetSpellInfo(SPELL_RANDOM_INGREDIENT_HARD))
                     return false;
@@ -1656,7 +1634,7 @@ class spell_random_ingredient : public SpellScriptLoader
         {
             PrepareSpellScript(spell_random_ingredient_SpellScript);
 
-            bool Validate(SpellInfo const* /*spellEntry*/) OVERRIDE
+            bool Validate(SpellInfo const* /*spellInfo*/) OVERRIDE
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_FETCH_KNOTROOT) || !sSpellMgr->GetSpellInfo(SPELL_FETCH_PICKLED_EAGLE_EGG) || !sSpellMgr->GetSpellInfo(SPELL_FETCH_SPECKLED_GUANO) ||
                     !sSpellMgr->GetSpellInfo(SPELL_FETCH_WITHERED_BATWING) || !sSpellMgr->GetSpellInfo(SPELL_FETCH_SEASONED_SLIDER_CIDER) || !sSpellMgr->GetSpellInfo(SPELL_FETCH_PULVERIZED_GARGOYLE_TEETH) ||
@@ -1720,7 +1698,7 @@ class spell_pot_check : public SpellScriptLoader
         {
             PrepareSpellScript(spell_pot_check_SpellScript);
 
-            bool Validate(SpellInfo const* /*spellEntry*/) OVERRIDE
+            bool Validate(SpellInfo const* /*spellInfo*/) OVERRIDE
             {
                 if (!sSpellMgr->GetSpellInfo(SPELL_FETCH_KNOTROOT) || !sSpellMgr->GetSpellInfo(SPELL_FETCH_PICKLED_EAGLE_EGG) || !sSpellMgr->GetSpellInfo(SPELL_FETCH_SPECKLED_GUANO) ||
                     !sSpellMgr->GetSpellInfo(SPELL_FETCH_WITHERED_BATWING) || !sSpellMgr->GetSpellInfo(SPELL_FETCH_SEASONED_SLIDER_CIDER) || !sSpellMgr->GetSpellInfo(SPELL_FETCH_PULVERIZED_GARGOYLE_TEETH) ||
@@ -1837,6 +1815,54 @@ class spell_fetch_ingredient_aura : public SpellScriptLoader
         }
 };
 
+enum StormCloud
+{
+    STORM_COULD         = 29939,
+    HEALING_WINDS       = 55549,
+    STORM_VISUAL        = 55708,
+    GYMERS_GRAB         = 55516,
+    RIDE_VEHICLE        = 43671
+};
+
+class npc_storm_cloud : public CreatureScript
+{
+public:
+    npc_storm_cloud() : CreatureScript("npc_storm_cloud") { }
+
+    struct npc_storm_cloudAI : public ScriptedAI
+    {
+        npc_storm_cloudAI(Creature* creature) : ScriptedAI(creature) { }
+
+        void Reset() OVERRIDE
+        {
+            me->CastSpell(me, STORM_VISUAL, true);
+        }
+
+        void JustRespawned() OVERRIDE
+        {
+            Reset();
+        }
+
+        void SpellHit(Unit* caster, const SpellInfo* spell) OVERRIDE
+        {
+            if (spell->Id != GYMERS_GRAB)
+                return;
+
+            if (Vehicle* veh = caster->GetVehicleKit())
+                if (veh->GetAvailableSeatCount() != 0)
+            {
+                me->CastSpell(caster, RIDE_VEHICLE, true);
+                me->CastSpell(caster, HEALING_WINDS, true);
+            }
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_storm_cloudAI(creature);
+    }
+};
+
 void AddSC_zuldrak()
 {
     new npc_drakuru_shackles();
@@ -1857,4 +1883,5 @@ void AddSC_zuldrak()
     new spell_random_ingredient();
     new spell_pot_check();
     new spell_fetch_ingredient_aura();
+    new npc_storm_cloud();
 }

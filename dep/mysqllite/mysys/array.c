@@ -23,11 +23,11 @@
 
   SYNOPSIS
     init_dynamic_array2()
-      array        Pointer to an array
-      element_size    Size of element
+      array		Pointer to an array
+      element_size	Size of element
       init_buffer       Initial buffer pointer
-      init_alloc    Number of initial elements
-      alloc_increment    Increment for adding new elements
+      init_alloc	Number of initial elements
+      alloc_increment	Increment for adding new elements
 
   DESCRIPTION
     init_dynamic_array() initiates array and allocate space for 
@@ -37,7 +37,7 @@
     Static buffers must begin immediately after the array structure.
 
   RETURN VALUE
-    FALSE    Ok
+    FALSE	Ok
 */
 
 my_bool init_dynamic_array2(DYNAMIC_ARRAY *array, uint element_size,
@@ -88,15 +88,15 @@ my_bool init_dynamic_array(DYNAMIC_ARRAY *array, uint element_size,
       element
 
   RETURN VALUE
-    TRUE    Insert failed
-    FALSE    Ok
+    TRUE	Insert failed
+    FALSE	Ok
 */
 
 my_bool insert_dynamic(DYNAMIC_ARRAY *array, uchar* element)
 {
   uchar* buffer;
   if (array->elements == array->max_element)
-  {                        /* Call only when nessesary */
+  {						/* Call only when nessesary */
     if (!(buffer=alloc_dynamic(array)))
       return TRUE;
   }
@@ -123,8 +123,8 @@ my_bool insert_dynamic(DYNAMIC_ARRAY *array, uchar* element)
     elements at the end of array.
 
   RETURN VALUE
-    pointer    Pointer to empty space for element
-    0        Error
+    pointer	Pointer to empty space for element
+    0		Error
 */
 
 uchar *alloc_dynamic(DYNAMIC_ARRAY *array)
@@ -167,8 +167,8 @@ uchar *alloc_dynamic(DYNAMIC_ARRAY *array)
       array
   
   RETURN VALUE    
-    pointer    Ok
-    0        Array is empty
+    pointer	Ok
+    0		Array is empty
 */
 
 uchar *pop_dynamic(DYNAMIC_ARRAY *array)
@@ -184,16 +184,16 @@ uchar *pop_dynamic(DYNAMIC_ARRAY *array)
   SYNOPSIS
     set_dynamic()
       array
-      element    Element to be inserted
-      idx    Index where element is to be inserted
+      element	Element to be inserted
+      idx	Index where element is to be inserted
 
   DESCRIPTION
     set_dynamic() replaces element in array. 
     If idx > max_element insert new element. Allocate memory if needed. 
  
   RETURN VALUE
-    TRUE    Idx was out of range and allocation of new memory failed
-    FALSE    Ok
+    TRUE	Idx was out of range and allocation of new memory failed
+    FALSE	Ok
 */
 
 my_bool set_dynamic(DYNAMIC_ARRAY *array, uchar* element, uint idx)
@@ -203,11 +203,11 @@ my_bool set_dynamic(DYNAMIC_ARRAY *array, uchar* element, uint idx)
     if (idx >= array->max_element && allocate_dynamic(array, idx))
       return TRUE;
     bzero((uchar*) (array->buffer+array->elements*array->size_of_element),
-      (idx - array->elements)*array->size_of_element);
+	  (idx - array->elements)*array->size_of_element);
     array->elements=idx+1;
   }
   memcpy(array->buffer+(idx * array->size_of_element),element,
-     (size_t) array->size_of_element);
+	 (size_t) array->size_of_element);
   return FALSE;
 }
 
@@ -224,8 +224,8 @@ my_bool set_dynamic(DYNAMIC_ARRAY *array, uchar* element, uint idx)
    Any new allocated element are NOT initialized
 
   RETURN VALUE
-    FALSE    Ok
-    TRUE    Allocation of new memory failed
+    FALSE	Ok
+    TRUE	Allocation of new memory failed
 */
 
 my_bool allocate_dynamic(DYNAMIC_ARRAY *array, uint max_elements)
@@ -268,9 +268,9 @@ my_bool allocate_dynamic(DYNAMIC_ARRAY *array, uint max_elements)
 
   SYNOPSIS
     get_dynamic()
-      array    
-      uchar*    Element to be returned. If idx > elements contain zeroes.
-      idx    Index of element wanted. 
+      array	
+      uchar*	Element to be returned. If idx > elements contain zeroes.
+      idx	Index of element wanted. 
 */
 
 void get_dynamic(DYNAMIC_ARRAY *array, uchar* element, uint idx)
@@ -292,7 +292,7 @@ void get_dynamic(DYNAMIC_ARRAY *array, uchar* element, uint idx)
 
   SYNOPSIS
     delete_dynamic()
-      array    Array to be deleted
+      array	Array to be deleted
 */
 
 void delete_dynamic(DYNAMIC_ARRAY *array)
@@ -334,7 +334,7 @@ void delete_dynamic_element(DYNAMIC_ARRAY *array, uint idx)
 
   SYNOPSIS
     freeze_size()
-      array    Array to be freed
+      array	Array to be freed
 
 */
 
@@ -363,7 +363,7 @@ void freeze_size(DYNAMIC_ARRAY *array)
 
   SYNOPSIS
     get_index_dynamic()
-     array    Array
+     array	Array
      element Whose element index 
 
 */

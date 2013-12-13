@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -76,7 +76,7 @@ public:
 
     struct instance_blackrock_depths_InstanceMapScript : public InstanceScript
     {
-        instance_blackrock_depths_InstanceMapScript(Map* map) : InstanceScript(map) {}
+        instance_blackrock_depths_InstanceMapScript(Map* map) : InstanceScript(map) { }
 
         uint32 encounter[MAX_ENCOUNTER];
         std::string str_data;
@@ -214,7 +214,7 @@ public:
 
         void SetData64(uint32 type, uint64 data) OVERRIDE
         {
-            TC_LOG_DEBUG(LOG_FILTER_TSCR, "Instance Blackrock Depths: SetData64 update (Type: %u Data " UI64FMTD ")", type, data);
+            TC_LOG_DEBUG("scripts", "Instance Blackrock Depths: SetData64 update (Type: %u Data " UI64FMTD ")", type, data);
 
             switch (type)
             {
@@ -230,7 +230,7 @@ public:
 
         void SetData(uint32 type, uint32 data) OVERRIDE
         {
-            TC_LOG_DEBUG(LOG_FILTER_TSCR, "Instance Blackrock Depths: SetData update (Type: %u Data %u)", type, data);
+            TC_LOG_DEBUG("scripts", "Instance Blackrock Depths: SetData update (Type: %u Data %u)", type, data);
 
             switch (type)
             {

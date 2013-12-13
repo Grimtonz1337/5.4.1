@@ -44,12 +44,12 @@
 
 #define isbig5code(c,d) (isbig5head(c) && isbig5tail(d))
 #define big5code(c,d)   (((uchar)(c) <<8) | (uchar)(d))
-#define big5head(e)    ((uchar)(e>>8))
-#define big5tail(e)    ((uchar)(e&0xff))
+#define big5head(e)	((uchar)(e>>8))
+#define big5tail(e)	((uchar)(e&0xff))
 
 static uchar ctype_big5[257] =
 {
-  0,                /* For standard library */
+  0,				/* For standard library */
   32,32,32,32,32,32,32,32,32,40,40,40,40,40,32,32,
   32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
   72,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
@@ -74,18 +74,18 @@ static uchar to_lower_big5[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'a',    'b',   'c',   'd',   'e',   'f',   'g',
-  'h',     'i',    'j',   'k',   'l',   'm',   'n',   'o',
-  'p',     'q',    'r',   's',   't',   'u',   'v',   'w',
-  'x',     'y',    'z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'a',    'b',   'c',   'd',   'e',   'f',   'g',
-  'h',     'i',    'j',   'k',   'l',   'm',   'n',   'o',
-  'p',     'q',    'r',   's',   't',   'u',   'v',   'w',
-  'x',     'y',    'z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'a',	'b',   'c',   'd',   'e',   'f',   'g',
+  'h',	 'i',	'j',   'k',   'l',   'm',   'n',   'o',
+  'p',	 'q',	'r',   's',   't',   'u',   'v',   'w',
+  'x',	 'y',	'z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'a',	'b',   'c',   'd',   'e',   'f',   'g',
+  'h',	 'i',	'j',   'k',   'l',   'm',   'n',   'o',
+  'p',	 'q',	'r',   's',   't',   'u',   'v',   'w',
+  'x',	 'y',	'z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -110,18 +110,18 @@ static uchar to_upper_big5[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -146,18 +146,18 @@ static uchar sort_order_big5[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '\\',  ']',   '[',   '^',   '_',
-  'E',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '{',   '|',   '}',   'Y',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '\\',  ']',   '[',   '^',   '_',
+  'E',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '{',   '|',   '}',   'Y',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -837,7 +837,7 @@ static uint16 big5strokexfrm(uint16 i)
 
 
 static int my_strnncoll_big5_internal(const uchar **a_res,
-                      const uchar **b_res, size_t length)
+				      const uchar **b_res, size_t length)
 {
   const uchar *a= *a_res, *b= *b_res;
 
@@ -846,16 +846,16 @@ static int my_strnncoll_big5_internal(const uchar **a_res,
     if ((length > 0) && isbig5code(*a,*(a+1)) && isbig5code(*b, *(b+1)))
     {
       if (*a != *b || *(a+1) != *(b+1))
-    return ((int) big5code(*a,*(a+1)) -
-        (int) big5code(*b,*(b+1)));
+	return ((int) big5code(*a,*(a+1)) -
+		(int) big5code(*b,*(b+1)));
       a+= 2;
       b+= 2;
       length--;
     }
     else if (sort_order_big5[*a++] !=
-         sort_order_big5[*b++])
+	     sort_order_big5[*b++])
       return ((int) sort_order_big5[a[-1]] -
-          (int) sort_order_big5[b[-1]]);
+	      (int) sort_order_big5[b[-1]]);
   }
   *a_res= a;
   *b_res= b;
@@ -866,7 +866,7 @@ static int my_strnncoll_big5_internal(const uchar **a_res,
 /* Compare strings */
 
 static int my_strnncoll_big5(CHARSET_INFO *cs __attribute__((unused)), 
-                 const uchar *a, size_t a_length,
+			     const uchar *a, size_t a_length,
                              const uchar *b, size_t b_length,
                              my_bool b_is_prefix)
 {
@@ -879,8 +879,8 @@ static int my_strnncoll_big5(CHARSET_INFO *cs __attribute__((unused)),
 /* compare strings, ignore end space */
 
 static int my_strnncollsp_big5(CHARSET_INFO * cs __attribute__((unused)), 
-                   const uchar *a, size_t a_length, 
-                   const uchar *b, size_t b_length,
+			       const uchar *a, size_t a_length, 
+			       const uchar *b, size_t b_length,
                                my_bool diff_if_only_endspace_difference)
 {
   size_t length= min(a_length, b_length);
@@ -911,7 +911,7 @@ static int my_strnncollsp_big5(CHARSET_INFO * cs __attribute__((unused)),
     for (end= a + a_length-length; a < end ; a++)
     {
       if (*a != ' ')
-    return (*a < ' ') ? -swap : swap;
+	return (*a < ' ') ? -swap : swap;
     }
   }
   return res;
@@ -954,13 +954,13 @@ static int my_strcoll_big5(const uchar *s1, const uchar *s2)
     if (*(s1+1) && *(s2+1) && isbig5code(*s1,*(s1+1)) && isbig5code(*s2, *(s2+1)))
     {
       if (*s1 != *s2 || *(s1+1) != *(s2+1))
-    return ((int) big5code(*s1,*(s1+1)) -
-        (int) big5code(*s2,*(s2+1)));
+	return ((int) big5code(*s1,*(s1+1)) -
+		(int) big5code(*s2,*(s2+1)));
       s1 +=2;
       s2 +=2;
     } else if (sort_order_big5[(uchar) *s1++] != sort_order_big5[(uchar) *s2++])
       return ((int) sort_order_big5[(uchar) s1[-1]] -
-          (int) sort_order_big5[(uchar) s2[-1]]);
+	      (int) sort_order_big5[(uchar) s2[-1]]);
   }
   return 0;
 }
@@ -6779,7 +6779,7 @@ static int func_uni_big5_onechar(int code){
 
 static int
 my_wc_mb_big5(CHARSET_INFO *cs __attribute__((unused)),
-          my_wc_t wc, uchar *s, uchar *e)
+	      my_wc_t wc, uchar *s, uchar *e)
 {
 
   int code;
@@ -6808,7 +6808,7 @@ my_wc_mb_big5(CHARSET_INFO *cs __attribute__((unused)),
 
 static int 
 my_mb_wc_big5(CHARSET_INFO *cs __attribute__((unused)),
-          my_wc_t *pwc,const uchar *s,const uchar *e)
+	      my_wc_t *pwc,const uchar *s,const uchar *e)
 {
 
   int hi;
@@ -6870,7 +6870,7 @@ size_t my_well_formed_len_big5(CHARSET_INFO *cs __attribute__((unused)),
 
 static MY_COLLATION_HANDLER my_collation_big5_chinese_ci_handler =
 {
-  NULL,            /* init */
+  NULL,			/* init */
   my_strnncoll_big5,
   my_strnncollsp_big5,
   my_strnxfrm_big5,
@@ -6885,7 +6885,7 @@ static MY_COLLATION_HANDLER my_collation_big5_chinese_ci_handler =
 
 static MY_CHARSET_HANDLER my_charset_big5_handler=
 {
-  NULL,            /* init */
+  NULL,			/* init */
   ismbchar_big5,
   mbcharlen_big5,
   my_numchars_mb,
@@ -6893,8 +6893,8 @@ static MY_CHARSET_HANDLER my_charset_big5_handler=
   my_well_formed_len_big5,
   my_lengthsp_8bit,
   my_numcells_8bit,
-  my_mb_wc_big5,    /* mb_wc       */
-  my_wc_mb_big5,    /* wc_mb       */
+  my_mb_wc_big5,	/* mb_wc       */
+  my_wc_mb_big5,	/* wc_mb       */
   my_mb_ctype_mb,
   my_caseup_str_mb,
   my_casedn_str_mb,
@@ -6916,30 +6916,30 @@ static MY_CHARSET_HANDLER my_charset_big5_handler=
 
 CHARSET_INFO my_charset_big5_chinese_ci=
 {
-    1,0,0,         /* number     */
-    MY_CS_COMPILED|MY_CS_PRIMARY|MY_CS_STRNXFRM,    /* state      */
-    "big5",        /* cs name    */
-    "big5_chinese_ci",    /* name       */
-    "",            /* comment    */
-    NULL,        /* tailoring */
+    1,0,0, 		/* number     */
+    MY_CS_COMPILED|MY_CS_PRIMARY|MY_CS_STRNXFRM,	/* state      */
+    "big5",		/* cs name    */
+    "big5_chinese_ci",	/* name       */
+    "",			/* comment    */
+    NULL,		/* tailoring */
     ctype_big5,
     to_lower_big5,
     to_upper_big5,
     sort_order_big5,
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_caseinfo_big5,   /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
-    1,            /* caseup_multiply  */
-    1,            /* casedn_multiply  */
-    1,            /* mbminlen   */
-    2,            /* mbmaxlen   */
-    0,            /* min_sort_char */
-    0xF9D5,        /* max_sort_char */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
+    1,			/* caseup_multiply  */
+    1,			/* casedn_multiply  */
+    1,			/* mbminlen   */
+    2,			/* mbmaxlen   */
+    0,			/* min_sort_char */
+    0xF9D5,		/* max_sort_char */
     ' ',                /* pad char      */
     1,                  /* escape_with_backslash_is_dangerous */
     &my_charset_big5_handler,
@@ -6949,30 +6949,30 @@ CHARSET_INFO my_charset_big5_chinese_ci=
 
 CHARSET_INFO my_charset_big5_bin=
 {
-    84,0,0,         /* number     */
-    MY_CS_COMPILED|MY_CS_BINSORT,    /* state      */
-    "big5",        /* cs name    */
-    "big5_bin",        /* name       */
-    "",            /* comment    */
-    NULL,        /* tailoring */
+    84,0,0, 		/* number     */
+    MY_CS_COMPILED|MY_CS_BINSORT,	/* state      */
+    "big5",		/* cs name    */
+    "big5_bin",		/* name       */
+    "",			/* comment    */
+    NULL,		/* tailoring */
     ctype_big5,
     to_lower_big5,
     to_upper_big5,
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_caseinfo_big5,   /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
-    1,            /* caseup_multiply  */
-    1,            /* casedn_multiply  */
-    1,            /* mbminlen   */
-    2,            /* mbmaxlen   */
-    0,            /* min_sort_char */
-    0xF9FE,        /* max_sort_char */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
+    1,			/* caseup_multiply  */
+    1,			/* casedn_multiply  */
+    1,			/* mbminlen   */
+    2,			/* mbmaxlen   */
+    0,			/* min_sort_char */
+    0xF9FE,		/* max_sort_char */
     ' ',                /* pad char      */
     1,                  /* escape_with_backslash_is_dangerous */
     &my_charset_big5_handler,

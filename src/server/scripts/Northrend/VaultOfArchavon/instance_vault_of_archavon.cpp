@@ -26,14 +26,14 @@
 4 - Toravon the Ice Watcher event
 */
 
-class instance_archavon : public InstanceMapScript
+class instance_vault_of_archavon : public InstanceMapScript
 {
     public:
-        instance_archavon() : InstanceMapScript("instance_archavon", 624) { }
+        instance_vault_of_archavon() : InstanceMapScript("instance_vault_of_archavon", 624) { }
 
-        struct instance_archavon_InstanceMapScript : public InstanceScript
+        struct instance_vault_of_archavon_InstanceMapScript : public InstanceScript
         {
-            instance_archavon_InstanceMapScript(Map* map) : InstanceScript(map)
+            instance_vault_of_archavon_InstanceMapScript(Map* map) : InstanceScript(map)
             {
                 SetBossNumber(EncounterCount);
 
@@ -44,7 +44,7 @@ class instance_archavon : public InstanceMapScript
                 KoralonDeath    = 0;
             }
 
-            void OnCreatureCreate(Creature* creature)
+            void OnCreatureCreate(Creature* creature) OVERRIDE
             {
                 switch (creature->GetEntry())
                 {
@@ -74,7 +74,7 @@ class instance_archavon : public InstanceMapScript
                 return 0;
             }
 
-            bool SetBossState(uint32 type, EncounterState state)
+            bool SetBossState(uint32 type, EncounterState state) OVERRIDE
             {
                 if (!InstanceScript::SetBossState(type, state))
                     return false;
@@ -103,7 +103,7 @@ class instance_archavon : public InstanceMapScript
                 return true;
             }
 
-            bool CheckAchievementCriteriaMeet(uint32 criteria_id, Player const* /*source*/, Unit const* /*target*/, uint32 /*miscvalue1*/)
+            bool CheckAchievementCriteriaMeet(uint32 criteria_id, Player const* /*source*/, Unit const* /*target*/, uint32 /*miscvalue1*/) OVERRIDE
             {
                 switch (criteria_id)
                 {
@@ -135,11 +135,11 @@ class instance_archavon : public InstanceMapScript
 
         InstanceScript* GetInstanceScript(InstanceMap* map) const OVERRIDE
         {
-            return new instance_archavon_InstanceMapScript(map);
+            return new instance_vault_of_archavon_InstanceMapScript(map);
         }
 };
 
-void AddSC_instance_archavon()
+void AddSC_instance_vault_of_archavon()
 {
-    new instance_archavon();
+    new instance_vault_of_archavon();
 }

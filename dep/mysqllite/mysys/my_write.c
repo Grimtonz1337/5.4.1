@@ -18,7 +18,7 @@
 #include <errno.h>
 
 
-    /* Write a chunk of bytes to a file */
+	/* Write a chunk of bytes to a file */
 
 size_t my_write(File Filedes, const uchar *Buffer, size_t Count, myf MyFlags)
 {
@@ -26,7 +26,7 @@ size_t my_write(File Filedes, const uchar *Buffer, size_t Count, myf MyFlags)
   uint errors;
   DBUG_ENTER("my_write");
   DBUG_PRINT("my",("fd: %d  Buffer: %p  Count: %lu  MyFlags: %d",
-           Filedes, Buffer, (ulong) Count, MyFlags));
+		   Filedes, Buffer, (ulong) Count, MyFlags));
   errors= 0; written= 0;
 
   /* The behavior of write(fd, buf, 0) is not portable */
@@ -43,17 +43,17 @@ size_t my_write(File Filedes, const uchar *Buffer, size_t Count, myf MyFlags)
     if (writtenbytes == Count)
       break;
     if (writtenbytes != (size_t) -1)
-    {                        /* Safeguard */
+    {						/* Safeguard */
       written+= writtenbytes;
       Buffer+= writtenbytes;
       Count-= writtenbytes;
     }
     my_errno= errno;
     DBUG_PRINT("error",("Write only %ld bytes, error: %d",
-            (long) writtenbytes, my_errno));
+			(long) writtenbytes, my_errno));
 #ifndef NO_BACKGROUND
     if (my_thread_var->abort)
-      MyFlags&= ~ MY_WAIT_IF_FULL;        /* End if aborted by user */
+      MyFlags&= ~ MY_WAIT_IF_FULL;		/* End if aborted by user */
 
     if ((my_errno == ENOSPC || my_errno == EDQUOT) &&
         (MyFlags & MY_WAIT_IF_FULL))
@@ -72,29 +72,29 @@ size_t my_write(File Filedes, const uchar *Buffer, size_t Count, myf MyFlags)
         continue;                               /* Interrupted */
       }
 
-      if (!writtenbytes && !errors++)        /* Retry once */
+      if (!writtenbytes && !errors++)		/* Retry once */
       {
         /* We may come here if the file quota is exeeded */
-        errno= EFBIG;                /* Assume this is the error */
+        errno= EFBIG;				/* Assume this is the error */
         continue;
       }
     }
     else
-      continue;                    /* Retry */
+      continue;					/* Retry */
 #endif
     if (MyFlags & (MY_NABP | MY_FNABP))
     {
       if (MyFlags & (MY_WME | MY_FAE | MY_FNABP))
       {
-    my_error(EE_WRITE, MYF(ME_BELL+ME_WAITTANG),
-         my_filename(Filedes),my_errno);
+	my_error(EE_WRITE, MYF(ME_BELL+ME_WAITTANG),
+		 my_filename(Filedes),my_errno);
       }
-      DBUG_RETURN(MY_FILE_ERROR);        /* Error on read */
+      DBUG_RETURN(MY_FILE_ERROR);		/* Error on read */
     }
     else
-      break;                    /* Return bytes written */
+      break;					/* Return bytes written */
   }
   if (MyFlags & (MY_NABP | MY_FNABP))
-    DBUG_RETURN(0);            /* Want only errors */
+    DBUG_RETURN(0);			/* Want only errors */
   DBUG_RETURN(writtenbytes+written);
 } /* my_write */

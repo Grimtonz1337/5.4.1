@@ -88,7 +88,7 @@
 */
 
 #define SHA1CircularShift(bits,word) \
-        (((word) << (bits)) | ((word) >> (32-(bits))))
+		(((word) << (bits)) | ((word) >> (32-(bits))))
 
 /* Local Function Prototyptes */
 static void SHA1PadMessage(SHA1_CONTEXT*);
@@ -100,15 +100,15 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT*);
 
   SYNOPSIS
     mysql_sha1_reset()
-    context [in/out]        The context to reset.
+    context [in/out]		The context to reset.
 
  DESCRIPTION
    This function will initialize the SHA1Context in preparation
    for computing a new SHA1 message digest.
 
  RETURN
-   SHA_SUCCESS        ok
-   != SHA_SUCCESS    sha Error Code.
+   SHA_SUCCESS		ok
+   != SHA_SUCCESS	sha Error Code.
 */
 
 
@@ -129,8 +129,8 @@ int mysql_sha1_reset(SHA1_CONTEXT *context)
     return SHA_NULL;
 #endif
 
-  context->Length          = 0;
-  context->Message_Block_Index      = 0;
+  context->Length		  = 0;
+  context->Message_Block_Index	  = 0;
 
   context->Intermediate_Hash[0]   = sha_const_key[0];
   context->Intermediate_Hash[1]   = sha_const_key[1];
@@ -150,16 +150,16 @@ int mysql_sha1_reset(SHA1_CONTEXT *context)
 
   SYNOPSIS
     mysql_sha1_result()
-    context [in/out]        The context to use to calculate the SHA-1 hash.
-    Message_Digest: [out]    Where the digest is returned.
+    context [in/out]		The context to use to calculate the SHA-1 hash.
+    Message_Digest: [out]	Where the digest is returned.
 
   DESCRIPTION
     NOTE: The first octet of hash is stored in the 0th element,
-      the last octet of hash in the 19th element.
+	  the last octet of hash in the 19th element.
 
  RETURN
-   SHA_SUCCESS        ok
-   != SHA_SUCCESS    sha Error Code.
+   SHA_SUCCESS		ok
+   != SHA_SUCCESS	sha Error Code.
 */
 
 int mysql_sha1_result(SHA1_CONTEXT *context,
@@ -186,7 +186,7 @@ int mysql_sha1_result(SHA1_CONTEXT *context,
 
   for (i = 0; i < SHA1_HASH_SIZE; i++)
     Message_Digest[i] = (int8)((context->Intermediate_Hash[i>>2] >> 8
-             * ( 3 - ( i & 0x03 ) )));
+			 * ( 3 - ( i & 0x03 ) )));
   return SHA_SUCCESS;
 }
 
@@ -196,14 +196,14 @@ int mysql_sha1_result(SHA1_CONTEXT *context,
 
   SYNOPSIS
    mysql_sha1_input()
-   context [in/out]    The SHA context to update
-   message_array    An array of characters representing the next portion
-            of the message.
-  length        The length of the message in message_array
+   context [in/out]	The SHA context to update
+   message_array	An array of characters representing the next portion
+			of the message.
+  length		The length of the message in message_array
 
  RETURN
-   SHA_SUCCESS        ok
-   != SHA_SUCCESS    sha Error Code.
+   SHA_SUCCESS		ok
+   != SHA_SUCCESS	sha Error Code.
 */
 
 int mysql_sha1_input(SHA1_CONTEXT *context, const uint8 *message_array,
@@ -234,7 +234,7 @@ int mysql_sha1_input(SHA1_CONTEXT *context, const uint8 *message_array,
       2^64 bits.
     */
     if (context->Length == 0)
-      return (context->Corrupted= 1);       /* Message is too long */
+      return (context->Corrupted= 1);	   /* Message is too long */
 #endif
 
     if (context->Message_Block_Index == 64)
@@ -259,7 +259,7 @@ int mysql_sha1_input(SHA1_CONTEXT *context, const uint8 *message_array,
      the publication.
 */
 
-/* Constants defined in SHA-1    */
+/* Constants defined in SHA-1	*/
 static const uint32  K[]=
 {
   0x5A827999,
@@ -271,10 +271,10 @@ static const uint32  K[]=
 
 static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
 {
-  int        t;           /* Loop counter          */
-  uint32    temp;           /* Temporary word value      */
-  uint32    W[80];           /* Word sequence          */
-  uint32    A, B, C, D, E;       /* Word buffers          */
+  int		t;		   /* Loop counter		  */
+  uint32	temp;		   /* Temporary word value	  */
+  uint32	W[80];		   /* Word sequence		  */
+  uint32	A, B, C, D, E;	   /* Word buffers		  */
   int idx;
 
   /*
@@ -325,7 +325,7 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
   for (t = 40; t < 60; t++)
   {
     temp= (SHA1CircularShift(5,A) + ((B & C) | (B & D) | (C & D)) + E + W[t] +
-       K[2]);
+	   K[2]);
     E = D;
     D = C;
     C = SHA1CircularShift(30,B);
@@ -358,7 +358,7 @@ static void SHA1ProcessMessageBlock(SHA1_CONTEXT *context)
 
   SYNOPSIS
     SHA1PadMessage()
-    context: [in/out]        The context to pad
+    context: [in/out]		The context to pad
 
   DESCRIPTION
     According to the standard, the message must be padded to an even
@@ -387,21 +387,21 @@ static void SHA1PadMessage(SHA1_CONTEXT *context)
   {
     context->Message_Block[i++] = 0x80;
     bzero((char*) &context->Message_Block[i],
-      sizeof(context->Message_Block[0])*(64-i));
+	  sizeof(context->Message_Block[0])*(64-i));
     context->Message_Block_Index=64;
 
-    /* This function sets context->Message_Block_Index to zero    */
+    /* This function sets context->Message_Block_Index to zero	*/
     SHA1ProcessMessageBlock(context);
 
     bzero((char*) &context->Message_Block[0],
-      sizeof(context->Message_Block[0])*56);
+	  sizeof(context->Message_Block[0])*56);
     context->Message_Block_Index=56;
   }
   else
   {
     context->Message_Block[i++] = 0x80;
     bzero((char*) &context->Message_Block[i],
-      sizeof(context->Message_Block[0])*(56-i));
+	  sizeof(context->Message_Block[0])*(56-i));
     context->Message_Block_Index=56;
   }
 

@@ -20,7 +20,7 @@
 
   SYNOPSIS
     my_filename()
-      fd    File descriptor
+      fd	File descriptor
 */
 
 char * my_filename(File fd)
@@ -33,5 +33,5 @@ char * my_filename(File fd)
     DBUG_RETURN(my_file_info[fd].name);
   }
   else
-    DBUG_RETURN((char*) "UNOPENED");    /* Debug message */
+    DBUG_RETURN((char*) "UNOPENED");	/* Debug message */
 }

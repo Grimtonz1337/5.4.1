@@ -55,7 +55,7 @@ ulonglong my_getsystime()
 
   SYNOPSIS
     my_time()
-    flags    If MY_WME is set, write error if time call fails
+    flags	If MY_WME is set, write error if time call fails
 
 */
 
@@ -125,7 +125,7 @@ ulonglong my_micro_time()
 
   SYNOPSIS
     my_micro_time_and_time()
-    time_arg        Will be set to seconds since epoch (00:00:00 UTC,
+    time_arg		Will be set to seconds since epoch (00:00:00 UTC,
                         January 1, 1970)
 
   NOTES
@@ -199,7 +199,7 @@ ulonglong my_micro_time_and_time(time_t *time_arg)
 
   SYNOPSIS
     my_time_possible_from_micro()
-    microtime        Value from very recent my_micro_time()
+    microtime		Value from very recent my_micro_time()
 
   NOTES
     This function returns the current time. The microtime argument is only used

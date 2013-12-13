@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -51,7 +51,7 @@ public:
 
     struct npc_crusade_persuadedAI : public ScriptedAI
     {
-        npc_crusade_persuadedAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_crusade_persuadedAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 speechTimer;
         uint32 speechCounter;
@@ -375,7 +375,7 @@ public:
 
     struct npc_scarlet_courierAI : public ScriptedAI
     {
-        npc_scarlet_courierAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_scarlet_courierAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiStage;
         uint32 uiStage_timer;
@@ -467,7 +467,7 @@ public:
 
     struct npc_high_inquisitor_valrothAI : public ScriptedAI
     {
-        npc_high_inquisitor_valrothAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_high_inquisitor_valrothAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiRenew_timer;
         uint32 uiInquisitor_Penance_timer;
@@ -603,7 +603,7 @@ public:
 
     struct npc_a_special_surpriseAI : public ScriptedAI
     {
-        npc_a_special_surpriseAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_a_special_surpriseAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 ExecuteSpeech_Timer;
         uint32 ExecuteSpeech_Counter;

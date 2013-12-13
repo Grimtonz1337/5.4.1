@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -37,7 +37,7 @@ public:
 
     struct boss_gorosh_the_dervishAI : public ScriptedAI
     {
-        boss_gorosh_the_dervishAI(Creature* creature) : ScriptedAI(creature) {}
+        boss_gorosh_the_dervishAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 WhirlWind_Timer;
         uint32 MortalStrike_Timer;

@@ -41,7 +41,7 @@ ulong STDCALL net_field_length(uchar **packet)
     (*packet)+=4;
     return (ulong) uint3korr(pos+1);
   }
-  (*packet)+=9;                    /* Must be 254 when here */
+  (*packet)+=9;					/* Must be 254 when here */
   return (ulong) uint4korr(pos+1);
 }
 
@@ -69,7 +69,7 @@ my_ulonglong net_field_length_ll(uchar **packet)
     (*packet)+=4;
     return (my_ulonglong) uint3korr(pos+1);
   }
-  (*packet)+=9;                    /* Must be 254 when here */
+  (*packet)+=9;					/* Must be 254 when here */
 #ifdef NO_CLIENT_LONGLONG
   return (my_ulonglong) uint4korr(pos+1);
 #else
@@ -82,8 +82,8 @@ my_ulonglong net_field_length_ll(uchar **packet)
 
   SYNOPSIS
     net_store_length()
-    pkg            Store the packed integer here
-    length        integers to store
+    pkg			Store the packed integer here
+    length		integers to store
 
   NOTES
     This is mostly used to store lengths of strings.

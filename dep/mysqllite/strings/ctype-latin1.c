@@ -357,9 +357,9 @@ NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL
 
 static
 int my_mb_wc_latin1(CHARSET_INFO *cs  __attribute__((unused)),
-            my_wc_t *wc,
-            const uchar *str,
-            const uchar *end __attribute__((unused)))
+		    my_wc_t *wc,
+		    const uchar *str,
+		    const uchar *end __attribute__((unused)))
 {
   if (str >= end)
     return MY_CS_TOOSMALL;
@@ -370,9 +370,9 @@ int my_mb_wc_latin1(CHARSET_INFO *cs  __attribute__((unused)),
 
 static
 int my_wc_mb_latin1(CHARSET_INFO *cs  __attribute__((unused)),
-            my_wc_t wc,
-            uchar *str,
-            uchar *end __attribute__((unused)))
+		    my_wc_t wc,
+		    uchar *str,
+		    uchar *end __attribute__((unused)))
 {
   uchar *pl;
   
@@ -386,7 +386,7 @@ int my_wc_mb_latin1(CHARSET_INFO *cs  __attribute__((unused)),
 
 static MY_CHARSET_HANDLER my_charset_handler=
 {
-    NULL,            /* init */
+    NULL,			/* init */
     NULL,
     my_mbcharlen_8bit,
     my_numchars_8bit,
@@ -418,30 +418,30 @@ static MY_CHARSET_HANDLER my_charset_handler=
 
 CHARSET_INFO my_charset_latin1=
 {
-    8,0,0,                /* number    */
-    MY_CS_COMPILED | MY_CS_PRIMARY,    /* state     */
-    "latin1",                /* cs name    */
-    "latin1_swedish_ci",        /* name      */
-    "",                    /* comment   */
-    NULL,                /* tailoring */
+    8,0,0,				/* number    */
+    MY_CS_COMPILED | MY_CS_PRIMARY,	/* state     */
+    "latin1",				/* cs name    */
+    "latin1_swedish_ci",		/* name      */
+    "",					/* comment   */
+    NULL,				/* tailoring */
     ctype_latin1,
     to_lower_latin1,
     to_upper_latin1,
     sort_order_latin1,
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    cs_to_uni,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    cs_to_uni,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen   */
-    1,            /* mbmaxlen  */
-    0,            /* min_sort_char */
-    255,        /* max_sort_char */
+    1,			/* mbminlen   */
+    1,			/* mbmaxlen  */
+    0,			/* min_sort_char */
+    255,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_handler,
@@ -543,8 +543,8 @@ uchar combo2map[]={
 
 
 static int my_strnncoll_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
-                  const uchar *a, size_t a_length,
-                  const uchar *b, size_t b_length,
+				  const uchar *a, size_t a_length,
+				  const uchar *b, size_t b_length,
                                   my_bool b_is_prefix)
 {
   const uchar *a_end= a + a_length;
@@ -579,13 +579,13 @@ static int my_strnncoll_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
     which string ran out first
   */
   return ((a < a_end || a_extend) ? (b_is_prefix ? 0 : 1) :
-      (b < b_end || b_extend) ? -1 : 0);
+	  (b < b_end || b_extend) ? -1 : 0);
 }
 
 
 static int my_strnncollsp_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
-                    const uchar *a, size_t a_length,
-                    const uchar *b, size_t b_length,
+				    const uchar *a, size_t a_length,
+				    const uchar *b, size_t b_length,
                                     my_bool diff_if_only_endspace_difference)
 {
   const uchar *a_end= a + a_length, *b_end= b + b_length;
@@ -642,13 +642,13 @@ static int my_strnncollsp_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
       /* put shorter key in a */
       a_end= b_end;
       a= b;
-      swap= -1;                    /* swap sign of result */
+      swap= -1;					/* swap sign of result */
       res= -res;
     }
     for ( ; a < a_end ; a++)
     {
       if (*a != ' ')
-    return (*a < ' ') ? -swap : swap;
+	return (*a < ' ') ? -swap : swap;
     }
   }
   return res;
@@ -675,8 +675,8 @@ static size_t my_strnxfrm_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
 
 
 void my_hash_sort_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
-                const uchar *key, size_t len,
-                ulong *nr1, ulong *nr2)
+			    const uchar *key, size_t len,
+			    ulong *nr1, ulong *nr2)
 {
   const uchar *end;
   /*
@@ -701,7 +701,7 @@ void my_hash_sort_latin1_de(CHARSET_INFO *cs __attribute__((unused)),
 
 static MY_COLLATION_HANDLER my_collation_german2_ci_handler=
 {
-  NULL,            /* init */
+  NULL,			/* init */
   my_strnncoll_latin1_de,
   my_strnncollsp_latin1_de,
   my_strnxfrm_latin1_de,
@@ -717,30 +717,30 @@ static MY_COLLATION_HANDLER my_collation_german2_ci_handler=
 
 CHARSET_INFO my_charset_latin1_german2_ci=
 {
-  31,0,0,                /* number    */
-  MY_CS_COMPILED|MY_CS_STRNXFRM,    /* state     */
-  "latin1",                /* cs name    */
-  "latin1_german2_ci",            /* name      */
-  "",                    /* comment   */
-  NULL,                    /* tailoring */
+  31,0,0,				/* number    */
+  MY_CS_COMPILED|MY_CS_STRNXFRM,	/* state     */
+  "latin1",				/* cs name    */
+  "latin1_german2_ci",			/* name      */
+  "",					/* comment   */
+  NULL,					/* tailoring */
   ctype_latin1,
   to_lower_latin1,
   to_upper_latin1,
   sort_order_latin1_de,
-  NULL,                    /* contractions */
-  NULL,                    /* sort_order_big*/
-  cs_to_uni,                /* tab_to_uni   */
-  NULL,                    /* tab_from_uni */
+  NULL,					/* contractions */
+  NULL,					/* sort_order_big*/
+  cs_to_uni,				/* tab_to_uni   */
+  NULL,					/* tab_from_uni */
   my_unicase_default,                   /* caseinfo     */
-  NULL,                    /* state_map    */
-  NULL,                    /* ident_map    */
-  2,                    /* strxfrm_multiply */
+  NULL,					/* state_map    */
+  NULL,					/* ident_map    */
+  2,					/* strxfrm_multiply */
   1,                                    /* caseup_multiply  */
   1,                                    /* casedn_multiply  */
-  1,                    /* mbminlen   */
-  1,                    /* mbmaxlen  */
-  0,                    /* min_sort_char */
-  247,                    /* max_sort_char */
+  1,					/* mbminlen   */
+  1,					/* mbmaxlen  */
+  0,					/* min_sort_char */
+  247,					/* max_sort_char */
   ' ',                                  /* pad char      */
   0,                                    /* escape_with_backslash_is_dangerous */
   &my_charset_handler,
@@ -750,30 +750,30 @@ CHARSET_INFO my_charset_latin1_german2_ci=
 
 CHARSET_INFO my_charset_latin1_bin=
 {
-  47,0,0,                /* number    */
-  MY_CS_COMPILED|MY_CS_BINSORT,        /* state     */
-  "latin1",                /* cs name    */
-  "latin1_bin",                /* name      */
-  "",                    /* comment   */
-  NULL,                    /* tailoring */
+  47,0,0,				/* number    */
+  MY_CS_COMPILED|MY_CS_BINSORT,		/* state     */
+  "latin1",				/* cs name    */
+  "latin1_bin",				/* name      */
+  "",					/* comment   */
+  NULL,					/* tailoring */
   ctype_latin1,
   to_lower_latin1,
   to_upper_latin1,
-  NULL,                    /* sort_order   */
-  NULL,                    /* contractions */
-  NULL,                    /* sort_order_big*/
-  cs_to_uni,                /* tab_to_uni   */
-  NULL,                    /* tab_from_uni */
+  NULL,					/* sort_order   */
+  NULL,					/* contractions */
+  NULL,					/* sort_order_big*/
+  cs_to_uni,				/* tab_to_uni   */
+  NULL,					/* tab_from_uni */
   my_unicase_default,                   /* caseinfo     */
-  NULL,                    /* state_map    */
-  NULL,                    /* ident_map    */
-  1,                    /* strxfrm_multiply */
+  NULL,					/* state_map    */
+  NULL,					/* ident_map    */
+  1,					/* strxfrm_multiply */
   1,                                    /* caseup_multiply  */
   1,                                    /* casedn_multiply  */
-  1,                    /* mbminlen   */
-  1,                    /* mbmaxlen  */
-  0,                    /* min_sort_char */
-  255,                    /* max_sort_char */
+  1,					/* mbminlen   */
+  1,					/* mbmaxlen  */
+  0,					/* min_sort_char */
+  255,					/* max_sort_char */
   ' ',                                  /* pad char      */
   0,                                    /* escape_with_backslash_is_dangerous */
   &my_charset_handler,

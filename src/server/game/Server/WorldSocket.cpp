@@ -54,48 +54,41 @@
 
 struct ServerPktHeader
 {
-    /**
-     * size is the length of the payload _plus_ the length of the opcode
-     */
-    ServerPktHeader(uint32 size, uint16 cmd) : size(size)
+    ServerPktHeader(uint32 size, uint32 cmd, AuthCrypt* _authCrypt) : size(size)
     {
-        uint8 headerIndex=0;
-        if (isLargePacket())
+        if (_authCrypt->IsInitialized())
         {
-            TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "initializing large server to client packet. Size: %u, cmd: %u", size, cmd);
-            header[headerIndex++] = 0x80 | (0xFF & (size >> 16));
+            uint32 data =  (size << 13) | cmd & MAX_OPCODE;
+            memcpy(&header[0], &data, 4);
+            _authCrypt->EncryptSend((uint8*)&header[0], getHeaderLength());
         }
-        header[headerIndex++] = 0xFF & size;
-        header[headerIndex++] = 0xFF &(size >> 8);
-
-        header[headerIndex++] = 0xFF & cmd;
-        header[headerIndex++] = 0xFF & (cmd >> 8);
+        else
+        {
+            // Dynamic header size is not needed anymore, we are using not encrypted part for only the first few packets
+            memcpy(&header[0], &size, 2);
+            memcpy(&header[2], &cmd, 2);
+        }
     }
 
     uint8 getHeaderLength()
     {
-        // cmd = 2 bytes, size= 2||3bytes
-        return 2 + (isLargePacket() ? 3 : 2);
-    }
-
-    bool isLargePacket() const
-    {
-        return size > 0x7FFF;
+        return 4;
     }
 
     const uint32 size;
-    uint8 header[5];
+    uint8 header[4];
 };
 
-struct ClientPktHeader
+struct AuthClientPktHeader
 {
     uint16 size;
     uint32 cmd;
 };
 
-struct WorldPktHeader
+struct WorldClientPktHeader
 {
-    uint32 cmd;
+    uint16 size;
+    uint16 cmd;
 };
 
 #if defined(__GNUC__)
@@ -106,8 +99,10 @@ struct WorldPktHeader
 
 WorldSocket::WorldSocket (void): WorldHandler(),
 m_LastPingTime(ACE_Time_Value::zero), m_OverSpeedPings(0), m_Session(0),
-m_RecvWPct(0), m_RecvPct(), m_Header(sizeof (ClientPktHeader)), m_WorldHeader(sizeof(WorldPktHeader)),
-m_OutBuffer(0), m_OutBufferSize(65536), m_OutActive(false),
+m_RecvWPct(0), m_RecvPct(), m_Header(sizeof(AuthClientPktHeader)), 
+m_WorldHeader(sizeof(WorldClientPktHeader)), m_OutBuffer(0),
+m_OutBufferSize(65536), m_OutActive(false),
+
 m_Seed(static_cast<uint32> (rand32()))
 {
     reference_counting_policy().value (ACE_Event_Handler::Reference_Counting_Policy::ENABLED);
@@ -170,26 +165,21 @@ int WorldSocket::SendPacket(WorldPacket const& pct)
 
     WorldPacket const* pkt = &pct;
 
+    // Empty buffer used in case packet should be compressed
+    // Disable compression for now :)
+   /* WorldPacket buff;
+    if (m_Session && pkt->size() > 0x400)
+    {
+        buff.Compress(m_Session->GetCompressionStream(), pkt);
+        pkt = &buff;
+    }*/
+
     if (m_Session)
-        TC_LOG_ERROR(LOG_FILTER_GENERAL, "S->C: %s %s", m_Session->GetPlayerInfo().c_str(), GetOpcodeNameForLogging(pkt->GetOpcode()).c_str());
+        TC_LOG_TRACE("network.opcode", "S->C: %s %s", m_Session->GetPlayerInfo().c_str(), GetOpcodeNameForLogging(pkt->GetOpcode()).c_str());
 
     sScriptMgr->OnPacketSend(this, *pkt);
 
-    ServerPktHeader header(pkt->size()+2, pkt->GetOpcode());
-    
-    if (m_Crypt.IsInitialized())
-    {
-        uint32 totalLength = pct.size();
-        totalLength <<= 13;
-        totalLength |= ((uint32)pct.GetOpcode() & 0x1FFF);
-
-        header.header[0] = (uint32)(totalLength & 0xFF);
-        header.header[1] = (uint32)((totalLength >> 8) & 0xFF);
-        header.header[2] = (uint32)((totalLength >> 16) & 0xFF);
-        header.header[3] = (uint32)((totalLength >> 24) & 0xFF);
-
-        m_Crypt.EncryptSend((uint8*)header.header, header.getHeaderLength());
-    }
+    ServerPktHeader header(!m_Crypt.IsInitialized() ? pkt->size() + 2 : pct.size(), pkt->GetOpcode(), &m_Crypt);
 
     if (m_OutBuffer->space() >= pkt->size() + header.getHeaderLength() && msg_queue()->is_empty())
     {
@@ -215,7 +205,7 @@ int WorldSocket::SendPacket(WorldPacket const& pct)
 
         if (msg_queue()->enqueue_tail(mb, (ACE_Time_Value*)&ACE_Time_Value::zero) == -1)
         {
-            TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::SendPacket enqueue_tail failed");
+            TC_LOG_ERROR("network", "WorldSocket::SendPacket enqueue_tail failed");
             mb->release();
             return -1;
         }
@@ -258,7 +248,7 @@ int WorldSocket::open (void *a)
 
     if (peer().get_remote_addr(remote_addr) == -1)
     {
-        TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::open: peer().get_remote_addr errno = %s", ACE_OS::strerror (errno));
+        TC_LOG_ERROR("network", "WorldSocket::open: peer().get_remote_addr errno = %s", ACE_OS::strerror (errno));
         return -1;
     }
 
@@ -267,7 +257,7 @@ int WorldSocket::open (void *a)
     // not an opcode. this packet sends raw string WORLD OF WARCRAFT CONNECTION - SERVER TO CLIENT"
     // because of our implementation, bytes "WO" become the opcode
     WorldPacket packet(MSG_VERIFY_CONNECTIVITY);
-    packet << "RLD OF WARCRAFT CONNECTION - SERVER TO CLIENT";
+    packet << std::string("RLD OF WARCRAFT CONNECTION - SERVER TO CLIENT");
 
     if (SendPacket(packet) == -1)
         return -1;
@@ -275,7 +265,7 @@ int WorldSocket::open (void *a)
     // Register with ACE Reactor
     if (reactor()->register_handler(this, ACE_Event_Handler::READ_MASK | ACE_Event_Handler::WRITE_MASK) == -1)
     {
-        TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::open: unable to register client handler errno = %s", ACE_OS::strerror (errno));
+        TC_LOG_ERROR("network", "WorldSocket::open: unable to register client handler errno = %s", ACE_OS::strerror (errno));
         return -1;
     }
 
@@ -311,14 +301,14 @@ int WorldSocket::handle_input (ACE_HANDLE)
                 return Update();                           // interesting line, isn't it ?
             }
 
-            TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WorldSocket::handle_input: Peer error closing connection errno = %s", ACE_OS::strerror (errno));
+            TC_LOG_DEBUG("network", "WorldSocket::handle_input: Peer error closing connection errno = %s", ACE_OS::strerror (errno));
 
             errno = ECONNRESET;
             return -1;
         }
         case 0:
         {
-            TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WorldSocket::handle_input: Peer has closed connection");
+            TC_LOG_DEBUG("network", "WorldSocket::handle_input: Peer has closed connection");
 
             errno = ECONNRESET;
             return -1;
@@ -387,7 +377,7 @@ int WorldSocket::handle_output_queue (GuardType& g)
 
     if (msg_queue()->dequeue_head(mblk, (ACE_Time_Value*)&ACE_Time_Value::zero) == -1)
     {
-        TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::handle_output_queue dequeue_head");
+        TC_LOG_ERROR("network", "WorldSocket::handle_output_queue dequeue_head");
         return -1;
     }
 
@@ -422,7 +412,7 @@ int WorldSocket::handle_output_queue (GuardType& g)
 
         if (msg_queue()->enqueue_head(mblk, (ACE_Time_Value*) &ACE_Time_Value::zero) == -1)
         {
-            TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::handle_output_queue enqueue_head");
+            TC_LOG_ERROR("network", "WorldSocket::handle_output_queue enqueue_head");
             mblk->release();
             return -1;
         }
@@ -467,8 +457,14 @@ int WorldSocket::Update (void)
     if (closing_)
         return -1;
 
-    if (m_OutActive || (m_OutBuffer->length() == 0 && msg_queue()->is_empty()))
+    if (m_OutActive)
         return 0;
+
+    {
+        ACE_GUARD_RETURN (LockType, Guard, m_OutBufferLock, 0);
+        if (m_OutBuffer->length() == 0 && msg_queue()->is_empty())
+            return 0;
+    }
 
     int ret;
     do
@@ -482,64 +478,75 @@ int WorldSocket::handle_input_header (void)
 {
     ACE_ASSERT(m_RecvWPct == NULL);
 
+
     if (m_Crypt.IsInitialized())
     {
-        uint8* authHeader = (uint8*)m_WorldHeader.rd_ptr();
-        WorldPktHeader& header = *((WorldPktHeader*)authHeader);
+        ACE_ASSERT(m_WorldHeader.length() == sizeof(WorldClientPktHeader));
+        uint8* uintHeader = (uint8*)m_WorldHeader.rd_ptr();
+        m_Crypt.DecryptRecv(uintHeader, sizeof(WorldClientPktHeader));
+        WorldClientPktHeader& header = *(WorldClientPktHeader*)uintHeader;
+        
+        uint32 value = *(uint32*)uintHeader;
+        header.cmd = value & 0x1FFF;
+        header.size = ((value & ~(uint32)0x1FFF) >> 13);
 
-        m_Crypt.DecryptRecv ((uint8*)authHeader, 4);
-
-        uint32 val = *(uint32*)authHeader;
-        uint32 opcode = val & 0x1FFF;
-        uint16 size = (uint16)((val & ~(uint32)0xFFF) >> 13);
-
-        if ((size > 20240) || (opcode >= 0xFFFF))
+        if (header.size > 10236)
         {
-            TC_LOG_ERROR(LOG_FILTER_GENERAL, "WorldSocket::handle_input_header - Client sent invalid packet size %.8X", header.cmd);
+            Player* _player = m_Session ? m_Session->GetPlayer() : NULL;
+            TC_LOG_ERROR("network", "WorldSocket::handle_input_header(): client (account: %u, char [GUID: %u, name: %s]) sent malformed packet (size: %d, cmd: %d)",
+                m_Session ? m_Session->GetAccountId() : 0,
+                _player ? _player->GetGUIDLow() : 0,
+                _player ? _player->GetName().c_str() : "<none>",
+                header.size, header.cmd);
+
             errno = EINVAL;
             return -1;
         }
-
-        ACE_NEW_RETURN(m_RecvWPct, WorldPacket(PacketFilter::DropHighBytes(Opcodes(opcode)), size), -1);
         
-        if (size > 0)
+        ACE_NEW_RETURN(m_RecvWPct, WorldPacket (PacketFilter::DropHighBytes(Opcodes(header.cmd)), header.size), -1);
+
+        if (header.size > 0)
         {
-            m_RecvWPct->resize(size);
-            m_RecvPct.base((char*)m_RecvWPct->contents(), m_RecvWPct->size());
+            m_RecvWPct->resize(header.size);
+            m_RecvPct.base ((char*) m_RecvWPct->contents(), m_RecvWPct->size());
         }
         else
             ACE_ASSERT(m_RecvPct.space() == 0);
     }
     else
     {
-        uint8* authHeader = (uint8*)m_Header.rd_ptr();
-        ClientPktHeader& header = *((ClientPktHeader*)authHeader);
+        ACE_ASSERT(m_Header.length() == sizeof(AuthClientPktHeader));
+        uint8* uintHeader = (uint8*)m_Header.rd_ptr();
+        AuthClientPktHeader& header = *((AuthClientPktHeader*)uintHeader);
 
-        EndianConvert(header.size);
-        EndianConvert(header.cmd);
-
-        if ((header.size < 4) || (header.size > 10240) || (header.cmd > 0xFFFF && (header.cmd >> 16) != 0x4C52))  // LR (from MSG_VERIFY_CONNECTIVITY)
+        if ((header.size < 4) || (header.size > 10240))
         {
-            TC_LOG_ERROR(LOG_FILTER_GENERAL, "WorldSocket::handle_input_header - Client sent invalid packet size %.8X", header.cmd);
+            Player* _player = m_Session ? m_Session->GetPlayer() : NULL;
+            TC_LOG_ERROR("network", "WorldSocket::handle_input_header(): client (account: %u, char [GUID: %u, name: %s]) sent malformed packet (size: %d, cmd: %d)",
+                m_Session ? m_Session->GetAccountId() : 0,
+                _player ? _player->GetGUIDLow() : 0,
+                _player ? _player->GetName().c_str() : "<none>",
+                header.size, header.cmd);
+
             errno = EINVAL;
             return -1;
         }
 
         header.size -= 4;
 
-        ACE_NEW_RETURN(m_RecvWPct, WorldPacket(PacketFilter::DropHighBytes(Opcodes(header.cmd)), header.size), -1);
-        
+        ACE_NEW_RETURN(m_RecvWPct, WorldPacket (PacketFilter::DropHighBytes(Opcodes(header.cmd)), header.size), -1);
+
         if (header.size > 0)
         {
             m_RecvWPct->resize(header.size);
-            m_RecvPct.base((char*)m_RecvWPct->contents(), m_RecvWPct->size());
+            m_RecvPct.base ((char*) m_RecvWPct->contents(), m_RecvWPct->size());
         }
         else
             ACE_ASSERT(m_RecvPct.space() == 0);
     }
+
     return 0;
 }
-
 int WorldSocket::handle_input_payload (void)
 {
     // set errno properly here on error !!!
@@ -669,7 +676,7 @@ int WorldSocket::handle_input_missing_data (void)
         // hope this is not hack, as proper m_RecvWPct is asserted around
         if (!m_RecvWPct)
         {
-            TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "Forcing close on input m_RecvWPct = NULL");
+            TC_LOG_ERROR("network", "Forcing close on input m_RecvWPct = NULL");
             errno = EINVAL;
             return -1;
         }
@@ -715,7 +722,7 @@ int WorldSocket::cancel_wakeup_output (GuardType& g)
         (this, ACE_Event_Handler::WRITE_MASK) == -1)
     {
         // would be good to store errno from reactor with errno guard
-        TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::cancel_wakeup_output");
+        TC_LOG_ERROR("network", "WorldSocket::cancel_wakeup_output");
         return -1;
     }
 
@@ -734,7 +741,7 @@ int WorldSocket::schedule_wakeup_output (GuardType& g)
     if (reactor()->schedule_wakeup
         (this, ACE_Event_Handler::WRITE_MASK) == -1)
     {
-        TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::schedule_wakeup_output");
+        TC_LOG_ERROR("network", "WorldSocket::schedule_wakeup_output");
         return -1;
     }
 
@@ -749,6 +756,7 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
     ACE_Auto_Ptr<WorldPacket> aptr(new_pct);
 
     Opcodes opcode = PacketFilter::DropHighBytes(new_pct->GetOpcode());
+    
 
     if (closing_)
         return -1;
@@ -759,8 +767,8 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
 
     std::string opcodeName = GetOpcodeNameForLogging(opcode);
     if (m_Session)
-        TC_LOG_ERROR(LOG_FILTER_GENERAL, "C->S: %s %s", m_Session->GetPlayerInfo().c_str(), opcodeName.c_str());
-
+        TC_LOG_TRACE("network.opcode", "C->S: %s %s", m_Session->GetPlayerInfo().c_str(), opcodeName.c_str());
+     
     try
     {
         switch (opcode)
@@ -770,26 +778,23 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
             case CMSG_AUTH_SESSION:
                 if (m_Session)
                 {
-                    TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::ProcessIncoming: received duplicate CMSG_AUTH_SESSION from %s", m_Session->GetPlayerInfo().c_str());
+                    TC_LOG_ERROR("network", "WorldSocket::ProcessIncoming: received duplicate CMSG_AUTH_SESSION from %s", m_Session->GetPlayerInfo().c_str());
                     return -1;
                 }
 
                 sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 return HandleAuthSession(*new_pct);
             case CMSG_KEEP_ALIVE:
-                TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "%s", opcodeName.c_str());
                 sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 return 0;
             case CMSG_LOG_DISCONNECT:
                 new_pct->rfinish(); // contains uint32 disconnectReason;
-                TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "%s", opcodeName.c_str());
                 sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 return 0;
             // not an opcode, client sends string "WORLD OF WARCRAFT CONNECTION - CLIENT TO SERVER" without opcode
             // first 4 bytes become the opcode (2 dropped)
             case MSG_VERIFY_CONNECTIVITY:
             {
-                TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "%s", opcodeName.c_str());
                 sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 std::string str;
                 *new_pct >> str;
@@ -797,18 +802,18 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
                     return -1;
                 return HandleSendAuthSession();
             }
-            case CMSG_ENABLE_NAGLE:
+            /*case CMSG_ENABLE_NAGLE:
             {
-                TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "%s", opcodeName.c_str());
+                TC_LOG_DEBUG("network", "%s", opcodeName.c_str());
                 sScriptMgr->OnPacketReceive(this, WorldPacket(*new_pct));
                 return m_Session ? m_Session->HandleEnableNagleAlgorithm() : -1;
-            }
+            }*/
             default:
             {
                 ACE_GUARD_RETURN(LockType, Guard, m_SessionLock, -1);
                 if (!m_Session)
                 {
-                    TC_LOG_ERROR(LOG_FILTER_OPCODES, "ProcessIncoming: Client not authed opcode = %u", uint32(opcode));
+                    TC_LOG_ERROR("network.opcode", "ProcessIncoming: Client not authed opcode = %u", uint32(opcode));
                     return -1;
                 }
 
@@ -819,7 +824,7 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
                 OpcodeHandler const* handler = opcodeTable[opcode];
                 if (!handler || handler->Status == STATUS_UNHANDLED)
                 {
-                    TC_LOG_ERROR(LOG_FILTER_OPCODES, "No defined handler for opcode %s sent by %s", GetOpcodeNameForLogging(new_pct->GetOpcode()).c_str(), m_Session->GetPlayerInfo().c_str());
+                    TC_LOG_ERROR("network.opcode", "No defined handler for opcode %s sent by %s", GetOpcodeNameForLogging(new_pct->GetOpcode()).c_str(), m_Session->GetPlayerInfo().c_str());
                     return 0;
                 }
 
@@ -838,7 +843,7 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
     }
     catch (ByteBufferException &)
     {
-        TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::ProcessIncoming ByteBufferException occured while parsing an instant handled packet %s from client %s, accountid=%i. Disconnected client.",
+        TC_LOG_ERROR("network", "WorldSocket::ProcessIncoming ByteBufferException occured while parsing an instant handled packet %s from client %s, accountid=%i. Disconnected client.",
                        opcodeName.c_str(), GetRemoteAddress().c_str(), m_Session ? int32(m_Session->GetAccountId()) : -1);
         new_pct->hexlike();
         return -1;
@@ -849,29 +854,24 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
 
 int WorldSocket::HandleSendAuthSession()
 {
-    WorldPacket packet(SMSG_AUTH_CHALLENGE, 37);
-    packet << uint32(1);
-    // BigNumber seed1;
-    // seed1.SetRand(16 * 8);
-    // packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
-
-    // BigNumber seed2;
-    // seed2.SetRand(16 * 8);
-    // packet.append(seed2.AsByteArray(16), 16);               // new encryption seeds
-    for (int i = 0; i < 8; i++)
-    packet << uint32(0);
+    WorldPacket packet(SMSG_AUTH_CHALLENGE, 39);
+    packet << uint16(0);
     packet << uint8(1);
+
+    for (int i = 0; i < 8; i++)
+        packet << uint32(0);
+
     packet << m_Seed;
     return SendPacket(packet);
-    
+
 }
 
 int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 {
     uint8 digest[20];
     uint32 clientSeed;
+    uint8 security;
     uint16 clientBuild;
-    uint16 security;
     uint32 id;
     uint32 addonSize;
     LocaleConstant locale;
@@ -881,36 +881,36 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     WorldPacket addonsData;
 
     recvPacket.read_skip<uint32>();
-    recvPacket >> digest[4];
+    recvPacket >> digest[14];
+    recvPacket >> digest[8];
     recvPacket.read_skip<uint32>();
-    recvPacket.read_skip<uint8>();
+    recvPacket >> digest[10];
     recvPacket >> digest[19];
-    recvPacket >> digest[12];
+    recvPacket >> digest[16];
+    recvPacket >> digest[13];
+    recvPacket >> digest[4];
+    recvPacket.read_skip<uint8>();
     recvPacket >> digest[9];
-    recvPacket >> digest[6];
+    recvPacket >> digest[0];
+    recvPacket >> clientSeed;
+    recvPacket >> digest[5];
+    recvPacket >> digest[2];
+    recvPacket >> clientBuild;
+    recvPacket >> digest[12];
+    recvPacket.read_skip<uint32>();
     recvPacket >> digest[18];
     recvPacket >> digest[17];
-    recvPacket >> digest[8];
-    recvPacket >> digest[13];
-    recvPacket >> digest[1];
-    recvPacket >> digest[10];
     recvPacket >> digest[11];
-    recvPacket >> digest[15];
-    recvPacket.read_skip<uint32>();
-    recvPacket >> digest[3];
-    recvPacket >> digest[14];
-    recvPacket >> digest[7];
     recvPacket.read_skip<uint64>();
+    recvPacket >> digest[7];
+    recvPacket >> digest[1];
+    recvPacket >> digest[3];
     recvPacket.read_skip<uint8>();
+    recvPacket >> digest[6];
     recvPacket.read_skip<uint32>();
-    recvPacket >> digest[5];
-    recvPacket >> digest[0];
-    recvPacket >> clientBuild;
-    recvPacket >> digest[16];
-    recvPacket >> digest[2];
-    recvPacket.read_skip<uint32>();
-    recvPacket >> addonSize;
+    recvPacket >> digest[15];
 
+    recvPacket >> addonSize;
     addonsData.resize(addonSize);
     recvPacket.read((uint8*)addonsData.contents(), addonSize);
 
@@ -921,7 +921,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     if (sWorld->IsClosed())
     {
         SendAuthResponseError(AUTH_REJECT);
-        TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::HandleAuthSession: World closed, denying client (%s).", GetRemoteAddress().c_str());
+        TC_LOG_ERROR("network", "WorldSocket::HandleAuthSession: World closed, denying client (%s).", GetRemoteAddress().c_str());
         return -1;
     }
 
@@ -938,7 +938,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     if (!result)
     {
         SendAuthResponseError(AUTH_UNKNOWN_ACCOUNT);
-        TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::HandleAuthSession: Sent Auth Response (unknown account).");
+        TC_LOG_ERROR("network", "WorldSocket::HandleAuthSession: Sent Auth Response (unknown account).");
         return -1;
     }
 
@@ -955,7 +955,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
         if (strcmp (fields[2].GetCString(), GetRemoteAddress().c_str()))
         {
             SendAuthResponseError(AUTH_FAILED);
-            TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WorldSocket::HandleAuthSession: Sent Auth Response (Account IP differs).");
+            TC_LOG_DEBUG("network", "WorldSocket::HandleAuthSession: Sent Auth Response (Account IP differs).");
             return -1;
         }
     }
@@ -963,6 +963,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     id = fields[0].GetUInt32();
 
     k.SetHexStr(fields[1].GetCString());
+
     int64 mutetime = fields[5].GetInt64();
     //! Negative mutetime indicates amount of seconds to be muted effective on next login - which is now.
     if (mutetime < 0)
@@ -988,7 +989,7 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     if (sWorld->getBoolConfig(CONFIG_WARDEN_ENABLED) && os != "Win" && os != "OSX")
     {
         SendAuthResponseError(AUTH_REJECT);
-        TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::HandleAuthSession: Client %s attempted to log in using invalid client OS (%s).", GetRemoteAddress().c_str(), os.c_str());
+        TC_LOG_ERROR("network", "WorldSocket::HandleAuthSession: Client %s attempted to log in using invalid client OS (%s).", GetRemoteAddress().c_str(), os.c_str());
         return -1;
     }
 
@@ -1019,17 +1020,17 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     if (banresult) // if account banned
     {
         SendAuthResponseError(AUTH_BANNED);
-        TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::HandleAuthSession: Sent Auth Response (Account banned).");
+        TC_LOG_ERROR("network", "WorldSocket::HandleAuthSession: Sent Auth Response (Account banned).");
         return -1;
     }
 
     // Check locked state for server
     AccountTypes allowedAccountType = sWorld->GetPlayerSecurityLimit();
-    TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "Allowed Level: %u Player Level %u", allowedAccountType, AccountTypes(security));
+    TC_LOG_DEBUG("network", "Allowed Level: %u Player Level %u", allowedAccountType, AccountTypes(security));
     if (allowedAccountType > SEC_PLAYER && AccountTypes(security) < allowedAccountType)
     {
         SendAuthResponseError(AUTH_UNAVAILABLE);
-        TC_LOG_INFO(LOG_FILTER_NETWORKIO, "WorldSocket::HandleAuthSession: User tries to login but his security level is not enough");
+        TC_LOG_INFO("network", "WorldSocket::HandleAuthSession: User tries to login but his security level is not enough");
         return -1;
     }
 
@@ -1046,7 +1047,14 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
 
     std::string address = GetRemoteAddress();
 
-    TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WorldSocket::HandleAuthSession: Client '%s' authenticated successfully from %s.",
+    if (memcmp(sha.GetDigest(), digest, 20))
+    {
+        SendAuthResponseError(AUTH_FAILED);
+        TC_LOG_ERROR("network", "WorldSocket::HandleAuthSession: Authentication failed for account: %u ('%s') address: %s", id, account.c_str(), address.c_str());
+        return -1;
+    }
+
+    TC_LOG_DEBUG("network", "WorldSocket::HandleAuthSession: Client '%s' authenticated successfully from %s.",
         account.c_str(),
         address.c_str());
 
@@ -1120,9 +1128,9 @@ int WorldSocket::HandlePing (WorldPacket& recvPacket)
             {
                 ACE_GUARD_RETURN (LockType, Guard, m_SessionLock, -1);
 
-                if (m_Session && !m_Session->HasPermission(RBAC_PERM_SKIP_CHECK_OVERSPEED_PING))
+                if (m_Session && !m_Session->HasPermission(rbac::RBAC_PERM_SKIP_CHECK_OVERSPEED_PING))
                 {
-                    TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::HandlePing: %s kicked for over-speed pings (address: %s)",
+                    TC_LOG_ERROR("network", "WorldSocket::HandlePing: %s kicked for over-speed pings (address: %s)",
                         m_Session->GetPlayerInfo().c_str(), GetRemoteAddress().c_str());
 
                     return -1;
@@ -1138,10 +1146,13 @@ int WorldSocket::HandlePing (WorldPacket& recvPacket)
         ACE_GUARD_RETURN (LockType, Guard, m_SessionLock, -1);
 
         if (m_Session)
+        {
             m_Session->SetLatency (latency);
+            m_Session->ResetClientTimeDelay();
+        }
         else
         {
-            TC_LOG_ERROR(LOG_FILTER_NETWORKIO, "WorldSocket::HandlePing: peer sent CMSG_PING, "
+            TC_LOG_ERROR("network", "WorldSocket::HandlePing: peer sent CMSG_PING, "
                             "but is not authenticated or got recently kicked, "
                             " address = %s",
                             GetRemoteAddress().c_str());
@@ -1156,9 +1167,9 @@ int WorldSocket::HandlePing (WorldPacket& recvPacket)
 
 void WorldSocket::SendAuthResponseError(uint8 code)
 {
-    WorldPacket packet(SMSG_AUTH_RESPONSE, 1);
-    packet.WriteBit(0); // has queue info
-    packet.WriteBit(0); // has account info
-    packet << uint8(code);
-    SendPacket(packet);
+        WorldPacket packet(SMSG_AUTH_RESPONSE, 1);
+        packet << uint8(code);
+        packet.WriteBit(0); // has queue info
+        packet.WriteBit(0); // has account info
+        SendPacket(packet);
 }

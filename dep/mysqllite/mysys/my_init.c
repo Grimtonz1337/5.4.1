@@ -39,7 +39,7 @@ static my_bool win32_init_tcp_ip();
 my_bool my_init_done= 0;
 /** True if @c my_basic_init() has been called. */
 my_bool my_basic_init_done= 0;
-uint    mysys_usage_id= 0;              /* Incremented for each my_init() */
+uint	mysys_usage_id= 0;              /* Incremented for each my_init() */
 ulong   my_thread_stack_size= 65536;
 
 static ulong atoi_octal(const char *str)
@@ -48,8 +48,8 @@ static ulong atoi_octal(const char *str)
   while (*str && my_isspace(&my_charset_latin1, *str))
     str++;
   str2int(str,
-      (*str == '0' ? 8 : 10),       /* Octalt or decimalt */
-      0, INT_MAX, &tmp);
+	  (*str == '0' ? 8 : 10),       /* Octalt or decimalt */
+	  0, INT_MAX, &tmp);
   return (ulong) tmp;
 }
 
@@ -95,7 +95,7 @@ my_bool my_basic_init(void)
     return 1;
 
 #if defined(SAFE_MUTEX)
-  safe_mutex_global_init();        /* Must be called early */
+  safe_mutex_global_init();		/* Must be called early */
 #endif
 
 #if defined(MY_PTHREAD_FASTMUTEX) && !defined(SAFE_MUTEX)
@@ -103,7 +103,7 @@ my_bool my_basic_init(void)
 #endif
 
 #if defined(HAVE_PTHREAD_INIT)
-  pthread_init();            /* Must be called before DBUG_ENTER */
+  pthread_init();			/* Must be called before DBUG_ENTER */
 #endif
   if (my_thread_basic_global_init())
     return 1;
@@ -153,7 +153,7 @@ my_bool my_init(void)
 } /* my_init */
 
 
-    /* End my_sys */
+	/* End my_sys */
 
 void my_end(int infoflag)
 {
@@ -182,7 +182,7 @@ void my_end(int infoflag)
 
   if ((infoflag & MY_CHECK_ERROR) || print_info)
 
-  {                    /* Test if some file is left open */
+  {					/* Test if some file is left open */
     if (my_file_opened | my_stream_opened)
     {
       char ebuff[512];
@@ -212,15 +212,15 @@ Maximum resident set size %ld, Integral resident set size %ld\n\
 Non-physical pagefaults %ld, Physical pagefaults %ld, Swaps %ld\n\
 Blocks in %ld out %ld, Messages in %ld out %ld, Signals %ld\n\
 Voluntary context switches %ld, Involuntary context switches %ld\n",
-          (rus.ru_utime.tv_sec * SCALE_SEC +
-           rus.ru_utime.tv_usec / SCALE_USEC) / 100.0,
-          (rus.ru_stime.tv_sec * SCALE_SEC +
-           rus.ru_stime.tv_usec / SCALE_USEC) / 100.0,
-          rus.ru_maxrss, rus.ru_idrss,
-          rus.ru_minflt, rus.ru_majflt,
-          rus.ru_nswap, rus.ru_inblock, rus.ru_oublock,
-          rus.ru_msgsnd, rus.ru_msgrcv, rus.ru_nsignals,
-          rus.ru_nvcsw, rus.ru_nivcsw);
+	      (rus.ru_utime.tv_sec * SCALE_SEC +
+	       rus.ru_utime.tv_usec / SCALE_USEC) / 100.0,
+	      (rus.ru_stime.tv_sec * SCALE_SEC +
+	       rus.ru_stime.tv_usec / SCALE_USEC) / 100.0,
+	      rus.ru_maxrss, rus.ru_idrss,
+	      rus.ru_minflt, rus.ru_majflt,
+	      rus.ru_nswap, rus.ru_inblock, rus.ru_oublock,
+	      rus.ru_msgsnd, rus.ru_msgrcv, rus.ru_nsignals,
+	      rus.ru_nvcsw, rus.ru_nivcsw);
 #endif
 #if defined(__WIN__) && defined(_MSC_VER)
    _CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_FILE );
@@ -277,7 +277,7 @@ void my_parameter_handler(const wchar_t * expression, const wchar_t * function,
                           uintptr_t pReserved)
 {
   DBUG_PRINT("my",("Expression: %s  function: %s  file: %s, line: %d",
-           expression, function, file, line));
+		   expression, function, file, line));
 }
 
 
@@ -442,15 +442,15 @@ static my_bool win32_have_tcpip(void)
 {
   HKEY hTcpipRegKey;
   if (RegOpenKeyEx ( HKEY_LOCAL_MACHINE, TCPIPKEY, 0, KEY_READ,
-              &hTcpipRegKey) != ERROR_SUCCESS)
+		      &hTcpipRegKey) != ERROR_SUCCESS)
   {
     if (RegOpenKeyEx ( HKEY_LOCAL_MACHINE, WINSOCK2KEY, 0, KEY_READ,
-              &hTcpipRegKey) != ERROR_SUCCESS)
+		      &hTcpipRegKey) != ERROR_SUCCESS)
     {
       if (RegOpenKeyEx ( HKEY_LOCAL_MACHINE, WINSOCKKEY, 0, KEY_READ,
-             &hTcpipRegKey) != ERROR_SUCCESS)
-    if (!getenv("HAVE_TCPIP") || have_tcpip)    /* Provide a workaround */
-      return (FALSE);
+			 &hTcpipRegKey) != ERROR_SUCCESS)
+	if (!getenv("HAVE_TCPIP") || have_tcpip)	/* Provide a workaround */
+	  return (FALSE);
     }
   }
   RegCloseKey ( hTcpipRegKey);
@@ -464,27 +464,27 @@ static my_bool win32_init_tcp_ip()
   {
     WORD wVersionRequested = MAKEWORD( 2, 2 );
     WSADATA wsaData;
-     /* Be a good citizen: maybe another lib has already initialised
-         sockets, so dont clobber them unless necessary */
+ 	/* Be a good citizen: maybe another lib has already initialised
+ 		sockets, so dont clobber them unless necessary */
     if (WSAStartup( wVersionRequested, &wsaData ))
     {
       /* Load failed, maybe because of previously loaded
-     incompatible version; try again */
+	 incompatible version; try again */
       WSACleanup( );
       if (!WSAStartup( wVersionRequested, &wsaData ))
-    have_tcpip=1;
+	have_tcpip=1;
     }
     else
     {
       if (wsaData.wVersion != wVersionRequested)
       {
-    /* Version is no good, try again */
-    WSACleanup( );
-    if (!WSAStartup( wVersionRequested, &wsaData ))
-      have_tcpip=1;
+	/* Version is no good, try again */
+	WSACleanup( );
+	if (!WSAStartup( wVersionRequested, &wsaData ))
+	  have_tcpip=1;
       }
       else
-    have_tcpip=1;
+	have_tcpip=1;
     }
   }
   return(0);

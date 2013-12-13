@@ -107,7 +107,7 @@ static my_bool init_state_maps(CHARSET_INFO *cs)
   for (i=0; i < 256 ; i++)
   {
     ident_map[i]= (uchar) (state_map[i] == MY_LEX_IDENT ||
-               state_map[i] == MY_LEX_NUMBER_IDENT);
+			   state_map[i] == MY_LEX_NUMBER_IDENT);
   }
 
   /* Special handling of hex and binary strings */
@@ -149,28 +149,28 @@ static int cs_copy_data(CHARSET_INFO *to, CHARSET_INFO *from)
   if (from->ctype)
   {
     if (!(to->ctype= (uchar*) my_once_memdup((char*) from->ctype,
-                         MY_CS_CTYPE_TABLE_SIZE,
-                         MYF(MY_WME))))
+					     MY_CS_CTYPE_TABLE_SIZE,
+					     MYF(MY_WME))))
       goto err;
     if (init_state_maps(to))
       goto err;
   }
   if (from->to_lower)
     if (!(to->to_lower= (uchar*) my_once_memdup((char*) from->to_lower,
-                        MY_CS_TO_LOWER_TABLE_SIZE,
-                        MYF(MY_WME))))
+						MY_CS_TO_LOWER_TABLE_SIZE,
+						MYF(MY_WME))))
       goto err;
 
   if (from->to_upper)
     if (!(to->to_upper= (uchar*) my_once_memdup((char*) from->to_upper,
-                        MY_CS_TO_UPPER_TABLE_SIZE,
-                        MYF(MY_WME))))
+						MY_CS_TO_UPPER_TABLE_SIZE,
+						MYF(MY_WME))))
       goto err;
   if (from->sort_order)
   {
     if (!(to->sort_order= (uchar*) my_once_memdup((char*) from->sort_order,
-                          MY_CS_SORT_ORDER_TABLE_SIZE,
-                          MYF(MY_WME))))
+						  MY_CS_SORT_ORDER_TABLE_SIZE,
+						  MYF(MY_WME))))
       goto err;
 
   }
@@ -178,7 +178,7 @@ static int cs_copy_data(CHARSET_INFO *to, CHARSET_INFO *from)
   {
     uint sz= MY_CS_TO_UNI_TABLE_SIZE*sizeof(uint16);
     if (!(to->tab_to_uni= (uint16*)  my_once_memdup((char*)from->tab_to_uni,
-                            sz, MYF(MY_WME))))
+						    sz, MYF(MY_WME))))
       goto err;
   }
   if (from->tailoring)
@@ -196,9 +196,9 @@ err:
 static my_bool simple_cs_is_full(CHARSET_INFO *cs)
 {
   return ((cs->csname && cs->tab_to_uni && cs->ctype && cs->to_upper &&
-       cs->to_lower) &&
-      (cs->number && cs->name &&
-      (cs->sort_order || (cs->state & MY_CS_BINSORT) )));
+	   cs->to_lower) &&
+	  (cs->number && cs->name &&
+	  (cs->sort_order || (cs->state & MY_CS_BINSORT) )));
 }
 
 
@@ -327,14 +327,14 @@ static int add_collation(CHARSET_INFO *cs)
       CHARSET_INFO *dst= all_charsets[cs->number];
       dst->number= cs->number;
       if (cs->comment)
-    if (!(dst->comment= my_once_strdup(cs->comment,MYF(MY_WME))))
-      return MY_XML_ERROR;
+	if (!(dst->comment= my_once_strdup(cs->comment,MYF(MY_WME))))
+	  return MY_XML_ERROR;
       if (cs->csname)
         if (!(dst->csname= my_once_strdup(cs->csname,MYF(MY_WME))))
-      return MY_XML_ERROR;
+	  return MY_XML_ERROR;
       if (cs->name)
-    if (!(dst->name= my_once_strdup(cs->name,MYF(MY_WME))))
-      return MY_XML_ERROR;
+	if (!(dst->name= my_once_strdup(cs->name,MYF(MY_WME))))
+	  return MY_XML_ERROR;
     }
     cs->number= 0;
     cs->primary_number= 0;
@@ -377,9 +377,9 @@ static my_bool my_read_charset_file(const char *filename, myf myflags)
   {
 #ifdef NOT_YET
     printf("ERROR at line %d pos %d '%s'\n",
-       my_xml_error_lineno(&p)+1,
-       my_xml_error_pos(&p),
-       my_xml_error_string(&p));
+	   my_xml_error_lineno(&p)+1,
+	   my_xml_error_pos(&p),
+	   my_xml_error_string(&p));
 #endif
   }
   
@@ -403,11 +403,11 @@ char *get_charsets_dir(char *buf)
   else
   {
     if (test_if_hard_path(sharedir) ||
-    is_prefix(sharedir, DEFAULT_CHARSET_HOME))
+	is_prefix(sharedir, DEFAULT_CHARSET_HOME))
       strxmov(buf, sharedir, "/", CHARSET_DIR, NullS);
     else
       strxmov(buf, DEFAULT_CHARSET_HOME, "/", sharedir, "/", CHARSET_DIR,
-          NullS);
+	      NullS);
   }
   res= convert_dirname(buf,buf,NullS);
   DBUG_PRINT("info",("charsets dir: '%s'", buf));
@@ -627,8 +627,8 @@ CHARSET_INFO *get_charset_by_name(const char *cs_name, myf flags)
 
 
 CHARSET_INFO *get_charset_by_csname(const char *cs_name,
-                    uint cs_flags,
-                    myf flags)
+				    uint cs_flags,
+				    myf flags)
 {
   uint cs_number;
   CHARSET_INFO *cs;
@@ -763,7 +763,7 @@ size_t escape_string_for_mysql(CHARSET_INFO *charset_info,
         break;
       }
       while (tmp_length--)
-    *to++= *from++;
+	*to++= *from++;
       from--;
       continue;
     }
@@ -783,10 +783,10 @@ size_t escape_string_for_mysql(CHARSET_INFO *charset_info,
     else
 #endif
     switch (*from) {
-    case 0:                /* Must be escaped for 'mysql' */
+    case 0:				/* Must be escaped for 'mysql' */
       escape= '0';
       break;
-    case '\n':                /* Must be escaped for logs */
+    case '\n':				/* Must be escaped for logs */
       escape= 'n';
       break;
     case '\r':
@@ -798,10 +798,10 @@ size_t escape_string_for_mysql(CHARSET_INFO *charset_info,
     case '\'':
       escape= '\'';
       break;
-    case '"':                /* Better safe than sorry */
+    case '"':				/* Better safe than sorry */
       escape= '"';
       break;
-    case '\032':            /* This gives problems on Win32 */
+    case '\032':			/* This gives problems on Win32 */
       escape= 'Z';
       break;
     }
@@ -902,7 +902,7 @@ size_t escape_quotes_for_mysql(CHARSET_INFO *charset_info,
         break;
       }
       while (tmp_length--)
-    *to++= *from++;
+	*to++= *from++;
       from--;
       continue;
     }

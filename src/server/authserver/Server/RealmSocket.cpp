@@ -23,7 +23,7 @@
 #include "RealmSocket.h"
 #include "Log.h"
 
-RealmSocket::Session::Session(void) {}
+RealmSocket::Session::Session(void) { }
 
 RealmSocket::Session::~Session(void) { }
 
@@ -45,8 +45,7 @@ RealmSocket::~RealmSocket(void)
     // delete RealmSocketObject must never be called from our code.
     closing_ = true;
 
-    if (session_)
-        delete session_;
+    delete session_;
 
     peer().close();
 }
@@ -57,7 +56,7 @@ int RealmSocket::open(void * arg)
 
     if (peer().get_remote_addr(addr) == -1)
     {
-        TC_LOG_ERROR(LOG_FILTER_AUTHSERVER, "Error %s while opening realm socket!", ACE_OS::strerror(errno));
+        TC_LOG_ERROR("server.authserver", "Error %s while opening realm socket!", ACE_OS::strerror(errno));
         return -1;
     }
 
@@ -286,8 +285,7 @@ int RealmSocket::handle_input(ACE_HANDLE)
 
 void RealmSocket::set_session(Session* session)
 {
-    if (session_ != NULL)
-        delete session_;
+    delete session_;
 
     session_ = session;
 }

@@ -991,7 +991,7 @@ public:
 
     struct npc_tenebronAI : public dummy_dragonAI
     {
-        npc_tenebronAI(Creature* creature) : dummy_dragonAI(creature) {}
+        npc_tenebronAI(Creature* creature) : dummy_dragonAI(creature) { }
 
         uint32 m_uiShadowBreathTimer;
         uint32 m_uiShadowFissureTimer;
@@ -1001,6 +1001,8 @@ public:
 
         void Reset() OVERRIDE
         {
+            dummy_dragonAI::Reset();
+
             m_uiShadowBreathTimer = 20000;
             m_uiShadowFissureTimer = 5000;
             m_uiHatchEggTimer = 30000;
@@ -1080,7 +1082,7 @@ public:
 
     struct npc_shadronAI : public dummy_dragonAI
     {
-        npc_shadronAI(Creature* creature) : dummy_dragonAI(creature) {}
+        npc_shadronAI(Creature* creature) : dummy_dragonAI(creature) { }
 
         uint32 m_uiShadowBreathTimer;
         uint32 m_uiShadowFissureTimer;
@@ -1090,6 +1092,8 @@ public:
 
         void Reset() OVERRIDE
         {
+            dummy_dragonAI::Reset();
+
             m_uiShadowBreathTimer = 20000;
             m_uiShadowFissureTimer = 5000;
             m_uiAcolyteShadronTimer = 60000;
@@ -1184,7 +1188,7 @@ public:
 
     struct npc_vesperonAI : public dummy_dragonAI
     {
-        npc_vesperonAI(Creature* creature) : dummy_dragonAI(creature) {}
+        npc_vesperonAI(Creature* creature) : dummy_dragonAI(creature) { }
 
         uint32 m_uiShadowBreathTimer;
         uint32 m_uiShadowFissureTimer;
@@ -1194,6 +1198,8 @@ public:
 
         void Reset() OVERRIDE
         {
+            dummy_dragonAI::Reset();
+
             m_uiShadowBreathTimer = 20000;
             m_uiShadowFissureTimer = 5000;
             m_uiAcolyteVesperonTimer = 60000;
@@ -1401,9 +1407,7 @@ public:
         {
             uiDespawnTimer = 28000;
             if (instance)
-            {
                 me->AddAura(SPELL_TWILIGHT_SHIFT_ENTER, me);
-            }
             DoCast(me, SPELL_TWILIGHT_TORMENT_VESP_ACO);
         }
 
@@ -1498,9 +1502,7 @@ public:
         void Reset() OVERRIDE
         {
             if (instance)
-            {
                 me->AddAura(SPELL_TWILIGHT_SHIFT_ENTER, me);
-            }
             m_uiFadeArmorTimer = 1000;
             m_uiHatchEggTimer = 20000;
         }
@@ -1534,8 +1536,8 @@ public:
                 m_uiHatchEggTimer -= uiDiff;
         }
 
-        void AttackStart(Unit* /*who*/) OVERRIDE {}
-        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE {}
+        void AttackStart(Unit* /*who*/) OVERRIDE { }
+        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE { }
 
     };
 

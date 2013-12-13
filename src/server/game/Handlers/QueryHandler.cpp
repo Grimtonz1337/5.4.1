@@ -30,135 +30,95 @@
 #include "NPCHandler.h"
 #include "Pet.h"
 #include "MapManager.h"
+#include "Config.h"
 
 void WorldSession::SendNameQueryOpcode(ObjectGuid guid)
 {
     Player* player = ObjectAccessor::FindPlayer(guid);
     CharacterNameData const* nameData = sWorld->GetCharacterNameData(GUID_LOPART(guid));
- 
+
     WorldPacket data(SMSG_NAME_QUERY_RESPONSE, 500);
-    
-    data.WriteBit(guid[5]);
-    data.WriteBit(guid[7]);
+
     data.WriteBit(guid[3]);
+    data.WriteBit(guid[2]);
+    data.WriteBit(guid[6]);
     data.WriteBit(guid[0]);
     data.WriteBit(guid[4]);
     data.WriteBit(guid[1]);
-    data.WriteBit(guid[6]);
-    data.WriteBit(guid[2]);
- 
+    data.WriteBit(guid[5]);
+    data.WriteBit(guid[7]);
+
     data.FlushBits();
- 
+
     data.WriteByteSeq(guid[7]);
-    data.WriteByteSeq(guid[4]);
+    data.WriteByteSeq(guid[1]);
+    data.WriteByteSeq(guid[2]);
+    data.WriteByteSeq(guid[6]);
     data.WriteByteSeq(guid[3]);
- 
+    data.WriteByteSeq(guid[5]);
+    
+    data << uint8(!nameData);
+
+    if (nameData)
+    {
+        data << uint8(nameData->m_gender);
+        data << uint8(nameData->m_class);
+        data << uint8(nameData->m_level);
+        data << uint32(sConfigMgr->GetIntDefault("RealmID", 0)); // RealmID
+        data << uint8(nameData->m_race);
+        data << uint32(50397209); // const player time
+    }
+
+    data.WriteByteSeq(guid[4]);
+    data.WriteByteSeq(guid[0]);
+
     if (!nameData)
     {
-        data << uint8(1); // name unknown
-        data.WriteByteSeq(guid[1]);
-        data.WriteByteSeq(guid[5]);
-        data.WriteByteSeq(guid[0]);
-        data.WriteByteSeq(guid[6]);
-        data.WriteByteSeq(guid[2]);
         SendPacket(&data);
         return;
     }
-    data << uint8(0); // name known
-    data << uint32(50397209); // const player time
-    data << uint8(nameData->m_race);
-    data << uint8(nameData->m_gender);
-    data << uint8(nameData->m_level);
-    data << uint8(nameData->m_class);
-    data << uint32(0);
- 
-    data.WriteByteSeq(guid[1]);
-    data.WriteByteSeq(guid[5]);
-    data.WriteByteSeq(guid[0]);
-    data.WriteByteSeq(guid[6]);
-    data.WriteByteSeq(guid[2]);
- 
-    data.WriteBit(guid[6]);
+
+    data.WriteBit(guid[5]);
+    data.WriteBit(0);
+    data.WriteBit(0);
+    data.WriteBit(0);
+    data.WriteBit(guid[3]);
     data.WriteBit(guid[7]);
-    data.WriteBits(nameData->m_name.size(), 6);
-    data.WriteBit(guid[1]);
-    data.WriteBit(guid[7]);
-    data.WriteBit(guid[2]);
-    data.WriteBit(guid[4]);
-    data.WriteBit(guid[4]);
     data.WriteBit(guid[0]);
+    data.WriteBit(guid[6]);
+    data.WriteBit(0);
+    data.WriteBit(0);
     data.WriteBit(guid[1]);
- 
+    data.WriteBit(0);
+
     DeclinedName const* names = (player ? player->GetDeclinedNames() : NULL);
     for (uint8 i = 0; i < MAX_DECLINED_NAME_CASES; ++i)
         data.WriteBits(names ? names->name[i].size() : 0, 7);
- 
-    data.WriteBit(guid[3]);
-    data.WriteBit(guid[3]);
-    data.WriteBit(guid[5]);
-    data.WriteBit(guid[0]);
-    data.WriteBit(guid[5]);
-    data.WriteBit(0);
+
     data.WriteBit(guid[2]);
-    data.WriteBit(guid[6]);
- 
+    data.WriteBit(0);
+    data.WriteBit(guid[4]);
+    data.WriteBit(0);
+    data.WriteBits(nameData->m_name.size(), 6);
+    data.WriteBit(0);
+
     data.FlushBits();
- 
-    data.WriteString(nameData->m_name); // played name
- 
-    data.WriteByteSeq(guid[4]);
-    data.WriteByteSeq(guid[3]);
-    data.WriteByteSeq(guid[6]);
-    data.WriteByteSeq(guid[2]);
-    data.WriteByteSeq(guid[4]);
-    data.WriteByteSeq(guid[5]);
-    data.WriteByteSeq(guid[1]);
-    data.WriteByteSeq(guid[7]);
- 
+    
     if (names)
         for (uint8 i = 0; i < MAX_DECLINED_NAME_CASES; ++i)
             data.WriteString(names->name[i]);
- 
-    data.WriteByteSeq(guid[3]);
+
+    data.WriteByteSeq(guid[0]);
     data.WriteByteSeq(guid[7]);
-    data.WriteByteSeq(guid[1]);
-    data.WriteByteSeq(guid[6]);
-    data.WriteByteSeq(guid[0]);
-    data.WriteByteSeq(guid[0]);
-    data.WriteByteSeq(guid[2]);
     data.WriteByteSeq(guid[5]);
- 
-    SendPacket(&data);
-}
+    data.WriteByteSeq(guid[2]);
 
-void WorldSession::HandlePlayerNameQueryOpcode(WorldPacket& recvData)
-{
-    uint32 rrealmId;
-    recvData >> rrealmId;
+    data.WriteString(nameData->m_name); // played name
 
-    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_REALMLIST);
-    PreparedQueryResult result = LoginDatabase.Query(stmt);
-
-    std::string realmName = "";
-    WorldPacket data(SMSG_REALM_QUERY);
-
-    if (result)
-    {
-        do
-        {
-            Field* fields = result->Fetch();
-            uint32 databaseRealmId = fields[0].GetUInt32();
-            if (databaseRealmId == realmID)
-                realmName = fields[1].GetString();
-        }while (result->NextRow());
-    }
-
-    data << rrealmId;
-    data << uint8(0);
-    data.WriteBits(realmName.size(), 8);
-    data.WriteBits(realmName.size(), 8);
-    data.WriteString(realmName);
-    data.WriteString(realmName);
+    data.WriteByteSeq(guid[4]);
+    data.WriteByteSeq(guid[1]);
+    data.WriteByteSeq(guid[3]);
+    data.WriteByteSeq(guid[6]);
     SendPacket(&data);
 }
 
@@ -168,27 +128,27 @@ void WorldSession::HandleNameQueryOpcode(WorldPacket& recvData)
 
     uint8 bit16, bit24;
     uint32 unk, unk1;
-    
-    guid[5] = recvData.ReadBit();
-    guid[7] = recvData.ReadBit();
-    guid[0] = recvData.ReadBit();
-    guid[1] = recvData.ReadBit();
-    bit16 = recvData.ReadBit(); // bit2
-    guid[6] = recvData.ReadBit();
-    bit24 = recvData.ReadBit(); // bit1
-    guid[3] = recvData.ReadBit();
-    guid[2] = recvData.ReadBit();
-    guid[4] = recvData.ReadBit();
-    
 
-    recvData.ReadByteSeq(guid[0]);
-    recvData.ReadByteSeq(guid[1]);
-    recvData.ReadByteSeq(guid[3]);
+    guid[1] = recvData.ReadBit();
+    guid[3] = recvData.ReadBit();
+    guid[6] = recvData.ReadBit();
+    guid[7] = recvData.ReadBit();
+    guid[2] = recvData.ReadBit();
+    guid[5] = recvData.ReadBit();
+    bit16 = recvData.ReadBit();
+    guid[0] = recvData.ReadBit();
+    bit24 = recvData.ReadBit();
+    guid[4] = recvData.ReadBit();
+
+
     recvData.ReadByteSeq(guid[4]);
     recvData.ReadByteSeq(guid[6]);
-    recvData.ReadByteSeq(guid[5]);
-    recvData.ReadByteSeq(guid[2]);
     recvData.ReadByteSeq(guid[7]);
+    recvData.ReadByteSeq(guid[1]);
+    recvData.ReadByteSeq(guid[2]);
+    recvData.ReadByteSeq(guid[5]);
+    recvData.ReadByteSeq(guid[0]);
+    recvData.ReadByteSeq(guid[3]);
 
     if (bit16)
         recvData >> unk;
@@ -197,10 +157,46 @@ void WorldSession::HandleNameQueryOpcode(WorldPacket& recvData)
         recvData >> unk1;
 
     // This is disable by default to prevent lots of console spam
-    // TC_LOG_INFO(LOG_FILTER_NETWORKIO, "HandleNameQueryOpcode %u", guid);
+    // TC_LOG_INFO("network", "HandleNameQueryOpcode %u", guid);
 
     SendNameQueryOpcode(guid);
 }
+
+void WorldSession::SendRealmNameQueryOpcode(uint32 realmId)
+{
+    std::string realmName = "";
+    PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_SEL_REALMNAME_BY_ID);
+    stmt->setInt32(0, realmId);
+    PreparedQueryResult result = LoginDatabase.Query(stmt);
+
+    WorldPacket data(SMSG_REALM_NAME_QUERY_RESPONSE);
+    data << uint8(!result);
+    data << uint32(realmId);
+    
+    if (result)
+    {
+        Field* fields = result->Fetch();
+        realmName = fields[0].GetString();
+
+        data.WriteBits(realmName.length(), 7);
+        data.WriteBit(1);
+        data.WriteBits(realmName.length(), 7);
+        data.FlushBits();
+
+        data.WriteString(realmName);
+        data.WriteString(realmName);
+    }
+
+    SendPacket(&data);
+}
+
+void WorldSession::HandleRealmNameQueryOpcode(WorldPacket& recvPacket)
+{
+    uint32 realmId;
+    recvPacket >> realmId;
+    SendRealmNameQueryOpcode(realmId);
+}
+
 void WorldSession::HandleQueryTimeOpcode(WorldPacket & /*recvData*/)
 {
     SendQueryTimeResponse();
@@ -219,7 +215,7 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket& recvData)
 {
     uint32 entry;
     recvData >> entry;
-    
+
     WorldPacket data(SMSG_CREATURE_QUERY_RESPONSE, 500);
     data << uint32(entry);                              // creature entry  
 
@@ -239,55 +235,61 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket& recvData)
                 ObjectMgr::GetLocaleString(cl->SubName, loc_idx, SubName);
             }
         }
-        TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: CMSG_CREATURE_QUERY '%s' - Entry: %u.", ci->Name.c_str(), entry);
-        
-        data.WriteBit(1);                                    // has data
-        data.WriteBits(SubName.length() == 0 ? 0 : SubName.length() + 1, 11);
+        TC_LOG_DEBUG("network", "WORLD: CMSG_CREATURE_QUERY '%s' - Entry: %u.", ci->Name.c_str(), entry);
+
+        data.WriteBit(1);                                    // Has data
+        data.WriteBits(0, 11);
+        data.WriteBits(MAX_CREATURE_QUEST_ITEMS, 22);        // Quest items
+        data.WriteBits(ci->IconName.length() + 1, 6);
         data.WriteBit(ci->RacialLeader);
-        
+
         for (int i = 0; i < 8; i++)
         {
-          if (i == 1)
-              data.WriteBits(Name.length() + 1, 11);
-          else
-              data.WriteBits(0, 11);                          // name2, ..., name8
+            if (i == 0)
+                data.WriteBits(Name.length() + 1, 11);
+            else
+                data.WriteBits(0, 11);                       // Name2, ..., name8
         }
-            
-        data.WriteBits(ci->IconName.length() + 1, 6);
-        data.WriteBits(0, 11);
-        data.WriteBits(8, 22);                              // questitems
-        
+
+        data.WriteBits(SubName.length() ? SubName.length() + 1 : 0, 11);
+
         data.FlushBits();
-        
-        data << Name;                                       // Name
-        data << float(ci->ModHealth);                       // dmg/hp modifier
-        data << SubName;                                    // Subname
-        data << uint32(ci->rank);                           // Creature Rank (elite, boss, etc)
-        
-        for (uint32 i = 0; i < MAX_CREATURE_QUEST_ITEMS; ++i)
-            data << uint32(ci->questItems[i]);              // itemId[6], quest drop
-            
-        data << uint32(ci->type);                           // CreatureType.dbc
-        data << uint32(ci->KillCredit[0]);                  // new in 3.1, kill credit
-        data << uint32(ci->KillCredit[1]);                  // new in 3.1, kill credit
+
         data << uint32(ci->family);                         // CreatureFamily.dbc
-        data << ci->IconName;                               // "Directions" for guard, string for Icons 2.3.0
-        data << uint32(ci->Modelid2);                       // Modelid2
-        data << uint32(ci->Modelid1);                       // Modelid1
-        data << uint32(ci->movementId);                     // CreatureMovementInfo.dbc
-        data << uint32(ci->Modelid4);                       // Modelid4
-        data << uint32(ci->type_flags);                     // flags
-        data << uint32(ci->type_flags2);                    // unknown meaning
-        data << uint32(ci->Modelid3);                       // Modelid3
-        data << float(ci->ModMana);                         // dmg/mana modifier
         data << uint32(ci->expansion);                      // Expansion Required
-        
+        data << uint32(ci->type);                           // CreatureType.dbc
+
+        if (SubName != "")
+            data << SubName;                                // Subname
+
+        data << uint32(ci->Modelid1);                       // Modelid1
+        data << uint32(ci->Modelid4);                       // Modelid4
+
+        for (uint32 i = 0; i < MAX_CREATURE_QUEST_ITEMS; ++i)
+            data << uint32(ci->questItems[i]);              // ItemId[6], quest drop
+
+        data << Name;
+
+        if (ci->IconName != "")
+            data << ci->IconName;                           // "Directions" for guard, string for Icons 2.3.0
+
+        data << uint32(ci->type_flags2);                    // Flags2
+        data << uint32(ci->type_flags);                     // Flags
+        data << float(ci->ModHealth);                       // Hp modifier
+        data << uint32(ci->rank);                           // Creature Rank (elite, boss, etc)
+        data << uint32(ci->KillCredit[0]);                  // New in 3.1, kill credit
+        data << uint32(ci->KillCredit[1]);                  // New in 3.1, kill credit
+        data << float(ci->ModMana);                         // Mana modifier
+        data << uint32(ci->movementId);                     // CreatureMovementInfo.dbc
+        data << uint32(ci->Modelid2);                       // Modelid2
+        data << uint32(ci->Modelid3);                       // Modelid3
+
         SendPacket(&data);
-        TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_CREATURE_QUERY_RESPONSE");
+        TC_LOG_DEBUG("network", "WORLD: Sent SMSG_CREATURE_QUERY_RESPONSE");
     }
     else
     {
-        TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: CMSG_CREATURE_QUERY - NO CREATURE INFO! (ENTRY: %u)", entry);
+        TC_LOG_DEBUG("network", "WORLD: CMSG_CREATURE_QUERY - NO CREATURE INFO! (ENTRY: %u)", entry);
         //data.WriteBit(0);
     }
 }
@@ -295,28 +297,28 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket& recvData)
 /// Only _static_ data is sent in this packet !!!
 void WorldSession::HandleGameObjectQueryOpcode(WorldPacket& recvData)
 {
-    ObjectGuid guid;
     uint32 entry;
+    ObjectGuid guid;
 
     recvData >> entry;
-    
-    guid[2] = recvData.ReadBit();
-    guid[4] = recvData.ReadBit();
-    guid[3] = recvData.ReadBit();
-    guid[7] = recvData.ReadBit();
-    guid[0] = recvData.ReadBit();
-    guid[6] = recvData.ReadBit();
-    guid[1] = recvData.ReadBit();
-    guid[5] = recvData.ReadBit();
 
-    recvData.ReadByteSeq(guid[1]);
-    recvData.ReadByteSeq(guid[7]);
-    recvData.ReadByteSeq(guid[2]);
-    recvData.ReadByteSeq(guid[3]);
-    recvData.ReadByteSeq(guid[6]);
+    guid[6] = recvData.ReadBit();
+    guid[3] = recvData.ReadBit();
+    guid[1] = recvData.ReadBit();
+    guid[2] = recvData.ReadBit();
+    guid[0] = recvData.ReadBit();
+    guid[7] = recvData.ReadBit();
+    guid[5] = recvData.ReadBit();
+    guid[4] = recvData.ReadBit();
+
     recvData.ReadByteSeq(guid[5]);
-    recvData.ReadByteSeq(guid[4]);
     recvData.ReadByteSeq(guid[0]);
+    recvData.ReadByteSeq(guid[6]);
+    recvData.ReadByteSeq(guid[7]);
+    recvData.ReadByteSeq(guid[3]);
+    recvData.ReadByteSeq(guid[4]);
+    recvData.ReadByteSeq(guid[2]);
+    recvData.ReadByteSeq(guid[1]);
 
     const GameObjectTemplate* info = sObjectMgr->GetGameObjectTemplate(entry);
     if (info)
@@ -338,9 +340,12 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket& recvData)
                 ObjectMgr::GetLocaleString(gl->CastBarCaption, loc_idx, CastBarCaption);
             }
         }
-        TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: CMSG_GAMEOBJECT_QUERY '%s' - Entry: %u. ", info->name.c_str(), entry);
+        TC_LOG_DEBUG("network", "WORLD: CMSG_GAMEOBJECT_QUERY '%s' - Entry: %u. ", info->name.c_str(), entry);
         WorldPacket data (SMSG_GAMEOBJECT_QUERY_RESPONSE, 150);
         data << uint32(entry);
+        size_t pos = data.wpos();
+        data << uint32(0);
+
         data << uint32(info->type);
         data << uint32(info->displayId);
         data << Name;
@@ -348,28 +353,43 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket& recvData)
         data << IconName;                                   // 2.0.3, string. Icon name to use instead of default icon for go's (ex: "Attack" makes sword)
         data << CastBarCaption;                             // 2.0.3, string. Text will appear in Cast Bar when using GO (ex: "Collecting")
         data << info->unk1;                                 // 2.0.3, string
+
         data.append(info->raw.data, MAX_GAMEOBJECT_DATA);
         data << float(info->size);                          // go size
+
+        data << uint8(MAX_GAMEOBJECT_QUEST_ITEMS);
+
         for (uint32 i = 0; i < MAX_GAMEOBJECT_QUEST_ITEMS; ++i)
             data << uint32(info->questItems[i]);            // itemId[6], quest drop
+
         data << int32(info->unkInt32);                      // 4.x, unknown
+
+        data.put(pos, uint32(data.wpos() - pos));
+
+        data.WriteBit(1);
+        data.FlushBits();
+
         SendPacket(&data);
-        TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_GAMEOBJECT_QUERY_RESPONSE");
+
+        TC_LOG_DEBUG("network", "WORLD: Sent SMSG_GAMEOBJECT_QUERY_RESPONSE");
     }
     else
     {
-        TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: CMSG_GAMEOBJECT_QUERY - Missing gameobject info for (GUID: %u, ENTRY: %u)",
-            GUID_LOPART(guid), entry);
+        TC_LOG_DEBUG("network", "WORLD: CMSG_GAMEOBJECT_QUERY - Missing gameobject info for (GUID: %u, ENTRY: %u)",
+            GUID_LOPART((uint64)guid), entry);
         WorldPacket data (SMSG_GAMEOBJECT_QUERY_RESPONSE, 4);
         data << uint32(entry | 0x80000000);
+        data << uint32(0);
+        data.WriteBit(0);
+        data.FlushBits();
         SendPacket(&data);
-        TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_GAMEOBJECT_QUERY_RESPONSE");
+        TC_LOG_DEBUG("network", "WORLD: Sent SMSG_GAMEOBJECT_QUERY_RESPONSE");
     }
 }
 
 void WorldSession::HandleCorpseQueryOpcode(WorldPacket& /*recvData*/)
 {
-    TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: Received MSG_CORPSE_QUERY");
+    TC_LOG_DEBUG("network", "WORLD: Received MSG_CORPSE_QUERY");
 
     Corpse* corpse = GetPlayer()->GetCorpse();
 
@@ -421,13 +441,29 @@ void WorldSession::HandleCorpseQueryOpcode(WorldPacket& /*recvData*/)
 void WorldSession::HandleNpcTextQueryOpcode(WorldPacket& recvData)
 {
     uint32 textID;
-    uint64 guid;
+    ObjectGuid guid;
 
     recvData >> textID;
-    TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: CMSG_NPC_TEXT_QUERY ID '%u'", textID);
 
-    recvData >> guid;
-    GetPlayer()->SetSelection(guid);
+    TC_LOG_DEBUG("network", "WORLD: CMSG_NPC_TEXT_QUERY ID '%u'", textID);
+
+    guid[4] = recvData.ReadBit();
+    guid[7] = recvData.ReadBit();
+    guid[2] = recvData.ReadBit();
+    guid[5] = recvData.ReadBit();
+    guid[3] = recvData.ReadBit();
+    guid[0] = recvData.ReadBit();
+    guid[1] = recvData.ReadBit();
+    guid[6] = recvData.ReadBit();
+
+    recvData.ReadByteSeq(guid[6]);
+    recvData.ReadByteSeq(guid[4]);
+    recvData.ReadByteSeq(guid[1]);
+    recvData.ReadByteSeq(guid[3]);
+    recvData.ReadByteSeq(guid[2]);
+    recvData.ReadByteSeq(guid[5]);
+    recvData.ReadByteSeq(guid[7]);
+    recvData.ReadByteSeq(guid[0]);
 
     GossipText const* pGossip = sObjectMgr->GetGossipText(textID);
 
@@ -498,13 +534,13 @@ void WorldSession::HandleNpcTextQueryOpcode(WorldPacket& recvData)
 
     SendPacket(&data);
 
-    TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_NPC_TEXT_UPDATE");
+    TC_LOG_DEBUG("network", "WORLD: Sent SMSG_NPC_TEXT_UPDATE");
 }
 
 /// Only _static_ data is sent in this packet !!!
 void WorldSession::HandlePageTextQueryOpcode(WorldPacket& recvData)
 {
-    TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: Received CMSG_PAGE_TEXT_QUERY");
+    TC_LOG_DEBUG("network", "WORLD: Received CMSG_PAGE_TEXT_QUERY");
 
     uint32 pageID;
     recvData >> pageID;
@@ -538,13 +574,13 @@ void WorldSession::HandlePageTextQueryOpcode(WorldPacket& recvData)
         }
         SendPacket(&data);
 
-        TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_PAGE_TEXT_QUERY_RESPONSE");
+        TC_LOG_DEBUG("network", "WORLD: Sent SMSG_PAGE_TEXT_QUERY_RESPONSE");
     }
 }
 
 void WorldSession::HandleCorpseMapPositionQuery(WorldPacket& recvData)
 {
-    TC_LOG_DEBUG(LOG_FILTER_NETWORKIO, "WORLD: Recv CMSG_CORPSE_MAP_POSITION_QUERY");
+    TC_LOG_DEBUG("network", "WORLD: Recv CMSG_CORPSE_MAP_POSITION_QUERY");
 
     uint32 transportGuidLow;
     recvData >> transportGuidLow;

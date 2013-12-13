@@ -22,7 +22,7 @@
 
 
 
-    /* Add a element to start of list */
+	/* Add a element to start of list */
 
 LIST *list_add(LIST *root, LIST *element)
 {
@@ -30,7 +30,7 @@ LIST *list_add(LIST *root, LIST *element)
   DBUG_PRINT("enter",("root: 0x%lx  element: 0x%lx", (long) root, (long) element));
   if (root)
   {
-    if (root->prev)            /* If add in mid of list */
+    if (root->prev)			/* If add in mid of list */
       root->prev->next= element;
     element->prev=root->prev;
     root->prev=element;
@@ -38,7 +38,7 @@ LIST *list_add(LIST *root, LIST *element)
   else
     element->prev=0;
   element->next=root;
-  DBUG_RETURN(element);            /* New root */
+  DBUG_RETURN(element);			/* New root */
 }
 
 

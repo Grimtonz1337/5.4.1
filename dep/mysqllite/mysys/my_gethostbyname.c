@@ -36,8 +36,8 @@
 #if defined(HAVE_GETHOSTBYNAME_R_GLIBC2_STYLE)
 
 struct hostent *my_gethostbyname_r(const char *name,
-                   struct hostent *result, char *buffer,
-                   int buflen, int *h_errnop)
+				   struct hostent *result, char *buffer,
+				   int buflen, int *h_errnop)
 {
   struct hostent *hp;
   DBUG_ASSERT((size_t) buflen >= sizeof(*result));
@@ -49,8 +49,8 @@ struct hostent *my_gethostbyname_r(const char *name,
 #elif defined(HAVE_GETHOSTBYNAME_R_RETURN_INT)
 
 struct hostent *my_gethostbyname_r(const char *name,
-                   struct hostent *result, char *buffer,
-                   int buflen, int *h_errnop)
+				   struct hostent *result, char *buffer,
+				   int buflen, int *h_errnop)
 {
   if (gethostbyname_r(name,result,(struct hostent_data *) buffer) == -1)
   {
@@ -65,8 +65,8 @@ struct hostent *my_gethostbyname_r(const char *name,
 /* gethostbyname_r with similar interface as gethostbyname() */
 
 struct hostent *my_gethostbyname_r(const char *name,
-                   struct hostent *result, char *buffer,
-                   int buflen, int *h_errnop)
+				   struct hostent *result, char *buffer,
+				   int buflen, int *h_errnop)
 {
   struct hostent *hp;
   DBUG_ASSERT(buflen >= sizeof(struct hostent_data));

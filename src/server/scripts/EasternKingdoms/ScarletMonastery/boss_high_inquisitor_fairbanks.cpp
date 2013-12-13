@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -48,7 +48,7 @@ public:
 
     struct boss_high_inquisitor_fairbanksAI : public ScriptedAI
     {
-        boss_high_inquisitor_fairbanksAI(Creature* creature) : ScriptedAI(creature) {}
+        boss_high_inquisitor_fairbanksAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 CurseOfBlood_Timer;
         uint32 DispelMagic_Timer;
@@ -68,13 +68,13 @@ public:
             Dispel_Timer = 20000;
             PowerWordShield = false;
             me->SetStandState(UNIT_STAND_STATE_DEAD);
-            me->SetUInt32Value(UNIT_FIELD_BYTES_1, 7);
+            me->SetUInt32Value(UNIT_FIELD_ANIM_TIER, 7);
         }
 
         void EnterCombat(Unit* /*who*/) OVERRIDE
         {
             me->SetStandState(UNIT_STAND_STATE_STAND);
-            me->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+            me->SetUInt32Value(UNIT_FIELD_ANIM_TIER, 0);
         }
 
         void UpdateAI(uint32 diff) OVERRIDE

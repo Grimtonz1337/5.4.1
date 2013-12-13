@@ -28,9 +28,9 @@
 
    SYNOPSIS
      my_compress()
-     packet    Data to compress. This is is replaced with the compressed data.
-     len    Length of data to compress at 'packet'
-     complen    out: 0 if packet was not compressed
+     packet	Data to compress. This is is replaced with the compressed data.
+     len	Length of data to compress at 'packet'
+     complen	out: 0 if packet was not compressed
 
    RETURN
      1   error. 'len' is not changed'
@@ -65,7 +65,7 @@ uchar *my_compress_alloc(const uchar *packet, size_t *len, size_t *complen)
   *complen=  *len * 120 / 100 + 12;
 
   if (!(compbuf= (uchar *) my_malloc(*complen, MYF(MY_WME))))
-    return 0;                    /* Not enough memory */
+    return 0;					/* Not enough memory */
 
   tmp_complen= (uint) *complen;
   res= compress((Bytef*) compbuf, &tmp_complen, (Bytef*) packet, (uLong) *len);
@@ -95,10 +95,10 @@ uchar *my_compress_alloc(const uchar *packet, size_t *len, size_t *complen)
 
    SYNOPSIS
      my_uncompress()
-     packet    Compressed data. This is is replaced with the orignal data.
-     len    Length of compressed data
-     complen    Length of the packet buffer (must be enough for the original
-            data)
+     packet	Compressed data. This is is replaced with the orignal data.
+     len	Length of compressed data
+     complen	Length of the packet buffer (must be enough for the original
+	        data)
 
    RETURN
      1   error
@@ -111,19 +111,19 @@ my_bool my_uncompress(uchar *packet, size_t len, size_t *complen)
   uLongf tmp_complen;
   DBUG_ENTER("my_uncompress");
 
-  if (*complen)                    /* If compressed */
+  if (*complen)					/* If compressed */
   {
     uchar *compbuf= (uchar *) my_malloc(*complen,MYF(MY_WME));
     int error;
     if (!compbuf)
-      DBUG_RETURN(1);                /* Not enough memory */
+      DBUG_RETURN(1);				/* Not enough memory */
 
     tmp_complen= (uint) *complen;
     error= uncompress((Bytef*) compbuf, &tmp_complen, (Bytef*) packet,
                       (uLong) len);
     *complen= tmp_complen;
     if (error != Z_OK)
-    {                        /* Probably wrong packet */
+    {						/* Probably wrong packet */
       DBUG_PRINT("error",("Can't uncompress packet, error: %d",error));
       my_free(compbuf);
       DBUG_RETURN(1);
@@ -139,7 +139,7 @@ my_bool my_uncompress(uchar *packet, size_t len, size_t *complen)
 /*
   Internal representation of the frm blob is:
 
-  ver      4 bytes
+  ver	  4 bytes
   orglen  4 bytes
   complen 4 bytes
 */

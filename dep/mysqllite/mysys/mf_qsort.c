@@ -32,33 +32,33 @@
 #define CMP(A,B) ((*cmp)((A),(B)))
 #endif
 
-#define SWAP(A, B, size,swap_ptrs)            \
-do {                            \
-   if (swap_ptrs)                    \
-   {                            \
+#define SWAP(A, B, size,swap_ptrs)			\
+do {							\
+   if (swap_ptrs)					\
+   {							\
      reg1 char **a = (char**) (A), **b = (char**) (B);  \
-     char *tmp = *a; *a++ = *b; *b++ = tmp;        \
-   }                            \
-   else                            \
-   {                            \
-     reg1 char *a = (A), *b = (B);            \
-     reg3 char *end= a+size;                \
-     do                            \
-     {                            \
-       char tmp = *a; *a++ = *b; *b++ = tmp;        \
-     } while (a < end);                    \
-   }                            \
+     char *tmp = *a; *a++ = *b; *b++ = tmp;		\
+   }							\
+   else							\
+   {							\
+     reg1 char *a = (A), *b = (B);			\
+     reg3 char *end= a+size;				\
+     do							\
+     {							\
+       char tmp = *a; *a++ = *b; *b++ = tmp;		\
+     } while (a < end);					\
+   }							\
 } while (0)
 
 /* Put the median in the middle argument */
-#define MEDIAN(low, mid, high)                \
-{                            \
-    if (CMP(high,low) < 0)                \
-      SWAP(high, low, size, ptr_cmp);            \
-    if (CMP(mid, low) < 0)                \
-      SWAP(mid, low, size, ptr_cmp);            \
-    else if (CMP(high, mid) < 0)            \
-      SWAP(mid, high, size, ptr_cmp);            \
+#define MEDIAN(low, mid, high)				\
+{							\
+    if (CMP(high,low) < 0)				\
+      SWAP(high, low, size, ptr_cmp);			\
+    if (CMP(mid, low) < 0)				\
+      SWAP(mid, low, size, ptr_cmp);			\
+    else if (CMP(high, mid) < 0)			\
+      SWAP(mid, high, size, ptr_cmp);			\
 }
 
 /* The following node is used to store ranges to avoid recursive calls */
@@ -72,7 +72,7 @@ typedef struct st_stack
 #define POP(LOW,HIGH)   {LOW = (--stack_ptr)->low; HIGH = stack_ptr->high;}
 
 /* The following stack size is enough for ulong ~0 elements */
-#define STACK_SIZE    (8 * sizeof(unsigned long int))
+#define STACK_SIZE	(8 * sizeof(unsigned long int))
 #define THRESHOLD_FOR_INSERT_SORT 10
 #if defined(QSORT_TYPE_IS_VOID)
 #define SORT_RETURN return
@@ -92,7 +92,7 @@ typedef struct st_stack
 
 #ifdef QSORT_EXTRA_CMP_ARGUMENT
 qsort_t my_qsort2(void *base_ptr, size_t count, size_t size, qsort2_cmp cmp,
-           void *cmp_argument)
+	       void *cmp_argument)
 #else
 qsort_t my_qsort(void *base_ptr, size_t count, size_t size, qsort_cmp cmp)
 #endif
@@ -126,10 +126,10 @@ qsort_t my_qsort(void *base_ptr, size_t count, size_t size, qsort_cmp cmp)
     {
       for (low_ptr = low + size; low_ptr <= high; low_ptr += size)
       {
-    char *ptr;
-    for (ptr = low_ptr; ptr > low && CMP(ptr - size, ptr) > 0;
-         ptr -= size)
-      SWAP(ptr, ptr - size, size, ptr_cmp);
+	char *ptr;
+	for (ptr = low_ptr; ptr > low && CMP(ptr - size, ptr) > 0;
+	     ptr -= size)
+	  SWAP(ptr, ptr - size, size, ptr_cmp);
       }
       POP(low, high);
       continue;
@@ -137,7 +137,7 @@ qsort_t my_qsort(void *base_ptr, size_t count, size_t size, qsort_cmp cmp)
 
     /* Try to find a good middle element */
     mid= low + size * (count >> 1);
-    if (count > 40)                /* Must be bigger than 24 */
+    if (count > 40)				/* Must be bigger than 24 */
     {
       size_t step = size* (count / 8);
       MEDIAN(low, low + step, low+step*2);
@@ -160,24 +160,24 @@ qsort_t my_qsort(void *base_ptr, size_t count, size_t size, qsort_cmp cmp)
     do
     {
       while (CMP(low_ptr, pivot) < 0)
-    low_ptr += size;
+	low_ptr += size;
       while (CMP(pivot, high_ptr) < 0)
-    high_ptr -= size;
+	high_ptr -= size;
 
       if (low_ptr < high_ptr)
       {
-    SWAP(low_ptr, high_ptr, size, ptr_cmp);
-    low_ptr += size;
-    high_ptr -= size;
+	SWAP(low_ptr, high_ptr, size, ptr_cmp);
+	low_ptr += size;
+	high_ptr -= size;
       }
       else 
       {
-    if (low_ptr == high_ptr)
-    {
-      low_ptr += size;
-      high_ptr -= size;
-    }
-    break;
+	if (low_ptr == high_ptr)
+	{
+	  low_ptr += size;
+	  high_ptr -= size;
+	}
+	break;
       }
     }
     while (low_ptr <= high_ptr);
@@ -193,21 +193,21 @@ qsort_t my_qsort(void *base_ptr, size_t count, size_t size, qsort_cmp cmp)
     {
       if ((int) (high - low_ptr) <= 0)
       {
-    POP(low, high);            /* Nothing more to sort */
+	POP(low, high);			/* Nothing more to sort */
       }
       else
-    low = low_ptr;            /* Ignore small left part. */
+	low = low_ptr;			/* Ignore small left part. */
     }
     else if ((int) (high - low_ptr) <= 0)
-      high = high_ptr;            /* Ignore small right part. */
+      high = high_ptr;			/* Ignore small right part. */
     else if ((high_ptr - low) > (high - low_ptr))
     {
-      PUSH(low, high_ptr);        /* Push larger left part */
+      PUSH(low, high_ptr);		/* Push larger left part */
       low = low_ptr;
     }
     else
     {
-      PUSH(low_ptr, high);        /* Push larger right part */
+      PUSH(low_ptr, high);		/* Push larger right part */
       high = high_ptr;
     }
   } while (stack_ptr > stack);

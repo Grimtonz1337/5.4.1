@@ -53,64 +53,64 @@ struct my_cs_file_section_st
   const char *str;
 };
 
-#define _CS_MISC    1
-#define _CS_ID        2
-#define _CS_CSNAME    3
-#define _CS_FAMILY    4
-#define _CS_ORDER    5
-#define _CS_COLNAME    6
-#define _CS_FLAG    7
-#define _CS_CHARSET    8
-#define _CS_COLLATION    9
-#define _CS_UPPERMAP    10
-#define _CS_LOWERMAP    11
-#define _CS_UNIMAP    12
-#define _CS_COLLMAP    13
-#define _CS_CTYPEMAP    14
-#define _CS_PRIMARY_ID    15
-#define _CS_BINARY_ID    16
-#define _CS_CSDESCRIPT    17
-#define _CS_RESET    18
-#define    _CS_DIFF1    19
-#define    _CS_DIFF2    20
-#define    _CS_DIFF3    21
-#define    _CS_IDENTICAL    22
+#define _CS_MISC	1
+#define _CS_ID		2
+#define _CS_CSNAME	3
+#define _CS_FAMILY	4
+#define _CS_ORDER	5
+#define _CS_COLNAME	6
+#define _CS_FLAG	7
+#define _CS_CHARSET	8
+#define _CS_COLLATION	9
+#define _CS_UPPERMAP	10
+#define _CS_LOWERMAP	11
+#define _CS_UNIMAP	12
+#define _CS_COLLMAP	13
+#define _CS_CTYPEMAP	14
+#define _CS_PRIMARY_ID	15
+#define _CS_BINARY_ID	16
+#define _CS_CSDESCRIPT	17
+#define _CS_RESET	18
+#define	_CS_DIFF1	19
+#define	_CS_DIFF2	20
+#define	_CS_DIFF3	21
+#define	_CS_IDENTICAL	22
 
 
 static struct my_cs_file_section_st sec[] =
 {
-  {_CS_MISC,        "xml"},
-  {_CS_MISC,        "xml/version"},
-  {_CS_MISC,        "xml/encoding"},
-  {_CS_MISC,        "charsets"},
-  {_CS_MISC,        "charsets/max-id"},
-  {_CS_CHARSET,        "charsets/charset"},
-  {_CS_PRIMARY_ID,    "charsets/charset/primary-id"},
-  {_CS_BINARY_ID,    "charsets/charset/binary-id"},
-  {_CS_CSNAME,        "charsets/charset/name"},
-  {_CS_FAMILY,        "charsets/charset/family"},
-  {_CS_CSDESCRIPT,    "charsets/charset/description"},
-  {_CS_MISC,        "charsets/charset/alias"},
-  {_CS_MISC,        "charsets/charset/ctype"},
-  {_CS_CTYPEMAP,    "charsets/charset/ctype/map"},
-  {_CS_MISC,        "charsets/charset/upper"},
-  {_CS_UPPERMAP,    "charsets/charset/upper/map"},
-  {_CS_MISC,        "charsets/charset/lower"},
-  {_CS_LOWERMAP,    "charsets/charset/lower/map"},
-  {_CS_MISC,        "charsets/charset/unicode"},
-  {_CS_UNIMAP,        "charsets/charset/unicode/map"},
-  {_CS_COLLATION,    "charsets/charset/collation"},
-  {_CS_COLNAME,        "charsets/charset/collation/name"},
-  {_CS_ID,        "charsets/charset/collation/id"},
-  {_CS_ORDER,        "charsets/charset/collation/order"},
-  {_CS_FLAG,        "charsets/charset/collation/flag"},
-  {_CS_COLLMAP,        "charsets/charset/collation/map"},
-  {_CS_RESET,        "charsets/charset/collation/rules/reset"},
-  {_CS_DIFF1,        "charsets/charset/collation/rules/p"},
-  {_CS_DIFF2,        "charsets/charset/collation/rules/s"},
-  {_CS_DIFF3,        "charsets/charset/collation/rules/t"},
-  {_CS_IDENTICAL,    "charsets/charset/collation/rules/i"},
-  {0,    NULL}
+  {_CS_MISC,		"xml"},
+  {_CS_MISC,		"xml/version"},
+  {_CS_MISC,		"xml/encoding"},
+  {_CS_MISC,		"charsets"},
+  {_CS_MISC,		"charsets/max-id"},
+  {_CS_CHARSET,		"charsets/charset"},
+  {_CS_PRIMARY_ID,	"charsets/charset/primary-id"},
+  {_CS_BINARY_ID,	"charsets/charset/binary-id"},
+  {_CS_CSNAME,		"charsets/charset/name"},
+  {_CS_FAMILY,		"charsets/charset/family"},
+  {_CS_CSDESCRIPT,	"charsets/charset/description"},
+  {_CS_MISC,		"charsets/charset/alias"},
+  {_CS_MISC,		"charsets/charset/ctype"},
+  {_CS_CTYPEMAP,	"charsets/charset/ctype/map"},
+  {_CS_MISC,		"charsets/charset/upper"},
+  {_CS_UPPERMAP,	"charsets/charset/upper/map"},
+  {_CS_MISC,		"charsets/charset/lower"},
+  {_CS_LOWERMAP,	"charsets/charset/lower/map"},
+  {_CS_MISC,		"charsets/charset/unicode"},
+  {_CS_UNIMAP,		"charsets/charset/unicode/map"},
+  {_CS_COLLATION,	"charsets/charset/collation"},
+  {_CS_COLNAME,		"charsets/charset/collation/name"},
+  {_CS_ID,		"charsets/charset/collation/id"},
+  {_CS_ORDER,		"charsets/charset/collation/order"},
+  {_CS_FLAG,		"charsets/charset/collation/flag"},
+  {_CS_COLLMAP,		"charsets/charset/collation/map"},
+  {_CS_RESET,		"charsets/charset/collation/rules/reset"},
+  {_CS_DIFF1,		"charsets/charset/collation/rules/p"},
+  {_CS_DIFF2,		"charsets/charset/collation/rules/s"},
+  {_CS_DIFF3,		"charsets/charset/collation/rules/t"},
+  {_CS_IDENTICAL,	"charsets/charset/collation/rules/i"},
+  {0,	NULL}
 };
 
 static struct my_cs_file_section_st * cs_file_sec(const char *attr, size_t len)
@@ -124,8 +124,8 @@ static struct my_cs_file_section_st * cs_file_sec(const char *attr, size_t len)
   return NULL;
 }
 
-#define MY_CS_CSDESCR_SIZE    64
-#define MY_CS_TAILORING_SIZE    1024
+#define MY_CS_CSDESCR_SIZE	64
+#define MY_CS_TAILORING_SIZE	1024
 
 typedef struct my_cs_file_info
 {

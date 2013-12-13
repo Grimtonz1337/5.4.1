@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -171,7 +171,7 @@ public:
                     instance->SetData(DATA_EREDAR_TWINS_EVENT, DONE);
             }
             else
-                me->RemoveFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                me->RemoveFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
         }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spell) OVERRIDE
@@ -464,7 +464,7 @@ public:
                     instance->SetData(DATA_EREDAR_TWINS_EVENT, DONE);
             }
             else
-                me->RemoveFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                me->RemoveFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
         }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spell) OVERRIDE
@@ -675,7 +675,7 @@ public:
 
     struct npc_shadow_imageAI : public ScriptedAI
     {
-        npc_shadow_imageAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_shadow_imageAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 ShadowfuryTimer;
         uint32 KillTimer;
@@ -689,7 +689,7 @@ public:
             KillTimer = 15000;
         }
 
-        void EnterCombat(Unit* /*who*/)OVERRIDE {}
+        void EnterCombat(Unit* /*who*/)OVERRIDE { }
 
         void SpellHitTarget(Unit* target, const SpellInfo* spell) OVERRIDE
         {

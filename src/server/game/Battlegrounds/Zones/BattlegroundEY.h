@@ -24,6 +24,7 @@
 
 enum BG_EY_Misc
 {
+    BG_EY_EVENT_START_BATTLE        = 13180, // Achievement: Flurry
     BG_EY_FLAG_RESPAWN_TIME         = (8*IN_MILLISECONDS),
     BG_EY_FPOINTS_TICK_TIME         = (2*IN_MILLISECONDS)
 };
@@ -117,7 +118,7 @@ enum EYBattlegroundGaveyards
 {
     EY_GRAVEYARD_MAIN_ALLIANCE     = 1103,
     EY_GRAVEYARD_MAIN_HORDE        = 1104,
-    EY_GRAVEYARD_FEL_REAVER        = 1105,
+    EY_GRAVEYARD_FEL_REAVER       = 1105,
     EY_GRAVEYARD_BLOOD_ELF         = 1106,
     EY_GRAVEYARD_DRAENEI_RUINS     = 1107,
     EY_GRAVEYARD_MAGE_TOWER        = 1108
@@ -136,7 +137,7 @@ enum EYBattlegroundPoints
 
 enum EYBattlegroundCreaturesTypes
 {
-    EY_SPIRIT_FEL_REAVER       = 0,
+    EY_SPIRIT_FEL_REAVER      = 0,
     EY_SPIRIT_BLOOD_ELF        = 1,
     EY_SPIRIT_DRAENEI_RUINS    = 2,
     EY_SPIRIT_MAGE_TOWER       = 3,
@@ -144,82 +145,80 @@ enum EYBattlegroundCreaturesTypes
     EY_SPIRIT_MAIN_HORDE       = 5,
 
     EY_TRIGGER_FEL_REAVER      = 6,
-    EY_TRIGGER_BLOOD_ELF       = 7,
-    EY_TRIGGER_DRAENEI_RUINS   = 8,
-    EY_TRIGGER_MAGE_TOWER      = 9,
+    EY_TRIGGER_BLOOD_ELF        = 7,
+    EY_TRIGGER_DRAENEI_RUINS    = 8,
+    EY_TRIGGER_MAGE_TOWER       = 9,
 
     BG_EY_CREATURES_MAX        = 10
 };
 
 enum EYBattlegroundObjectTypes
 {
-    BG_EY_OBJECT_DOOR_A                        = 0,
-    BG_EY_OBJECT_DOOR_H                        = 1,
+    BG_EY_OBJECT_DOOR_A                         = 0,
+    BG_EY_OBJECT_DOOR_H                         = 1,
     BG_EY_OBJECT_A_BANNER_FEL_REAVER_CENTER    = 2,
     BG_EY_OBJECT_A_BANNER_FEL_REAVER_LEFT      = 3,
     BG_EY_OBJECT_A_BANNER_FEL_REAVER_RIGHT     = 4,
-    BG_EY_OBJECT_A_BANNER_BLOOD_ELF_CENTER     = 5,
-    BG_EY_OBJECT_A_BANNER_BLOOD_ELF_LEFT       = 6,
-    BG_EY_OBJECT_A_BANNER_BLOOD_ELF_RIGHT      = 7,
-    BG_EY_OBJECT_A_BANNER_DRAENEI_RUINS_CENTER = 8,
-    BG_EY_OBJECT_A_BANNER_DRAENEI_RUINS_LEFT   = 9,
-    BG_EY_OBJECT_A_BANNER_DRAENEI_RUINS_RIGHT  = 10,
-    BG_EY_OBJECT_A_BANNER_MAGE_TOWER_CENTER    = 11,
-    BG_EY_OBJECT_A_BANNER_MAGE_TOWER_LEFT      = 12,
-    BG_EY_OBJECT_A_BANNER_MAGE_TOWER_RIGHT     = 13,
+    BG_EY_OBJECT_A_BANNER_BLOOD_ELF_CENTER      = 5,
+    BG_EY_OBJECT_A_BANNER_BLOOD_ELF_LEFT        = 6,
+    BG_EY_OBJECT_A_BANNER_BLOOD_ELF_RIGHT       = 7,
+    BG_EY_OBJECT_A_BANNER_DRAENEI_RUINS_CENTER  = 8,
+    BG_EY_OBJECT_A_BANNER_DRAENEI_RUINS_LEFT    = 9,
+    BG_EY_OBJECT_A_BANNER_DRAENEI_RUINS_RIGHT   = 10,
+    BG_EY_OBJECT_A_BANNER_MAGE_TOWER_CENTER     = 11,
+    BG_EY_OBJECT_A_BANNER_MAGE_TOWER_LEFT       = 12,
+    BG_EY_OBJECT_A_BANNER_MAGE_TOWER_RIGHT      = 13,
     BG_EY_OBJECT_H_BANNER_FEL_REAVER_CENTER    = 14,
     BG_EY_OBJECT_H_BANNER_FEL_REAVER_LEFT      = 15,
     BG_EY_OBJECT_H_BANNER_FEL_REAVER_RIGHT     = 16,
-    BG_EY_OBJECT_H_BANNER_BLOOD_ELF_CENTER     = 17,
-    BG_EY_OBJECT_H_BANNER_BLOOD_ELF_LEFT       = 18,
-    BG_EY_OBJECT_H_BANNER_BLOOD_ELF_RIGHT      = 19,
-    BG_EY_OBJECT_H_BANNER_DRAENEI_RUINS_CENTER = 20,
-    BG_EY_OBJECT_H_BANNER_DRAENEI_RUINS_LEFT   = 21,
-    BG_EY_OBJECT_H_BANNER_DRAENEI_RUINS_RIGHT  = 22,
-    BG_EY_OBJECT_H_BANNER_MAGE_TOWER_CENTER    = 23,
-    BG_EY_OBJECT_H_BANNER_MAGE_TOWER_LEFT      = 24,
-    BG_EY_OBJECT_H_BANNER_MAGE_TOWER_RIGHT     = 25,
+    BG_EY_OBJECT_H_BANNER_BLOOD_ELF_CENTER      = 17,
+    BG_EY_OBJECT_H_BANNER_BLOOD_ELF_LEFT        = 18,
+    BG_EY_OBJECT_H_BANNER_BLOOD_ELF_RIGHT       = 19,
+    BG_EY_OBJECT_H_BANNER_DRAENEI_RUINS_CENTER  = 20,
+    BG_EY_OBJECT_H_BANNER_DRAENEI_RUINS_LEFT    = 21,
+    BG_EY_OBJECT_H_BANNER_DRAENEI_RUINS_RIGHT   = 22,
+    BG_EY_OBJECT_H_BANNER_MAGE_TOWER_CENTER     = 23,
+    BG_EY_OBJECT_H_BANNER_MAGE_TOWER_LEFT       = 24,
+    BG_EY_OBJECT_H_BANNER_MAGE_TOWER_RIGHT      = 25,
     BG_EY_OBJECT_N_BANNER_FEL_REAVER_CENTER    = 26,
     BG_EY_OBJECT_N_BANNER_FEL_REAVER_LEFT      = 27,
     BG_EY_OBJECT_N_BANNER_FEL_REAVER_RIGHT     = 28,
-    BG_EY_OBJECT_N_BANNER_BLOOD_ELF_CENTER     = 29,
-    BG_EY_OBJECT_N_BANNER_BLOOD_ELF_LEFT       = 30,
-    BG_EY_OBJECT_N_BANNER_BLOOD_ELF_RIGHT      = 31,
-    BG_EY_OBJECT_N_BANNER_DRAENEI_RUINS_CENTER = 32,
-    BG_EY_OBJECT_N_BANNER_DRAENEI_RUINS_LEFT   = 33,
-    BG_EY_OBJECT_N_BANNER_DRAENEI_RUINS_RIGHT  = 34,
-    BG_EY_OBJECT_N_BANNER_MAGE_TOWER_CENTER    = 35,
-    BG_EY_OBJECT_N_BANNER_MAGE_TOWER_LEFT      = 36,
-    BG_EY_OBJECT_N_BANNER_MAGE_TOWER_RIGHT     = 37,
+    BG_EY_OBJECT_N_BANNER_BLOOD_ELF_CENTER      = 29,
+    BG_EY_OBJECT_N_BANNER_BLOOD_ELF_LEFT        = 30,
+    BG_EY_OBJECT_N_BANNER_BLOOD_ELF_RIGHT       = 31,
+    BG_EY_OBJECT_N_BANNER_DRAENEI_RUINS_CENTER  = 32,
+    BG_EY_OBJECT_N_BANNER_DRAENEI_RUINS_LEFT    = 33,
+    BG_EY_OBJECT_N_BANNER_DRAENEI_RUINS_RIGHT   = 34,
+    BG_EY_OBJECT_N_BANNER_MAGE_TOWER_CENTER     = 35,
+    BG_EY_OBJECT_N_BANNER_MAGE_TOWER_LEFT       = 36,
+    BG_EY_OBJECT_N_BANNER_MAGE_TOWER_RIGHT      = 37,
     BG_EY_OBJECT_TOWER_CAP_FEL_REAVER          = 38,
-    BG_EY_OBJECT_TOWER_CAP_BLOOD_ELF           = 39,
-    BG_EY_OBJECT_TOWER_CAP_DRAENEI_RUINS       = 40,
-    BG_EY_OBJECT_TOWER_CAP_MAGE_TOWER          = 41,
-    BG_EY_OBJECT_FLAG_NETHERSTORM              = 42,
+    BG_EY_OBJECT_TOWER_CAP_BLOOD_ELF            = 39,
+    BG_EY_OBJECT_TOWER_CAP_DRAENEI_RUINS        = 40,
+    BG_EY_OBJECT_TOWER_CAP_MAGE_TOWER           = 41,
+    BG_EY_OBJECT_FLAG_NETHERSTORM               = 42,
     BG_EY_OBJECT_FLAG_FEL_REAVER               = 43,
-    BG_EY_OBJECT_FLAG_BLOOD_ELF                = 44,
-    BG_EY_OBJECT_FLAG_DRAENEI_RUINS            = 45,
-    BG_EY_OBJECT_FLAG_MAGE_TOWER               = 46,
+    BG_EY_OBJECT_FLAG_BLOOD_ELF                 = 44,
+    BG_EY_OBJECT_FLAG_DRAENEI_RUINS             = 45,
+    BG_EY_OBJECT_FLAG_MAGE_TOWER                = 46,
     //buffs
     BG_EY_OBJECT_SPEEDBUFF_FEL_REAVER          = 47,
     BG_EY_OBJECT_REGENBUFF_FEL_REAVER          = 48,
     BG_EY_OBJECT_BERSERKBUFF_FEL_REAVER        = 49,
-    BG_EY_OBJECT_SPEEDBUFF_BLOOD_ELF           = 50,
-    BG_EY_OBJECT_REGENBUFF_BLOOD_ELF           = 51,
-    BG_EY_OBJECT_BERSERKBUFF_BLOOD_ELF         = 52,
-    BG_EY_OBJECT_SPEEDBUFF_DRAENEI_RUINS       = 53,
-    BG_EY_OBJECT_REGENBUFF_DRAENEI_RUINS       = 54,
-    BG_EY_OBJECT_BERSERKBUFF_DRAENEI_RUINS     = 55,
-    BG_EY_OBJECT_SPEEDBUFF_MAGE_TOWER          = 56,
-    BG_EY_OBJECT_REGENBUFF_MAGE_TOWER          = 57,
-    BG_EY_OBJECT_BERSERKBUFF_MAGE_TOWER        = 58,
-    BG_EY_OBJECT_MAX                           = 59
+    BG_EY_OBJECT_SPEEDBUFF_BLOOD_ELF            = 50,
+    BG_EY_OBJECT_REGENBUFF_BLOOD_ELF            = 51,
+    BG_EY_OBJECT_BERSERKBUFF_BLOOD_ELF          = 52,
+    BG_EY_OBJECT_SPEEDBUFF_DRAENEI_RUINS        = 53,
+    BG_EY_OBJECT_REGENBUFF_DRAENEI_RUINS        = 54,
+    BG_EY_OBJECT_BERSERKBUFF_DRAENEI_RUINS      = 55,
+    BG_EY_OBJECT_SPEEDBUFF_MAGE_TOWER           = 56,
+    BG_EY_OBJECT_REGENBUFF_MAGE_TOWER           = 57,
+    BG_EY_OBJECT_BERSERKBUFF_MAGE_TOWER         = 58,
+    BG_EY_OBJECT_MAX                            = 59
 };
 
 #define BG_EY_NotEYWeekendHonorTicks    260
 #define BG_EY_EYWeekendHonorTicks       160
-
-#define EY_EVENT_START_BATTLE           13180 // Achievement: Flurry
 
 enum BG_EY_Score
 {
@@ -250,7 +249,7 @@ enum BG_EY_Objectives
 struct BattlegroundEYPointIconsStruct
 {
     BattlegroundEYPointIconsStruct(uint32 _WorldStateControlIndex, uint32 _WorldStateAllianceControlledIndex, uint32 _WorldStateHordeControlledIndex)
-        : WorldStateControlIndex(_WorldStateControlIndex), WorldStateAllianceControlledIndex(_WorldStateAllianceControlledIndex), WorldStateHordeControlledIndex(_WorldStateHordeControlledIndex) {}
+        : WorldStateControlIndex(_WorldStateControlIndex), WorldStateAllianceControlledIndex(_WorldStateAllianceControlledIndex), WorldStateHordeControlledIndex(_WorldStateHordeControlledIndex) { }
     uint32 WorldStateControlIndex;
     uint32 WorldStateAllianceControlledIndex;
     uint32 WorldStateHordeControlledIndex;
@@ -271,7 +270,7 @@ struct BattlegroundEYLosingPointStruct
         : SpawnNeutralObjectType(_SpawnNeutralObjectType),
         DespawnObjectTypeAlliance(_DespawnObjectTypeAlliance), MessageIdAlliance(_MessageIdAlliance),
         DespawnObjectTypeHorde(_DespawnObjectTypeHorde), MessageIdHorde(_MessageIdHorde)
-    {}
+    { }
 
     uint32 SpawnNeutralObjectType;
     uint32 DespawnObjectTypeAlliance;
@@ -287,7 +286,7 @@ struct BattlegroundEYCapturingPointStruct
         SpawnObjectTypeAlliance(_SpawnObjectTypeAlliance), MessageIdAlliance(_MessageIdAlliance),
         SpawnObjectTypeHorde(_SpawnObjectTypeHorde), MessageIdHorde(_MessageIdHorde),
         GraveYardId(_GraveYardId)
-    {}
+    { }
 
     uint32 DespawnNeutralObjectType;
     uint32 SpawnObjectTypeAlliance;

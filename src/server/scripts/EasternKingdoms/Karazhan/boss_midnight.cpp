@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -90,7 +90,7 @@ public:
             ResetTimer = 2000;
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void KilledUnit(Unit* /*victim*/) OVERRIDE
         {
@@ -126,7 +126,7 @@ public:
 
     struct boss_midnightAI : public ScriptedAI
     {
-        boss_midnightAI(Creature* creature) : ScriptedAI(creature) {}
+        boss_midnightAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint64 Attumen;
         uint8 Phase;
@@ -142,7 +142,7 @@ public:
             me->SetVisible(true);
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void KilledUnit(Unit* /*victim*/) OVERRIDE
         {
@@ -278,7 +278,7 @@ void boss_attumen::boss_attumenAI::UpdateAI(uint32 diff)
         RandomYellTimer = urand(30000, 60000);
     } else RandomYellTimer -= diff;
 
-    if (me->GetUInt32Value(UNIT_FIELD_DISPLAYID) == MOUNTED_DISPLAYID)
+    if (me->GetUInt32Value(UNIT_FIELD_DISPLAY_ID) == MOUNTED_DISPLAYID)
     {
         if (ChargeTimer <= diff)
         {

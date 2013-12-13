@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -73,7 +73,7 @@ class npc_professor_phizzlethorpe : public CreatureScript
 
         struct npc_professor_phizzlethorpeAI : public npc_escortAI
         {
-            npc_professor_phizzlethorpeAI(Creature* creature) : npc_escortAI(creature) {}
+            npc_professor_phizzlethorpeAI(Creature* creature) : npc_escortAI(creature) { }
 
             void WaypointReached(uint32 waypointId) OVERRIDE
             {

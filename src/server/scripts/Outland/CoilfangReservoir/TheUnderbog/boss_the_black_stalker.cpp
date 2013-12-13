@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - CoalitionWoW <http://coalitionwow.no-ip.org/>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -80,7 +80,7 @@ public:
             Striders.clear();
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void JustSummoned(Creature* summon) OVERRIDE
         {

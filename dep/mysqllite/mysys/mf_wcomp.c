@@ -17,8 +17,8 @@
 
 #include "mysys_priv.h"
 
-    /* Test if a string is "comparable" to a wild-card string */
-    /* returns 0 if the strings are "comparable" */
+	/* Test if a string is "comparable" to a wild-card string */
+	/* returns 0 if the strings are "comparable" */
 
 char wild_many='*';
 char wild_one='?';
@@ -36,7 +36,7 @@ int wild_compare(register const char *str, register const char *wildstr,
     {
       if (*wildstr == wild_prefix && wildstr[1])
       {
-    wildstr++;
+	wildstr++;
         if (str_is_pattern && *str++ != wild_prefix)
           DBUG_RETURN(1);
       }
@@ -53,7 +53,7 @@ int wild_compare(register const char *str, register const char *wildstr,
         str++;
     }
     else
-    {                        /* Found '*' */
+    {						/* Found '*' */
       while (str_is_pattern && *str == wild_many)
         str++;
       for (; *wildstr ==  wild_many || *wildstr == wild_one; wildstr++)
@@ -70,7 +70,7 @@ int wild_compare(register const char *str, register const char *wildstr,
             DBUG_RETURN (1);
         }
       if (!*wildstr)
-        DBUG_RETURN(0);        /* '*' as last char: OK */
+        DBUG_RETURN(0);		/* '*' as last char: OK */
       if ((cmp= *wildstr) == wild_prefix && wildstr[1] && !str_is_pattern)
         cmp=wildstr[1];
       for (;;str++)
@@ -79,7 +79,7 @@ int wild_compare(register const char *str, register const char *wildstr,
           str++;
         if (!*str)
           DBUG_RETURN (1);
-    if (wild_compare(str,wildstr,str_is_pattern) == 0)
+	if (wild_compare(str,wildstr,str_is_pattern) == 0)
           DBUG_RETURN (0);
       }
       /* We will never come here */

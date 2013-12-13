@@ -30,7 +30,7 @@ void CharacterDatabaseCleaner::CleanDatabase()
     if (!sWorld->getBoolConfig(CONFIG_CLEAN_CHARACTER_DB))
         return;
 
-    TC_LOG_INFO(LOG_FILTER_GENERAL, "Cleaning character database...");
+    TC_LOG_INFO("misc", "Cleaning character database...");
 
     uint32 oldMSTime = getMSTime();
 
@@ -64,7 +64,7 @@ void CharacterDatabaseCleaner::CleanDatabase()
 
     sWorld->SetCleaningFlags(flags);
 
-    TC_LOG_INFO(LOG_FILTER_SERVER_LOADING, ">> Cleaned character database in %u ms", GetMSTimeDiffToNow(oldMSTime));
+    TC_LOG_INFO("server.loading", ">> Cleaned character database in %u ms", GetMSTimeDiffToNow(oldMSTime));
 }
 
 void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table, bool (*check)(uint32))
@@ -72,7 +72,7 @@ void CharacterDatabaseCleaner::CheckUnique(const char* column, const char* table
     QueryResult result = CharacterDatabase.PQuery("SELECT DISTINCT %s FROM %s", column, table);
     if (!result)
     {
-        TC_LOG_INFO(LOG_FILTER_GENERAL, "Table %s is empty.", table);
+        TC_LOG_INFO("misc", "Table %s is empty.", table);
         return;
     }
 
@@ -138,12 +138,11 @@ void CharacterDatabaseCleaner::CleanCharacterSpell()
 
 bool CharacterDatabaseCleaner::TalentCheck(uint32 talent_id)
 {
-    //TalentEntry const* talentInfo = sTalentStore.LookupEntry(talent_id);
-    //if (!talentInfo)
-    //    return false;
+    TalentEntry const* talentInfo = sTalentStore.LookupEntry(talent_id);
+    if (!talentInfo)
+        return false;
 
-    //return sTalentTabStore.LookupEntry(talentInfo->TalentTab);
-    return false;
+    return true;
 }
 
 void CharacterDatabaseCleaner::CleanCharacterTalent()

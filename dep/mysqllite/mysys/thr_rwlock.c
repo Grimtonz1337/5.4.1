@@ -173,7 +173,7 @@ static int srw_unlock(my_rw_lock_t *rwp)
 
 int my_rw_init(my_rw_lock_t *rwp)
 {
-  pthread_condattr_t    cond_attr;
+  pthread_condattr_t	cond_attr;
 
 #ifdef _WIN32
   /*
@@ -197,8 +197,8 @@ int my_rw_init(my_rw_lock_t *rwp)
   pthread_cond_init( &rwp->writers, &cond_attr );
   pthread_condattr_destroy(&cond_attr);
 
-  rwp->state    = 0;
-  rwp->waiters    = 0;
+  rwp->state	= 0;
+  rwp->waiters	= 0;
 #ifdef SAFE_MUTEX
   rwp->write_thread   = 0;
 #endif
@@ -250,7 +250,7 @@ int my_rw_tryrdlock(my_rw_lock_t *rwp)
 
   pthread_mutex_lock(&rwp->lock);
   if ((rwp->state < 0 ) || rwp->waiters)
-    res= EBUSY;                    /* Can't get lock */
+    res= EBUSY;					/* Can't get lock */
   else
   {
     res=0;
@@ -269,13 +269,13 @@ int my_rw_wrlock(my_rw_lock_t *rwp)
 #endif
 
   pthread_mutex_lock(&rwp->lock);
-  rwp->waiters++;                /* another writer queued */
+  rwp->waiters++;				/* another writer queued */
 
   my_rw_lock_assert_not_write_owner(rwp);
 
   while (rwp->state)
     pthread_cond_wait(&rwp->writers, &rwp->lock);
-  rwp->state    = -1;
+  rwp->state	= -1;
   rwp->waiters--;
 #ifdef SAFE_MUTEX
   rwp->write_thread= pthread_self();
@@ -296,11 +296,11 @@ int my_rw_trywrlock(my_rw_lock_t *rwp)
 
   pthread_mutex_lock(&rwp->lock);
   if (rwp->state)
-    res= EBUSY;                    /* Can't get lock */    
+    res= EBUSY;					/* Can't get lock */    
   else
   {
     res=0;
-    rwp->state    = -1;
+    rwp->state	= -1;
 #ifdef SAFE_MUTEX
   rwp->write_thread= pthread_self();
 #endif
@@ -318,20 +318,20 @@ int my_rw_unlock(my_rw_lock_t *rwp)
 #endif
 
   DBUG_PRINT("rw_unlock",
-         ("state: %d waiters: %d", rwp->state, rwp->waiters));
+	     ("state: %d waiters: %d", rwp->state, rwp->waiters));
   pthread_mutex_lock(&rwp->lock);
 
   DBUG_ASSERT(rwp->state != 0);
 
-  if (rwp->state == -1)        /* writer releasing */
+  if (rwp->state == -1)		/* writer releasing */
   {
     my_rw_lock_assert_write_owner(rwp);
-    rwp->state= 0;        /* mark as available */
+    rwp->state= 0;		/* mark as available */
 #ifdef SAFE_MUTEX
     rwp->write_thread= 0;
 #endif
 
-    if ( rwp->waiters )        /* writers queued */
+    if ( rwp->waiters )		/* writers queued */
       pthread_cond_signal( &rwp->writers );
     else
       pthread_cond_broadcast( &rwp->readers );

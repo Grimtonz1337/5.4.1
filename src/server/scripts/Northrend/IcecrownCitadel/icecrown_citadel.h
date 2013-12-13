@@ -268,7 +268,6 @@ enum CreaturesIds
     NPC_THE_LICH_KING                           = 36597,
     NPC_HIGHLORD_TIRION_FORDRING_LK             = 38995,
     NPC_TERENAS_MENETHIL_FROSTMOURNE            = 36823,
-    NPC_TERENAS_MENETHIL_TFT                    = 38579,
     NPC_SPIRIT_WARDEN                           = 36824,
     NPC_TERENAS_MENETHIL_FROSTMOURNE_H          = 39217,
     NPC_SHAMBLING_HORROR                        = 37698,
@@ -287,7 +286,6 @@ enum CreaturesIds
 
     // Generic
     NPC_INVISIBLE_STALKER                       = 30298,
-    NPC_MOVIE                                   = 14495,
 };
 
 enum GameObjectsIds

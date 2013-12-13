@@ -53,7 +53,7 @@ int my_readlink(char *to, const char *filename, myf MyFlags)
     else
     {
       if (MyFlags & MY_WME)
-    my_error(EE_CANT_READLINK, MYF(0), filename, errno);
+	my_error(EE_CANT_READLINK, MYF(0), filename, errno);
       result= -1;
     }
   }
@@ -157,7 +157,7 @@ int my_realpath(char *to, const char *filename, myf MyFlags)
       my_errno= EACCES;
     if (MyFlags & MY_WME)
       my_error(EE_REALPATH, MYF(0), filename, my_errno);
-      return -1;
+	  return -1;
   }
 #else
   my_load_path(to, filename, NullS);

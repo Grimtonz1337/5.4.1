@@ -86,15 +86,15 @@ int find_type(char *x, const TYPELIB *typelib, uint full_name)
   for (pos=0 ; (j=typelib->type_names[pos]) ; pos++)
   {
     for (i=x ; 
-        *i && (!(full_name & 8) || !is_field_separator(*i)) &&
+    	*i && (!(full_name & 8) || !is_field_separator(*i)) &&
         my_toupper(&my_charset_latin1,*i) == 
-            my_toupper(&my_charset_latin1,*j) ; i++, j++) ;
+    		my_toupper(&my_charset_latin1,*j) ; i++, j++) ;
     if (! *j)
     {
       while (*i == ' ')
-    i++;                    /* skip_end_space */
+	i++;					/* skip_end_space */
       if (! *i || ((full_name & 8) && is_field_separator(*i)))
-    DBUG_RETURN(pos+1);
+	DBUG_RETURN(pos+1);
     }
     if ((!*i && (!(full_name & 8) || !is_field_separator(*i))) && 
         (!*j || !(full_name & 1)))
@@ -130,7 +130,7 @@ int find_type(char *x, const TYPELIB *typelib, uint full_name)
 */
 
 void make_type(register char * to, register uint nr,
-           register TYPELIB *typelib)
+	       register TYPELIB *typelib)
 {
   DBUG_ENTER("make_type");
   if (!nr)

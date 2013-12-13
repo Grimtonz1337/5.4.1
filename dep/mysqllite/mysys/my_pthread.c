@@ -147,19 +147,19 @@ void sigwait_setup(sigset_t *set)
     {
       sigdelset(&rev_sigwait_set,i);
       if (!sigismember(&sigwait_set,i))
-    sigaction(i, &sact, (struct sigaction*) 0);
+	sigaction(i, &sact, (struct sigaction*) 0);
     }
     else
     {
-      sigdelset(&px_recd,i);            /* Don't handle this */
+      sigdelset(&px_recd,i);			/* Don't handle this */
       if (sigismember(&sigwait_set,i))
-      {                        /* Remove the old handler */
-    sigaddset(&unblock_mask,i);
-    sigdelset(&rev_sigwait_set,i);
-    sact1.sa_flags = 0;
-    sact1.sa_handler = SIG_DFL;
-    sigemptyset(&sact1.sa_mask);
-    sigaction(i, &sact1, 0);
+      {						/* Remove the old handler */
+	sigaddset(&unblock_mask,i);
+	sigdelset(&rev_sigwait_set,i);
+	sact1.sa_flags = 0;
+	sact1.sa_handler = SIG_DFL;
+	sigemptyset(&sact1.sa_mask);
+	sigaction(i, &sact1, 0);
       }
     }
   }
@@ -172,7 +172,7 @@ void sigwait_setup(sigset_t *set)
 int sigwait(sigset_t *setp, int *sigp)
 {
   if (memcmp(setp,&sigwait_set,sizeof(sigwait_set)))
-    sigwait_setup(setp);            /* Init or change of set */
+    sigwait_setup(setp);			/* Init or change of set */
 
   for (;;)
   {
@@ -190,16 +190,16 @@ int sigwait(sigset_t *setp, int *sigp)
     {
       if (*ptr)
       {
-    ulong set= *ptr;
-    int found= (int) ((char*) ptr - (char*) &px_recd)*8+1;
-    while (!(set & 1))
-    {
-      found++;
-      set>>=1;
-    }
-    *sigp=found;
-    sigdelset(&px_recd,found);
-    return 0;
+	ulong set= *ptr;
+	int found= (int) ((char*) ptr - (char*) &px_recd)*8+1;
+	while (!(set & 1))
+	{
+	  found++;
+	  set>>=1;
+	}
+	*sigp=found;
+	sigdelset(&px_recd,found);
+	return 0;
       }
     }
     sigsuspend(&rev_sigwait_set);
@@ -265,16 +265,16 @@ void *sigwait_thread(void *set_arg)
   DBUG_ASSERT(thr_client_alarm);
   sigaddset(set, thr_client_alarm);
   pthread_sigmask(SIG_UNBLOCK,(sigset_t*) set,(sigset_t*) 0);
-  alarm_thread=pthread_self();            /* For thr_alarm */
+  alarm_thread=pthread_self();			/* For thr_alarm */
 
   for (;;)
-  {                        /* Wait for signals */
+  {						/* Wait for signals */
 #ifdef HAVE_NOT_BROKEN_SELECT
     fd_set fd;
     FD_ZERO(&fd);
     select(0,&fd,0,0,0);
 #else
-    sleep(1);                    /* Because of broken BSDI */
+    sleep(1);					/* Because of broken BSDI */
 #endif
   }
 }
@@ -309,17 +309,17 @@ int sigwait(sigset_t *setp, int *sigp)
     {
       if (*ptr)
       {
-    ulong set= *ptr;
-    int found= (int) ((char*) ptr - (char*) &pending_set)*8+1;
-    while (!(set & 1))
-    {
-      found++;
-      set>>=1;
-    }
-    *sigp=found;
-    sigdelset(&pending_set,found);
-    pthread_mutex_unlock(&LOCK_sigwait);
-    return 0;
+	ulong set= *ptr;
+	int found= (int) ((char*) ptr - (char*) &pending_set)*8+1;
+	while (!(set & 1))
+	{
+	  found++;
+	  set>>=1;
+	}
+	*sigp=found;
+	sigdelset(&pending_set,found);
+	pthread_mutex_unlock(&LOCK_sigwait);
+	return 0;
       }
     }
     pthread_cond_wait(&COND_sigwait, &LOCK_sigwait);
@@ -395,15 +395,15 @@ int my_pthread_cond_init(pthread_cond_t *mp, const pthread_condattr_t *attr)
 #if defined(HPUX10) || defined(HAVE_BROKEN_PTHREAD_COND_TIMEDWAIT)
 
 int my_pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
-                  struct timespec *abstime)
+			      struct timespec *abstime)
 {
   int error=pthread_cond_timedwait(cond, mutex, abstime);
-  if (error == -1)            /* Safety if the lib is fixed */
+  if (error == -1)			/* Safety if the lib is fixed */
   {
     if (!(error=errno))
-      error= ETIMEDOUT;            /* Can happen on HPUX */
+      error= ETIMEDOUT;			/* Can happen on HPUX */
   }
-  if (error == EAGAIN)            /* Correct errno to Posix */
+  if (error == EAGAIN)			/* Correct errno to Posix */
     error= ETIMEDOUT;
   return error;
 }
@@ -412,7 +412,7 @@ int my_pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
 #if defined(HPUX10)
 
 void my_pthread_attr_getstacksize(pthread_attr_t *connection_attrib,
-                  size_t *stack_size)
+				  size_t *stack_size)
 {
   *stack_size= pthread_attr_getstacksize(*connection_attrib);
 }
@@ -442,21 +442,21 @@ void my_pthread_attr_getstacksize(pthread_attr_t *connection_attrib,
   Convert pthread_mutex_trylock to return values according to latest POSIX
 
   RETURN VALUES
-  0        If we are able successfully lock the mutex.
-  EBUSY        Mutex was locked by another thread
-  #        Other error number returned by pthread_mutex_trylock()
-        (Not likely)  
+  0		If we are able successfully lock the mutex.
+  EBUSY		Mutex was locked by another thread
+  #		Other error number returned by pthread_mutex_trylock()
+		(Not likely)  
 */
 
 int my_pthread_mutex_trylock(pthread_mutex_t *mutex)
 {
   int error= pthread_mutex_trylock(mutex);
   if (error == 1)
-    return 0;                /* Got lock on mutex */
-  if (error == 0)            /* Someon else is locking mutex */
+    return 0;				/* Got lock on mutex */
+  if (error == 0)			/* Someon else is locking mutex */
     return EBUSY;
-  if (error == -1)            /* Safety if the lib is fixed */
-    error= errno;            /* Probably invalid parameter */
+  if (error == -1)			/* Safety if the lib is fixed */
+    error= errno;			/* Probably invalid parameter */
    return error;
 }
 #endif /* HAVE_POSIX1003_4a_MUTEX */

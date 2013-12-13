@@ -37,8 +37,6 @@ enum LfgOptions
 {
     LFG_OPTION_ENABLE_DUNGEON_FINDER             = 0x01,
     LFG_OPTION_ENABLE_RAID_BROWSER               = 0x02,
-    LFG_OPTION_ENABLE_RAID_FINDER                = 0x04,
-    LFG_OPTION_ENABLE_SCENARIO_FINDER            = 0x08,
 };
 
 enum LFGMgrEnum
@@ -65,12 +63,10 @@ enum LfgFlags
 enum LfgType
 {
     LFG_TYPE_NONE                                = 0,
-    LFG_TYPE_DUNGEON                             = 1,  // Normal 5 Man
-    LFG_TYPE_DUNGEON_RANDOM                      = 2,  // Random 5 Man
-    LFG_TYPE_RAID                                = 3,  // Normal Raid
-    LFG_TYPE_RAID_RANDOM                         = 4,  // Random Raid
-    LFG_TYPE_SCENARIO                            = 5,  // Normal Scenario
-    LFG_TYPE_SCENARIO_RANDOM                     = 6   // Random Scenario
+    LFG_TYPE_DUNGEON                             = 1,
+    LFG_TYPE_RAID                                = 2,
+    LFG_TYPE_HEROIC                              = 5,
+    LFG_TYPE_RANDOM                              = 6
 };
 
 /// Proposal states
@@ -156,7 +152,7 @@ typedef UNORDERED_MAP<uint32, LFGDungeonData> LFGDungeonContainer;
 struct LfgJoinResultData
 {
     LfgJoinResultData(LfgJoinResult _result = LFG_JOIN_OK, LfgRoleCheckState _state = LFG_ROLECHECK_DEFAULT):
-        result(_result), state(_state) {}
+        result(_result), state(_state) { }
     LfgJoinResult result;
     LfgRoleCheckState state;
     LfgLockPartyMap lockmap;
@@ -183,7 +179,7 @@ struct LfgQueueStatusData
     LfgQueueStatusData(uint8 _queueId = 0, uint32 _dungeonId = 0, time_t _joinTime = 0, int32 _waitTime = -1, int32 _waitTimeAvg = -1, int32 _waitTimeTank = -1, int32 _waitTimeHealer = -1,
         int32 _waitTimeDps = -1, uint32 _queuedTime = 0, uint8 _tanks = 0, uint8 _healers = 0, uint8 _dps = 0) :
         queueId(_queueId), dungeonId(_dungeonId), joinTime(_joinTime), waitTime(_waitTime), waitTimeAvg(_waitTimeAvg), waitTimeTank(_waitTimeTank),
-        waitTimeHealer(_waitTimeHealer), waitTimeDps(_waitTimeDps), queuedTime(_queuedTime), tanks(_tanks), healers(_healers), dps(_dps) {}
+        waitTimeHealer(_waitTimeHealer), waitTimeDps(_waitTimeDps), queuedTime(_queuedTime), tanks(_tanks), healers(_healers), dps(_dps) { }
 
     uint8 queueId;
     uint32 dungeonId;

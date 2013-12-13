@@ -24,33 +24,33 @@
 
   SYNOPSIS
     my_open()
-      FileName    Fully qualified file name
-      Flags    Read | write 
-      MyFlags    Special flags
+      FileName	Fully qualified file name
+      Flags	Read | write 
+      MyFlags	Special flags
 
   RETURN VALUE
     File descriptor
 */
 
 File my_open(const char *FileName, int Flags, myf MyFlags)
-                /* Path-name of file */
-                /* Read | write .. */
-                /* Special flags */
+				/* Path-name of file */
+				/* Read | write .. */
+				/* Special flags */
 {
   File fd;
   DBUG_ENTER("my_open");
   DBUG_PRINT("my",("Name: '%s'  Flags: %d  MyFlags: %d",
-           FileName, Flags, MyFlags));
+		   FileName, Flags, MyFlags));
 #if defined(_WIN32)
   fd= my_win_open(FileName, Flags);
 #elif !defined(NO_OPEN_3)
-  fd = open(FileName, Flags, my_umask);    /* Normal unix */
+  fd = open(FileName, Flags, my_umask);	/* Normal unix */
 #else
   fd = open((char *) FileName, Flags);
 #endif
 
   DBUG_RETURN(my_register_filename(fd, FileName, FILE_BY_OPEN,
-                   EE_FILENOTFOUND, MyFlags));
+				   EE_FILENOTFOUND, MyFlags));
 } /* my_open */
 
 
@@ -59,8 +59,8 @@ File my_open(const char *FileName, int Flags, myf MyFlags)
 
   SYNOPSIS
     my_close()
-      fd    File sescriptor
-      myf    Special Flags
+      fd	File sescriptor
+      myf	Special Flags
 
 */
 
@@ -105,11 +105,11 @@ int my_close(File fd, myf MyFlags)
    
   SYNOPSIS
     my_register_filename()
-    fd               File number opened, -1 if error on open
-    FileName           File name
-    type_file_type       How file was created
+    fd			   File number opened, -1 if error on open
+    FileName		   File name
+    type_file_type	   How file was created
     error_message_number   Error message number if caller got error (fd == -1)
-    MyFlags           Flags for my_close()
+    MyFlags		   Flags for my_close()
 
   RETURN
     -1   error
@@ -118,7 +118,7 @@ int my_close(File fd, myf MyFlags)
 */
 
 File my_register_filename(File fd, const char *FileName, enum file_type
-              type_of_file, uint error_message_number, myf MyFlags)
+			  type_of_file, uint error_message_number, myf MyFlags)
 {
   DBUG_ENTER("my_register_filename");
   if ((int) fd >= MY_FILE_MIN)
@@ -129,7 +129,7 @@ File my_register_filename(File fd, const char *FileName, enum file_type
       my_errno= EMFILE;
 #else
       thread_safe_increment(my_file_opened,&THR_LOCK_open);
-      DBUG_RETURN(fd);                /* safeguard */
+      DBUG_RETURN(fd);				/* safeguard */
 #endif
     }
     else

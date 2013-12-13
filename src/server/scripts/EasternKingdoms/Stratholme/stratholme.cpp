@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -100,14 +100,14 @@ public:
 
     struct npc_freed_soulAI : public ScriptedAI
     {
-        npc_freed_soulAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_freed_soulAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
             Talk(SAY_ZAPPED);
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
     };
 
 };
@@ -142,7 +142,7 @@ public:
 
     struct npc_restless_soulAI : public ScriptedAI
     {
-        npc_restless_soulAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_restless_soulAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint64 Tagger;
         uint32 Die_Timer;
@@ -155,7 +155,7 @@ public:
             Tagged = false;
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void SpellHit(Unit* caster, const SpellInfo* spell) OVERRIDE
         {
@@ -224,7 +224,7 @@ public:
 
     struct npc_spectral_ghostly_citizenAI : public ScriptedAI
     {
-        npc_spectral_ghostly_citizenAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_spectral_ghostly_citizenAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 Die_Timer;
         bool Tagged;
@@ -235,7 +235,7 @@ public:
             Tagged = false;
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void SpellHit(Unit* /*caster*/, const SpellInfo* spell) OVERRIDE
         {

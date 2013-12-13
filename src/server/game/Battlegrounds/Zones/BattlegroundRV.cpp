@@ -73,9 +73,7 @@ void BattlegroundRV::PostUpdateImpl(uint32 diff)
         setTimer(getTimer() - diff);
 }
 
-void BattlegroundRV::StartingEventCloseDoors()
-{
-}
+void BattlegroundRV::StartingEventCloseDoors() { }
 
 void BattlegroundRV::StartingEventOpenDoors()
 {
@@ -121,7 +119,7 @@ void BattlegroundRV::HandleKillPlayer(Player* player, Player* killer)
 
     if (!killer)
     {
-        TC_LOG_ERROR(LOG_FILTER_BATTLEGROUND, "BattlegroundRV: Killer player not found");
+        TC_LOG_ERROR("bg.battleground", "BattlegroundRV: Killer player not found");
         return;
     }
 
@@ -198,7 +196,7 @@ bool BattlegroundRV::SetupBattleground()
 
 )
     {
-        TC_LOG_ERROR(LOG_FILTER_SQL, "BatteGroundRV: Failed to spawn some object!");
+        TC_LOG_ERROR("sql.sql", "BatteGroundRV: Failed to spawn some object!");
         return false;
     }
     return true;

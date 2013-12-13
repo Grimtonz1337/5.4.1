@@ -22,15 +22,15 @@
 #include <m_ctype.h>
 #include "hash.h"
 
-#define NO_RECORD    ((uint) -1)
+#define NO_RECORD	((uint) -1)
 #define LOWFIND 1
 #define LOWUSED 2
 #define HIGHFIND 4
 #define HIGHUSED 8
 
 typedef struct st_hash_info {
-  uint next;                    /* index to next key */
-  uchar *data;                    /* data for current entry */
+  uint next;					/* index to next key */
+  uchar *data;					/* data for current entry */
 } HASH_LINK;
 
 static uint my_hash_mask(my_hash_value_type hashnr,
@@ -177,7 +177,7 @@ my_hash_key(const HASH *hash, const uchar *record, size_t *length,
   return (char*) record+hash->key_offset;
 }
 
-    /* Calculate pos according to keys */
+	/* Calculate pos according to keys */
 
 static uint my_hash_mask(my_hash_value_type hashnr, size_t buffmax,
                          size_t maxlength)
@@ -273,15 +273,15 @@ uchar* my_hash_first_from_hash_value(const HASH *hash,
       pos= dynamic_element(&hash->array,idx,HASH_LINK*);
       if (!hashcmp(hash,pos,key,length))
       {
-    DBUG_PRINT("exit",("found key at %d",idx));
-    *current_record= idx;
-    DBUG_RETURN (pos->data);
+	DBUG_PRINT("exit",("found key at %d",idx));
+	*current_record= idx;
+	DBUG_RETURN (pos->data);
       }
       if (flag)
       {
-    flag=0;                    /* Reset flag */
-    if (my_hash_rec_mask(hash, pos, hash->blength, hash->records) != idx)
-      break;                /* Wrong link */
+	flag=0;					/* Reset flag */
+	if (my_hash_rec_mask(hash, pos, hash->blength, hash->records) != idx)
+	  break;				/* Wrong link */
       }
     }
     while ((idx=pos->next) != NO_RECORD);
@@ -290,8 +290,8 @@ uchar* my_hash_first_from_hash_value(const HASH *hash,
   DBUG_RETURN(0);
 }
 
-    /* Get next record with identical key */
-    /* Can only be called if previous calls was my_hash_search */
+	/* Get next record with identical key */
+	/* Can only be called if previous calls was my_hash_search */
 
 uchar* my_hash_next(const HASH *hash, const uchar *key, size_t length,
                     HASH_SEARCH_STATE *current_record)
@@ -307,8 +307,8 @@ uchar* my_hash_next(const HASH *hash, const uchar *key, size_t length,
       pos=data+idx;
       if (!hashcmp(hash,pos,key,length))
       {
-    *current_record= idx;
-    return pos->data;
+	*current_record= idx;
+	return pos->data;
       }
     }
     *current_record= NO_RECORD;
@@ -317,7 +317,7 @@ uchar* my_hash_next(const HASH *hash, const uchar *key, size_t length,
 }
 
 
-    /* Change link from pos to new_link */
+	/* Change link from pos to new_link */
 
 static void movelink(HASH_LINK *array,uint find,uint next_link,uint newlink)
 {
@@ -356,12 +356,12 @@ static int hashcmp(const HASH *hash, HASH_LINK *pos, const uchar *key,
   size_t rec_keylength;
   uchar *rec_key= (uchar*) my_hash_key(hash, pos->data, &rec_keylength, 1);
   return ((length && length != rec_keylength) ||
-      my_strnncoll(hash->charset, (uchar*) rec_key, rec_keylength,
-               (uchar*) key, rec_keylength));
+	  my_strnncoll(hash->charset, (uchar*) rec_key, rec_keylength,
+		       (uchar*) key, rec_keylength));
 }
 
 
-    /* Write a hash-key to the hash-index */
+	/* Write a hash-key to the hash-index */
 
 my_bool my_hash_insert(HASH *info, const uchar *record)
 {
@@ -375,79 +375,79 @@ my_bool my_hash_insert(HASH *info, const uchar *record)
   {
     uchar *key= (uchar*) my_hash_key(info, record, &idx, 1);
     if (my_hash_search(info, key, idx))
-      return(TRUE);                /* Duplicate entry */
+      return(TRUE);				/* Duplicate entry */
   }
 
   flag=0;
   if (!(empty=(HASH_LINK*) alloc_dynamic(&info->array)))
-    return(TRUE);                /* No more memory */
+    return(TRUE);				/* No more memory */
 
   data=dynamic_element(&info->array,0,HASH_LINK*);
   halfbuff= info->blength >> 1;
 
   idx=first_index=info->records-halfbuff;
-  if (idx != info->records)                /* If some records */
+  if (idx != info->records)				/* If some records */
   {
     do
     {
       pos=data+idx;
       hash_nr=rec_hashnr(info,pos->data);
-      if (flag == 0)                /* First loop; Check if ok */
-    if (my_hash_mask(hash_nr, info->blength, info->records) != first_index)
-      break;
+      if (flag == 0)				/* First loop; Check if ok */
+	if (my_hash_mask(hash_nr, info->blength, info->records) != first_index)
+	  break;
       if (!(hash_nr & halfbuff))
-      {                        /* Key will not move */
-    if (!(flag & LOWFIND))
-    {
-      if (flag & HIGHFIND)
-      {
-        flag=LOWFIND | HIGHFIND;
-        /* key shall be moved to the current empty position */
-        gpos=empty;
-        ptr_to_rec=pos->data;
-        empty=pos;                /* This place is now free */
+      {						/* Key will not move */
+	if (!(flag & LOWFIND))
+	{
+	  if (flag & HIGHFIND)
+	  {
+	    flag=LOWFIND | HIGHFIND;
+	    /* key shall be moved to the current empty position */
+	    gpos=empty;
+	    ptr_to_rec=pos->data;
+	    empty=pos;				/* This place is now free */
+	  }
+	  else
+	  {
+	    flag=LOWFIND | LOWUSED;		/* key isn't changed */
+	    gpos=pos;
+	    ptr_to_rec=pos->data;
+	  }
+	}
+	else
+	{
+	  if (!(flag & LOWUSED))
+	  {
+	    /* Change link of previous LOW-key */
+	    gpos->data=ptr_to_rec;
+	    gpos->next= (uint) (pos-data);
+	    flag= (flag & HIGHFIND) | (LOWFIND | LOWUSED);
+	  }
+	  gpos=pos;
+	  ptr_to_rec=pos->data;
+	}
       }
       else
-      {
-        flag=LOWFIND | LOWUSED;        /* key isn't changed */
-        gpos=pos;
-        ptr_to_rec=pos->data;
-      }
-    }
-    else
-    {
-      if (!(flag & LOWUSED))
-      {
-        /* Change link of previous LOW-key */
-        gpos->data=ptr_to_rec;
-        gpos->next= (uint) (pos-data);
-        flag= (flag & HIGHFIND) | (LOWFIND | LOWUSED);
-      }
-      gpos=pos;
-      ptr_to_rec=pos->data;
-    }
-      }
-      else
-      {                        /* key will be moved */
-    if (!(flag & HIGHFIND))
-    {
-      flag= (flag & LOWFIND) | HIGHFIND;
-      /* key shall be moved to the last (empty) position */
-      gpos2 = empty; empty=pos;
-      ptr_to_rec2=pos->data;
-    }
-    else
-    {
-      if (!(flag & HIGHUSED))
-      {
-        /* Change link of previous hash-key and save */
-        gpos2->data=ptr_to_rec2;
-        gpos2->next=(uint) (pos-data);
-        flag= (flag & LOWFIND) | (HIGHFIND | HIGHUSED);
-      }
-      gpos2=pos;
-      ptr_to_rec2=pos->data;
-    }
+      {						/* key will be moved */
+	if (!(flag & HIGHFIND))
+	{
+	  flag= (flag & LOWFIND) | HIGHFIND;
+	  /* key shall be moved to the last (empty) position */
+	  gpos2 = empty; empty=pos;
+	  ptr_to_rec2=pos->data;
+	}
+	else
+	{
+	  if (!(flag & HIGHUSED))
+	  {
+	    /* Change link of previous hash-key and save */
+	    gpos2->data=ptr_to_rec2;
+	    gpos2->next=(uint) (pos-data);
+	    flag= (flag & LOWFIND) | (HIGHFIND | HIGHUSED);
+	  }
+	  gpos2=pos;
+	  ptr_to_rec2=pos->data;
+	}
       }
     }
     while ((idx=pos->next) != NO_RECORD);
@@ -520,7 +520,7 @@ my_bool my_hash_delete(HASH *hash, uchar *record)
   {
     gpos=pos;
     if (pos->next == NO_RECORD)
-      DBUG_RETURN(1);            /* Key not found */
+      DBUG_RETURN(1);			/* Key not found */
     pos=data+pos->next;
   }
 
@@ -530,7 +530,7 @@ my_bool my_hash_delete(HASH *hash, uchar *record)
   /* Remove link to record */
   empty=pos; empty_index=(uint) (empty-data);
   if (gpos)
-    gpos->next=pos->next;        /* unlink current ptr */
+    gpos->next=pos->next;		/* unlink current ptr */
   else if (pos->next != NO_RECORD)
   {
     empty=data+(empty_index=pos->next);
@@ -538,14 +538,14 @@ my_bool my_hash_delete(HASH *hash, uchar *record)
     pos->next=empty->next;
   }
 
-  if (empty == lastpos)            /* last key at wrong pos or no next link */
+  if (empty == lastpos)			/* last key at wrong pos or no next link */
     goto exit;
 
   /* Move the last key (lastpos) */
   lastpos_hashnr=rec_hashnr(hash,lastpos->data);
   /* pos is where lastpos should be */
   pos= data + my_hash_mask(lastpos_hashnr, hash->blength, hash->records);
-  if (pos == empty)            /* Move to empty position. */
+  if (pos == empty)			/* Move to empty position. */
   {
     empty[0]=lastpos[0];
     goto exit;
@@ -554,24 +554,24 @@ my_bool my_hash_delete(HASH *hash, uchar *record)
   /* pos3 is where the pos should be */
   pos3= data + my_hash_mask(pos_hashnr, hash->blength, hash->records);
   if (pos != pos3)
-  {                    /* pos is on wrong posit */
-    empty[0]=pos[0];            /* Save it here */
-    pos[0]=lastpos[0];            /* This should be here */
+  {					/* pos is on wrong posit */
+    empty[0]=pos[0];			/* Save it here */
+    pos[0]=lastpos[0];			/* This should be here */
     movelink(data,(uint) (pos-data),(uint) (pos3-data),empty_index);
     goto exit;
   }
   pos2= my_hash_mask(lastpos_hashnr, blength, hash->records + 1);
   if (pos2 == my_hash_mask(pos_hashnr, blength, hash->records + 1))
-  {                    /* Identical key-positions */
+  {					/* Identical key-positions */
     if (pos2 != hash->records)
     {
       empty[0]=lastpos[0];
       movelink(data,(uint) (lastpos-data),(uint) (pos-data),empty_index);
       goto exit;
     }
-    idx= (uint) (pos-data);        /* Link pos->next after lastpos */
+    idx= (uint) (pos-data);		/* Link pos->next after lastpos */
   }
-  else idx= NO_RECORD;        /* Different positions merge */
+  else idx= NO_RECORD;		/* Different positions merge */
 
   empty[0]=lastpos[0];
   movelink(data,idx,empty_index,pos->next);
@@ -584,10 +584,10 @@ exit:
   DBUG_RETURN(0);
 }
 
-    /*
-      Update keys when record has changed.
-      This is much more efficent than using a delete & insert.
-      */
+	/*
+	  Update keys when record has changed.
+	  This is much more efficent than using a delete & insert.
+	  */
 
 my_bool my_hash_update(HASH *hash, uchar *record, uchar *old_key,
                        size_t old_key_length)
@@ -606,7 +606,7 @@ my_bool my_hash_update(HASH *hash, uchar *record, uchar *old_key,
       do 
       {
         if (found != record)
-          DBUG_RETURN(1);        /* Duplicate entry */
+          DBUG_RETURN(1);		/* Duplicate entry */
       } 
       while ((found= my_hash_next(hash, new_key, idx, &state)));
     }
@@ -623,7 +623,7 @@ my_bool my_hash_update(HASH *hash, uchar *record, uchar *old_key,
                     blength, records);
   new_index= my_hash_mask(rec_hashnr(hash, record), blength, records);
   if (idx == new_index)
-    DBUG_RETURN(0);            /* Nothing to do (No record check) */
+    DBUG_RETURN(0);			/* Nothing to do (No record check) */
   previous=0;
   for (;;)
   {
@@ -632,7 +632,7 @@ my_bool my_hash_update(HASH *hash, uchar *record, uchar *old_key,
       break;
     previous=pos;
     if ((idx=pos->next) == NO_RECORD)
-      DBUG_RETURN(1);            /* Not found in links */
+      DBUG_RETURN(1);			/* Not found in links */
   }
   org_link= *pos;
   empty=idx;
@@ -648,7 +648,7 @@ my_bool my_hash_update(HASH *hash, uchar *record, uchar *old_key,
     }
   }
   else
-    previous->next=pos->next;        /* unlink pos */
+    previous->next=pos->next;		/* unlink pos */
 
   /* Move data to correct position */
   if (new_index == empty)
@@ -673,14 +673,14 @@ my_bool my_hash_update(HASH *hash, uchar *record, uchar *old_key,
   pos=data+new_index;
   new_pos_index= my_hash_rec_mask(hash, pos, blength, records);
   if (new_index != new_pos_index)
-  {                    /* Other record in wrong position */
+  {					/* Other record in wrong position */
     data[empty] = *pos;
     movelink(data,new_index,new_pos_index,empty);
     org_link.next=NO_RECORD;
     data[new_index]= org_link;
   }
   else
-  {                    /* Link in chain at right position */
+  {					/* Link in chain at right position */
     org_link.next=data[new_index].next;
     data[empty]=org_link;
     data[new_index].next=empty;
@@ -729,28 +729,28 @@ my_bool my_hash_check(HASH *hash)
     {
       found++; seek++; links=1;
       for (idx=data[i].next ;
-       idx != NO_RECORD && found < records + 1;
-       idx=hash_info->next)
+	   idx != NO_RECORD && found < records + 1;
+	   idx=hash_info->next)
       {
-    if (idx >= records)
-    {
-      DBUG_PRINT("error",
-             ("Found pointer outside array to %d from link starting at %d",
-              idx,i));
-      error=1;
-    }
-    hash_info=data+idx;
-    seek+= ++links;
-    if ((rec_link= my_hash_rec_mask(hash, hash_info,
+	if (idx >= records)
+	{
+	  DBUG_PRINT("error",
+		     ("Found pointer outside array to %d from link starting at %d",
+		      idx,i));
+	  error=1;
+	}
+	hash_info=data+idx;
+	seek+= ++links;
+	if ((rec_link= my_hash_rec_mask(hash, hash_info,
                                         blength, records)) != i)
-    {
+	{
           DBUG_PRINT("error", ("Record in wrong link at %d: Start %d  "
                                "Record: 0x%lx  Record-link %d",
                                idx, i, (long) hash_info->data, rec_link));
-      error=1;
-    }
-    else
-      found++;
+	  error=1;
+	}
+	else
+	  found++;
       }
       if (links > max_links) max_links=links;
     }
@@ -762,8 +762,8 @@ my_bool my_hash_check(HASH *hash)
   }
   if (records)
     DBUG_PRINT("info",
-           ("records: %u   seeks: %d   max links: %d   hitrate: %.2f",
-        records,seek,max_links,(float) seek / (float) records));
+	       ("records: %u   seeks: %d   max links: %d   hitrate: %.2f",
+		records,seek,max_links,(float) seek / (float) records));
   return error;
 }
 #endif

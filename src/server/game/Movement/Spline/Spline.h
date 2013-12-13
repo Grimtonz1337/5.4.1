@@ -21,6 +21,7 @@
 
 #include "MovementTypedefs.h"
 #include <G3D/Vector3.h>
+#include <limits>
 
 namespace Movement {
 
@@ -85,7 +86,7 @@ protected:
 
 public:
 
-    explicit SplineBase() : index_lo(0), index_hi(0), m_mode(UninitializedMode), cyclic(false) {}
+    explicit SplineBase() : index_lo(0), index_hi(0), m_mode(UninitializedMode), cyclic(false) { }
 
     /** Caclulates the position for given segment Idx, and percent of segment length t
         @param t - percent of segment length, assumes that t in range [0, 1]
@@ -143,7 +144,7 @@ protected:
     index_type computeIndexInBounds(length_type length) const;
 public:
 
-    explicit Spline(){}
+    explicit Spline(){ }
 
     /** Calculates the position for given t
         @param t - percent of spline's length, assumes that t in range [0, 1]. */
@@ -184,6 +185,9 @@ public:
         while (i < index_hi)
         {
             new_length = cacher(*this, i);
+            // length overflowed, assign to max positive value
+            if (new_length < 0)
+                new_length = std::numeric_limits<length_type>::max();
             lengths[++i] = new_length;
 
             ASSERT(prev_length <= new_length);

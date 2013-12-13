@@ -1,5 +1,5 @@
 ################################################
-# OpenEMU 5.4.0 World Server configuration file#
+#   SkyFire World Server configuration file    #
 ################################################
 [worldserver]
 
@@ -29,6 +29,7 @@
 #    CUSTOM SERVER OPTIONS
 #    LOGGING SYSTEM SETTINGS
 #    CURRENCIES SETTINGS
+#    PACKET SPOOF PROTECTION SETTINGS
 #
 ###################################################################################################
 
@@ -61,7 +62,7 @@ RealmID = 1
 #    DataDir
 #        Description: Data directory setting.
 #        Important:   DataDir needs to be quoted, as the string might contain space characters.
-#        Example:     "@prefix@/share/openemu"
+#        Example:     "@prefix@/share/skyfire"
 #        Default:     "."
 
 DataDir = "."
@@ -73,7 +74,7 @@ DataDir = "."
 #                     Logs directory must exists, or log file creation will be disabled.
 #        Default:     "" - (Log files will be stored in the current path)
 
-LogsDir = "logs"
+LogsDir = ""
 
 #
 #    LoginDatabaseInfo
@@ -86,13 +87,13 @@ LogsDir = "logs"
 #                                                                 section my.ini)
 #                     ".;/path/to/unix_socket;username;password;database" - (use Unix sockets on
 #                                                                           Unix/Linux)
-#        Default:     "127.0.0.1;3306;openemu;openemu;auth"       - (LoginDatabaseInfo)
-#                     "127.0.0.1;3306;openemu;openemu;world"      - (WorldDatabaseInfo)
-#                     "127.0.0.1;3306;openemu;openemu;characters" - (CharacterDatabaseInfo)
+#        Default:     "127.0.0.1;3306;skyfire;skyfire;auth"       - (LoginDatabaseInfo)
+#                     "127.0.0.1;3306;skyfire;skyfire;world"      - (WorldDatabaseInfo)
+#                     "127.0.0.1;3306;skyfire;skyfire;characters" - (CharacterDatabaseInfo)
 
-LoginDatabaseInfo     = "127.0.0.1;3306;openemu;openemu;auth"
-WorldDatabaseInfo     = "127.0.0.1;3306;openemu;openemu;world"
-CharacterDatabaseInfo = "127.0.0.1;3306;openemu;openemu;characters"
+LoginDatabaseInfo     = "127.0.0.1;3306;skyfire;skyfire;auth"
+WorldDatabaseInfo     = "127.0.0.1;3306;skyfire;skyfire;world"
+CharacterDatabaseInfo = "127.0.0.1;3306;skyfire;skyfire;characters"
 
 #
 #    LoginDatabase.WorkerThreads
@@ -150,7 +151,9 @@ BindIP = "0.0.0.0"
 # PERFORMANCE SETTINGS
 #
 #    UseProcessors
-#        Description: Processors mask for Windows based multi-processor systems.
+#        Description: Processors mask for Windows and Linux based multi-processor systems.
+#        Example:     A computer with 2 CPUs:
+#                     1 - 1st CPU only, 2 - 2nd CPU only, 3 - 1st and 2nd CPU, because 1 | 2 is 3
 #        Default:     0  - (Selected by OS)
 #                     1+ - (Bit mask value of selected processors)
 
@@ -158,11 +161,12 @@ UseProcessors = 0
 
 #
 #    ProcessPriority
-#        Description: Process priority setting for Windows based systems.
-#        Default:     1 - (High)
-#                     0 - (Normal)
+#        Description: Process priority setting for Windows and Linux based systems.
+#        Details:     On Linux, a nice value of -15 is used. (requires superuser). On Windows, process is set to HIGH class.
+#        Default:     0 - (Normal)
+#                     1 - (High)
 
-ProcessPriority = 1
+ProcessPriority = 0
 
 #
 #    Compression
@@ -604,9 +608,9 @@ DeclinedNames = 0
 #    Expansion
 #        Description: Allow server to use content from expansions. Checks for expansion-related
 #                     map files, client compatibility and class/race character creation.
-#        Default:     4 - (Expansion 4) // Mists Of Pandaria
-#                     3 - (Expansion 3) // Cataclysm
-#                     2 - (Expansion 2) // Wrath of the Lich King
+#        Default:     4 - (Expansion 4)
+#                     3 - (Expansion 3)
+#                     2 - (Expansion 2)
 #                     1 - (Expansion 1)
 #                     0 - (Disabled, Ignore and disable expansion content (maps, races, classes)
 
@@ -699,10 +703,10 @@ CharactersPerAccount = 50
 #
 #    CharactersPerRealm
 #        Description: Limit number of characters per account on this realm.
-#        Range:       1-10
-#        Default:     10 - (Client limitation)
+#        Range:       1-11
+#        Default:     11 - (Client limitation)
 
-CharactersPerRealm = 10
+CharactersPerRealm = 11
 
 #
 #    HeroicCharactersPerRealm
@@ -867,6 +871,13 @@ Instance.ResetTimeHour = 4
 
 Instance.UnloadDelay = 1800000
 
+#
+#    InstancesResetAnnounce
+#        Description: Announce the reset of one instance to whole party.
+#        Default:     false - (Disabled, don't show, blizzlike)
+#                     true  - (Enabled, show)
+
+InstancesResetAnnounce = false
 #
 #    Quests.LowLevelHideDiff
 #        Description: Level difference between player and quest level at which quests are
@@ -1040,10 +1051,10 @@ BeepAtStart = 1
 #    Motd
 #        Description: Message of the Day, displayed at login.
 #                     Use '@' for a newline and be sure to escape special characters.
-#        Example:     "Welcome to John\'s Server@This server runs on Trinity Core."
-#        Default:     "Welcome to a Trinity Core server."
+#        Example:     "Welcome to John\'s Server@This server runs on SkyFire Core."
+#        Default:     "Welcome to a SkyFire server."
 
-Motd = "Welcome to a Trinity Core server."
+Motd = "Welcome to a SkyFire server."
 
 #
 #    Server.LoginInfo
@@ -1078,7 +1089,6 @@ AllowTickets = 1
 
 DungeonFinder.OptionsMask = 1
 
-
 #
 #   DBC.EnforceItemAttributes
 #        Description: Disallow overriding item attributes stored in DBC files with values from the
@@ -1096,12 +1106,13 @@ DBC.EnforceItemAttributes = 1
 AccountInstancesPerHour = 5
 
 #
-#   RBAC.DefaultGroups
-#        Description: Comma separated list of groups to be added to any account
-#                     Check auth.rbac_groups for correct ids
-#        Default:     "" (No group)
+#   Account.PasswordChangeSecurity
+#        Description: Controls how secure the password changes are.
+#        Default:     0 - None (Old and new password)
+#                     1 - Email (Email confirmation necessary)
+#                     2 - RBAC (RBAC enable or disables email confirmation per group)
 
-RBAC.DefaultGroups = ""
+Account.PasswordChangeSecurity = 0
 
 #
 ###################################################################################################
@@ -1175,7 +1186,6 @@ Warden.BanDuration = 86400
 
 ###################################################################################################
 # PLAYER INTERACTION
-#
 #
 #    AllowTwoSide.Interaction.Calendar
 #        Description: Allow calendar invites between factions.
@@ -1625,17 +1635,17 @@ Visibility.GroupMode = 1
 #    Visibility.Distance.Instances
 #    Visibility.Distance.BGArenas
 #        Description: Visibility distance to see other players or gameobjects.
-#                     Visibility on continents on retail ~130 yards. In BG/Arenas ~587.
-#                     For instances default ~200.
-#                     Max limited by grid size: 587.33333
+#                     Visibility on continents on retail ~90 yards. In BG/Arenas ~533.
+#                     For instances default ~170.
+#                     Max limited by grid size: 533.33333
 #                     Min limit is max aggro radius (45) * Rate.Creature.Aggro
-#        Default:     130  - (Visibility.Distance.Continents)
-#                     200 - (Visibility.Distance.Instances)
-#                     587 - (Visibility.Distance.BGArenas)
+#        Default:     90  - (Visibility.Distance.Continents)
+#                     170 - (Visibility.Distance.Instances)
+#                     533 - (Visibility.Distance.BGArenas)
 
-Visibility.Distance.Continents = 130
-Visibility.Distance.Instances = 200
-Visibility.Distance.BGArenas = 587
+Visibility.Distance.Continents = 90
+Visibility.Distance.Instances = 170
+Visibility.Distance.BGArenas = 533
 
 #
 #    Visibility.Notify.Period.OnContinents
@@ -1664,11 +1674,11 @@ Visibility.Notify.Period.InBGArenas   = 1000
 #    Rate.RunicPower.Income
 #    Rate.RunicPower.Loss
 #    Rate.Focus
-#    Rate.Energy
 #    Rate.Chi
+#    Rate.Energy
 #    Rate.Loyalty
 #        Description: Multiplier to configure health, mana, incoming rage, loss of rage, focus
-#                     energy, chi and loyalty increase or decrease.
+#                     energy and loyalty increase or decrease.
 #        Default:     1 - (Rate.Health)
 #                     1 - (Rate.Mana)
 #                     1 - (Rate.Rage.Income)
@@ -1676,8 +1686,8 @@ Visibility.Notify.Period.InBGArenas   = 1000
 #                     1 - (Rate.RunicPower.Income)
 #                     1 - (Rate.RunicPower.Loss)
 #                     1 - (Rate.Focus)
-#                     1 - (Rate.Energy)
 #                     1 - (Rate.Chi)
+#                     1 - (Rate.Energy)
 #                     1 - (Rate.Loyalty)
 
 Rate.Health            = 1
@@ -1687,8 +1697,8 @@ Rate.Rage.Loss         = 1
 Rate.RunicPower.Income = 1
 Rate.RunicPower.Loss   = 1
 Rate.Focus             = 1
-Rate.Energy            = 1
 Rate.Chi               = 1
+Rate.Energy            = 1
 Rate.Loyalty           = 1
 
 #
@@ -2096,6 +2106,29 @@ Battleground.GiveXPForKills = 0
 #        Default:     6 - (06:00 AM)
 
 Battleground.Random.ResetHour = 6
+
+#
+#     Battleground.RewardWinnerHonorFirst
+#     Battleground.RewardWinnerConquestFirst
+#     Battleground.RewardWinnerHonorLast
+#     Battleground.RewardWinnerConquestLast
+#     Battleground.RewardLoserHonorFirst
+#     Battleground.RewardLoserHonorLast
+#        Description: Random Battlegrounds / call to the arms rewards
+#        Default:     30 - Battleground.RewardWinnerHonorFirst
+#                     25 - Battleground.RewardWinnerArenaFirst
+#                     15 - Battleground.RewardWinnerHonorLast
+#                     0  - Battleground.RewardWinnerArenaLast
+#                     5  - Battleground.RewardLoserHonorFirst
+#                     5  - Battleground.RewardLoserHonorLast
+#
+
+Battleground.RewardWinnerHonorFirst     = 27000
+Battleground.RewardWinnerConquestFirst  = 10000
+Battleground.RewardWinnerHonorLast      = 13500
+Battleground.RewardWinnerConquestLast   = 5000
+Battleground.RewardLoserHonorFirst      = 4500
+Battleground.RewardLoserHonorLast       = 3500
 
 #
 ###################################################################################################
@@ -2576,7 +2609,6 @@ UI.ShowQuestLevelsInDialogs = 0
 ###################################################################################################
 
 ###################################################################################################
-#
 #  LOGGING SYSTEM SETTINGS
 #
 #  Appender config values: Given a appender "name"
@@ -2643,79 +2675,13 @@ UI.ShowQuestLevelsInDialogs = 0
 
 Appender.Console=1,3,0
 Appender.Server=2,2,0,Server.log,w
-Appender.GM=2,2,0,GM.log
+Appender.GM=2,2,15,gm/gm_%s.log
 Appender.DBErrors=2,2,0,DBErrors.log
-Appender.Char=2,2,0,Char.log,w
-Appender.RA=2,2,0,RA.log
-Appender.Warden=2,4,0,Warden.log
-Appender.Chat=2,2,0,Chat.log
-Appender.CharDump=2,2,0,%s.log
-Appender.Arenas=2,2,0,Arena.log
-Appender.SQLDev=2,2,0,SQLDev.log
-Appender.SQLDriver=2,2,0,SQLDriver.log
-
-#    Appenders
-#        Description: List of Appenders to read from config
-#                     (Using spaces as separator).
-#        Default:     "Console Server GM DBErrors Char RA Warden Chat"
-
-Appenders=Console Server GM DBErrors Char RA Warden Chat
 
 #  Logger config values: Given a logger "name"
 #    Logger.name
 #        Description: Defines 'What to log'
-#        Format:      Type,LogLevel,AppenderList
-#                     Type
-#                         0 - Default. Each type that has no config will
-#                             rely on this one. Core will create this logger
-#                             (disabled) if it's not configured
-#                         1 - Units that doesn't fit in other categories
-#                         2 - Pets
-#                         3 - Vehicles
-#                         4 - C++ AI, instance scripts, etc.
-#                         5 - DB AI, such as SAI, EAI, CreatureAI
-#                         6 - DB map scripts
-#                         7 - Network input/output,
-#                             such as packet handlers and netcode logs
-#                         8 - Spellsystem and aurasystem
-#                         9 - Achievement system
-#                        10 - Condition system
-#                        11 - Pool system
-#                        12 - Auction house
-#                        13 - Arena's and battlegrounds
-#                        14 - Outdoor PVP
-#                        15 - Chat system
-#                        16 - LFG system
-#                        17 - Maps, instances (not scripts),
-#                             grids, cells, visibility, etc.
-#                        18 - Player that doesn't fit in other categories.
-#                        19 - Player loading from DB
-#                             (Player::_LoadXXX functions)
-#                        20 - Items
-#                        21 - Player skills (do not confuse with spells)
-#                        22 - Player chat logs
-#                        23 - loot
-#                        24 - guilds
-#                        25 - transports
-#                        26 - SQL. DB errors
-#                        27 - GM Commands
-#                        28 - Remote Access Commands
-#                        29 - Warden
-#                        30 - Authserver
-#                        31 - Worldserver
-#                        32 - Game Events
-#                        33 - Calendar
-#                        34 - Character (Exclusive to log login, logout, create, rename)
-#                        35 - Arenas
-#                        36 - SQL Driver
-#                        37 - SQL Dev
-#                        38 - Player Dump
-#                        39 - Battlefield
-#                        40 - Server Loading
-#                        41 - Opcodes (just id and name sent / received)
-#                        42 - SOAP
-#                        43 - RBAC (Role Based Access Control)
-#                        44 - Cheat (used to log cheat attempts)
+#        Format:      LogLevel,AppenderList
 #
 #                     LogLevel
 #                         0 - (Disabled)
@@ -2730,28 +2696,52 @@ Appenders=Console Server GM DBErrors Char RA Warden Chat
 #                     (Using spaces as separator).
 #
 
-Logger.Root=0,5,Console Server
-Logger.Chat=22,2,Chat
-Logger.DBErrors=26,5,Console Server DBErrors
-Logger.GM=27,3,Console Server GM
-Logger.RA=28,3,RA
-Logger.Warden=29,4,Warden
-Logger.WorldServer=31,3,Console Server
-Logger.Character=34,3,Char
-Logger.Arenas=35,3,Arenas
-Logger.SQLDriver=36,5,SQLDriver
-Logger.SQLDev=37,3,SQLDev
-Logger.CharDump=38,3,CharDump
-Logger.Load=40,3,Console Server
-Logger.Opcodes=41,6,Console Server
+Logger.root=5,Console Server
+Logger.server=3,Console Server
+Logger.commands.gm=3,Console GM
+Logger.sql.sql=5,Console DBErrors
 
-#
-#    Loggers
-#        Description: List of Loggers to read from config
-#                     (Using spaces as separator).
-#        Default:     "Root Chat DBErrors GM RA Warden Character Load"
-
-Loggers=Root Chat DBErrors GM RA Warden Character Load WorldServer Opcodes
+#Logger.achievement=3,Console Server
+#Logger.auctionHouse=3,Console Server
+#Logger.bg.arena=3,Console Server
+#Logger.bg.battlefield=3,Console Server
+#Logger.bg.battleground=3,Console Server
+#Logger.chat.log=3,Console Server
+#Logger.calendar=3,Console Server
+#Logger.chat.system=3,Console Server
+#Logger.cheat=3,Console Server
+#Logger.commands.ra=3,Console Server
+#Logger.condition=3,Console Server
+#Logger.entities.pet=3,Console Server
+#Logger.entities.player.character=3,Console Server
+#Logger.entities.player.dump=3,Console Server
+#Logger.entities.player=3,Console Server
+#Logger.entities.player.items=3,Console Server
+#Logger.entities.player.loading=3,Console Server
+#Logger.entities.player.skills=3,Console Server
+#Logger.entities.transport=3,Console Server
+#Logger.entities.unit=3,Console Server
+#Logger.entities.vehicle=3,Console Server
+#Logger.gameevent=3,Console Server
+#Logger.guild=3,Console Server
+#Logger.lfg=3,Console Server
+#Logger.loot=3,Console Server
+#Logger.maps.script=3,Console Server
+#Logger.maps=3,Console Server
+#Logger.misc=3,Console Server
+#Logger.network=3,Console Server
+#Logger.network.opcode=3,Console Server
+#Logger.network.soap=3,Console Server
+#Logger.outdoorpvp=3,Console Server
+#Logger.pool=3,Console Server
+#Logger.rbac=3,Console Server
+#Logger.scripts=3,Console Server
+#Logger.scripts.ai=3,Console Server
+#Logger.server.authserver=3,Console Server
+#Logger.spells=3,Console Server
+#Logger.sql.dev=3,Console Server
+#Logger.sql.driver=3,Console Server
+#Logger.warden=3,Console Server
 
 #
 #    Log.Async.Enable
@@ -2765,7 +2755,6 @@ Log.Async.Enable = 0
 ###################################################################################################
 
 ###################################################################################################
-#
 #  GUILD LEVELING SETTINGS
 #
 #    Guild.LevelingEnabled
@@ -2786,10 +2775,10 @@ Guild.SaveInterval = 15
 #
 #    Guild.MaxLevel
 #        Description: Defines max level a guild can reach
-#        Default:     25
+#        Default:     30
 #
 
-Guild.MaxLevel = 25
+Guild.MaxLevel = 30
 
 #
 #    Guild.UndeletableLevel
@@ -2827,7 +2816,6 @@ Guild.WeeklyReputationCap = 4375
 ###################################################################################################
 
 ###################################################################################################
-#
 # CURRENCIES SETTINGS
 #
 #    Currency.ResetInterval
@@ -2908,6 +2896,39 @@ Currency.ConquestPointsDefaultWeekCap = 1350
 #
 
 Currency.ConquestPointsArenaReward = 180
+
+#
+###################################################################################################
+# PACKET SPOOF PROTECTION SETTINGS
+#
+# These settings determine which action to take when harmful packet spoofing is detected.
+#
+#    PacketSpoof.Policy
+#        Description: Determines the course of action when packet spoofing is detected.
+#        Default:    1 - Log + kick
+#                    0 - Log only ("network")
+#                    2 - Log + kick + ban
+
+PacketSpoof.Policy = 1
+
+#
+#    PacketSpoof.BanMode
+#        Description: If PacketSpoof.Policy equals 2, this will determine the ban mode.
+#        Note: Banning by character not supported for logical reasons.
+#        Default:    0 - Ban Account
+#                    2 - Ban IP
+#
+
+PacketSpoof.BanMode = 0
+
+#
+#    PacketSpoof.BanDuration
+#        Description: Duration of the ban in seconds. Only valid if PacketSpoof.Policy is set to 2.
+#                     Set to 0 for permanent ban.
+#        Default:     86400 seconds (1 day)
+#
+
+PacketSpoof.BanDuration = 86400
 
 #
 ###################################################################################################

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -248,8 +248,8 @@ public:
                 instance->SetData(DATA_DELRISSA_EVENT, DONE);
             else
             {
-                if (me->HasFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE))
-                    me->RemoveFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                if (me->HasFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE))
+                    me->RemoveFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
             }
         }
 
@@ -442,8 +442,8 @@ struct boss_priestess_lackey_commonAI : public ScriptedAI
             //time to make her lootable and complete event if she died before lackeys
             if (!pDelrissa->IsAlive())
             {
-                if (!pDelrissa->HasFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE))
-                    pDelrissa->SetFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                if (!pDelrissa->HasFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE))
+                    pDelrissa->SetFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                 instance->SetData(DATA_DELRISSA_EVENT, DONE);
             }
@@ -510,7 +510,7 @@ public:
     struct boss_kagani_nightstrikeAI : public boss_priestess_lackey_commonAI
     {
         //Rogue
-        boss_kagani_nightstrikeAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) {}
+        boss_kagani_nightstrikeAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) { }
 
         uint32 Gouge_Timer;
         uint32 Kick_Timer;
@@ -614,7 +614,7 @@ public:
     struct boss_ellris_duskhallowAI : public boss_priestess_lackey_commonAI
     {
         //Warlock
-        boss_ellris_duskhallowAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) {}
+        boss_ellris_duskhallowAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) { }
 
         uint32 Immolate_Timer;
         uint32 Shadow_Bolt_Timer;
@@ -705,7 +705,7 @@ public:
     struct boss_eramas_brightblazeAI : public boss_priestess_lackey_commonAI
     {
         //Monk
-        boss_eramas_brightblazeAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) {}
+        boss_eramas_brightblazeAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) { }
 
         uint32 Knockdown_Timer;
         uint32 Snap_Kick_Timer;
@@ -766,7 +766,7 @@ public:
     struct boss_yazzaiAI : public boss_priestess_lackey_commonAI
     {
         //Mage
-        boss_yazzaiAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) {}
+        boss_yazzaiAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) { }
 
         bool HasIceBlocked;
 
@@ -896,7 +896,7 @@ public:
     struct boss_warlord_salarisAI : public boss_priestess_lackey_commonAI
     {
         //Warrior
-        boss_warlord_salarisAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) {}
+        boss_warlord_salarisAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) { }
 
         uint32 Intercept_Stun_Timer;
         uint32 Disarm_Timer;
@@ -1127,7 +1127,7 @@ public:
     struct boss_apokoAI : public boss_priestess_lackey_commonAI
     {
         //Shaman
-        boss_apokoAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) {}
+        boss_apokoAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) { }
 
         uint32 Totem_Timer;
         uint8  Totem_Amount;
@@ -1225,7 +1225,7 @@ public:
     struct boss_zelfanAI : public boss_priestess_lackey_commonAI
     {
         //Engineer
-        boss_zelfanAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) {}
+        boss_zelfanAI(Creature* creature) : boss_priestess_lackey_commonAI(creature) { }
 
         uint32 Goblin_Dragon_Gun_Timer;
         uint32 Rocket_Launch_Timer;

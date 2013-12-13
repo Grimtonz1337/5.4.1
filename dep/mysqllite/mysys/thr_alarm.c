@@ -28,7 +28,7 @@
 #include "thr_alarm.h"
 
 #ifdef HAVE_SYS_SELECT_H
-#include <sys/select.h>                /* AIX needs this for fd_set */
+#include <sys/select.h>				/* AIX needs this for fd_set */
 #endif
 
 #ifndef ETIME
@@ -36,7 +36,7 @@
 #endif
 
 uint thr_client_alarm;
-static int alarm_aborted=1;            /* No alarm thread */
+static int alarm_aborted=1;			/* No alarm thread */
 my_bool thr_alarm_inited= 0;
 volatile my_bool alarm_thread_running= 0;
 time_t next_alarm_expire_time= ~ (time_t) 0;
@@ -61,7 +61,7 @@ static void *alarm_handler(void *arg);
 static sig_handler thread_alarm(int sig __attribute__((unused)));
 
 static int compare_ulong(void *not_used __attribute__((unused)),
-             uchar *a_ptr,uchar* b_ptr)
+			 uchar *a_ptr,uchar* b_ptr)
 {
   ulong a=*((ulong*) a_ptr),b= *((ulong*) b_ptr);
   return (a < b) ? -1  : (a == b) ? 0 : 1;
@@ -74,8 +74,8 @@ void init_thr_alarm(uint max_alarms)
   alarm_aborted=0;
   next_alarm_expire_time= ~ (time_t) 0;
   init_queue(&alarm_queue,max_alarms+1,offsetof(ALARM,expire_time),0,
-         compare_ulong,NullS);
-  sigfillset(&full_signal_set);            /* Neaded to block signals */
+	     compare_ulong,NullS);
+  sigfillset(&full_signal_set);			/* Neaded to block signals */
   mysql_mutex_init(key_LOCK_alarm, &LOCK_alarm, MY_MUTEX_INIT_FAST);
   mysql_cond_init(key_COND_alarm, &COND_alarm, NULL);
   if (thd_lib_detected == THD_LIB_LT)
@@ -103,7 +103,7 @@ void init_thr_alarm(uint max_alarms)
     pthread_attr_destroy(&thr_attr);
   }
 #elif defined(USE_ONE_SIGNAL_HAND)
-  pthread_sigmask(SIG_BLOCK, &s, NULL);        /* used with sigwait() */
+  pthread_sigmask(SIG_BLOCK, &s, NULL);		/* used with sigwait() */
   if (thd_lib_detected == THD_LIB_LT)
   {
     my_sigset(thr_client_alarm, process_alarm);        /* Linuxthreads */
@@ -135,8 +135,8 @@ void resize_thr_alarm(uint max_alarms)
 
   SYNOPSIS
     thr_alarm()
-    alrm        Pointer to alarm detection
-    alarm_data        Structure to store in alarm queue
+    alrm		Pointer to alarm detection
+    alarm_data		Structure to store in alarm queue
 
   NOTES
     This function can't be called from the alarm-handling thread.
@@ -166,9 +166,9 @@ my_bool thr_alarm(thr_alarm_t *alrm, uint sec, ALARM *alarm_data)
 #endif
   mysql_mutex_lock(&LOCK_alarm);        /* Lock from threads & alarms */
   if (alarm_aborted > 0)
-  {                    /* No signal thread */
+  {					/* No signal thread */
     DBUG_PRINT("info", ("alarm aborted"));
-    *alrm= 0;                    /* No alarm */
+    *alrm= 0;					/* No alarm */
     mysql_mutex_unlock(&LOCK_alarm);
 #ifndef USE_ONE_SIGNAL_HAND
     pthread_sigmask(SIG_SETMASK,&old_mask,NULL);
@@ -176,7 +176,7 @@ my_bool thr_alarm(thr_alarm_t *alrm, uint sec, ALARM *alarm_data)
     DBUG_RETURN(1);
   }
   if (alarm_aborted < 0)
-    sec= 1;                    /* Abort mode */
+    sec= 1;					/* Abort mode */
 
   if (alarm_queue.elements >= max_used_alarms)
   {
@@ -184,7 +184,7 @@ my_bool thr_alarm(thr_alarm_t *alrm, uint sec, ALARM *alarm_data)
     {
       DBUG_PRINT("info", ("alarm queue full"));
       fprintf(stderr,"Warning: thr_alarm queue is full\n");
-      *alrm= 0;                    /* No alarm */
+      *alrm= 0;					/* No alarm */
       mysql_mutex_unlock(&LOCK_alarm);
 #ifndef USE_ONE_SIGNAL_HAND
       pthread_sigmask(SIG_SETMASK,&old_mask,NULL);
@@ -199,7 +199,7 @@ my_bool thr_alarm(thr_alarm_t *alrm, uint sec, ALARM *alarm_data)
     if (!(alarm_data=(ALARM*) my_malloc(sizeof(ALARM),MYF(MY_WME))))
     {
       DBUG_PRINT("info", ("failed my_malloc()"));
-      *alrm= 0;                    /* No alarm */
+      *alrm= 0;					/* No alarm */
       mysql_mutex_unlock(&LOCK_alarm);
 #ifndef USE_ONE_SIGNAL_HAND
       pthread_sigmask(SIG_SETMASK,&old_mask,NULL);
@@ -222,11 +222,11 @@ my_bool thr_alarm(thr_alarm_t *alrm, uint sec, ALARM *alarm_data)
     DBUG_PRINT("info", ("reschedule"));
     if (pthread_equal(pthread_self(),alarm_thread))
     {
-      alarm(sec);                /* purecov: inspected */
+      alarm(sec);				/* purecov: inspected */
       next_alarm_expire_time= now + sec;
     }
     else
-      reschedule_alarms();            /* Reschedule alarms */
+      reschedule_alarms();			/* Reschedule alarms */
   }
   mysql_mutex_unlock(&LOCK_alarm);
 #ifndef USE_ONE_SIGNAL_HAND
@@ -262,7 +262,7 @@ void thr_end_alarm(thr_alarm_t *alarmed)
     {
       queue_remove(&alarm_queue,i),MYF(0);
       if (alarm_data->malloced)
-    my_free(alarm_data);
+	my_free(alarm_data);
       found++;
 #ifdef DBUG_OFF
       break;
@@ -274,9 +274,9 @@ void thr_end_alarm(thr_alarm_t *alarmed)
   {
     if (*alarmed)
       fprintf(stderr,"Warning: Didn't find alarm 0x%lx in queue of %d alarms\n",
-          (long) *alarmed, alarm_queue.elements);
+	      (long) *alarmed, alarm_queue.elements);
     DBUG_PRINT("warning",("Didn't find alarm 0x%lx in queue\n",
-              (long) *alarmed));
+			  (long) *alarmed));
   }
   mysql_mutex_unlock(&LOCK_alarm);
 #ifndef USE_ONE_SIGNAL_HAND
@@ -307,7 +307,7 @@ sig_handler process_alarm(int sig __attribute__((unused)))
     printf("thread_alarm in process_alarm\n"); fflush(stdout);
 #endif
 #ifdef SIGNAL_HANDLER_RESET_ON_DELIVERY
-    my_sigset(thr_client_alarm, process_alarm);    /* int. thread system calls */
+    my_sigset(thr_client_alarm, process_alarm);	/* int. thread system calls */
 #endif
     return;
   }
@@ -351,22 +351,22 @@ static sig_handler process_alarm_part2(int sig __attribute__((unused)))
       uint i;
       for (i=0 ; i < alarm_queue.elements ;)
       {
-    alarm_data=(ALARM*) queue_element(&alarm_queue,i);
-    alarm_data->alarmed=1;            /* Info to thread */
-    if (pthread_equal(alarm_data->thread,alarm_thread) ||
-        pthread_kill(alarm_data->thread, thr_client_alarm))
-    {
+	alarm_data=(ALARM*) queue_element(&alarm_queue,i);
+	alarm_data->alarmed=1;			/* Info to thread */
+	if (pthread_equal(alarm_data->thread,alarm_thread) ||
+	    pthread_kill(alarm_data->thread, thr_client_alarm))
+	{
 #ifdef MAIN
-      printf("Warning: pthread_kill couldn't find thread!!!\n");
+	  printf("Warning: pthread_kill couldn't find thread!!!\n");
 #endif
-      queue_remove(&alarm_queue,i);        /* No thread. Remove alarm */
-    }
-    else
-      i++;                    /* Signal next thread */
+	  queue_remove(&alarm_queue,i);		/* No thread. Remove alarm */
+	}
+	else
+	  i++;					/* Signal next thread */
       }
 #ifndef USE_ALARM_THREAD
       if (alarm_queue.elements)
-    alarm(1);                /* Signal soon again */
+	alarm(1);				/* Signal soon again */
 #endif
     }
     else
@@ -375,31 +375,31 @@ static sig_handler process_alarm_part2(int sig __attribute__((unused)))
       ulong next=now+10-(now%10);
       while ((alarm_data=(ALARM*) queue_top(&alarm_queue))->expire_time <= now)
       {
-    alarm_data->alarmed=1;            /* Info to thread */
-    DBUG_PRINT("info",("sending signal to waiting thread"));
-    if (pthread_equal(alarm_data->thread,alarm_thread) ||
-        pthread_kill(alarm_data->thread, thr_client_alarm))
-    {
+	alarm_data->alarmed=1;			/* Info to thread */
+	DBUG_PRINT("info",("sending signal to waiting thread"));
+	if (pthread_equal(alarm_data->thread,alarm_thread) ||
+	    pthread_kill(alarm_data->thread, thr_client_alarm))
+	{
 #ifdef MAIN
-      printf("Warning: pthread_kill couldn't find thread!!!\n");
+	  printf("Warning: pthread_kill couldn't find thread!!!\n");
 #endif
-      queue_remove(&alarm_queue,0);        /* No thread. Remove alarm */
-      if (!alarm_queue.elements)
-        break;
-    }
-    else
-    {
-      alarm_data->expire_time=next;
-      queue_replaced(&alarm_queue);
-    }
+	  queue_remove(&alarm_queue,0);		/* No thread. Remove alarm */
+	  if (!alarm_queue.elements)
+	    break;
+	}
+	else
+	{
+	  alarm_data->expire_time=next;
+	  queue_replaced(&alarm_queue);
+	}
       }
 #ifndef USE_ALARM_THREAD
       if (alarm_queue.elements)
       {
 #ifdef __bsdi__
-    alarm(0);                /* Remove old alarm */
+	alarm(0);				/* Remove old alarm */
 #endif
-    alarm((uint) (alarm_data->expire_time-now));
+	alarm((uint) (alarm_data->expire_time-now));
         next_alarm_expire_time= alarm_data->expire_time;
       }
 #endif
@@ -421,10 +421,10 @@ static sig_handler process_alarm_part2(int sig __attribute__((unused)))
 
   SYNPOSIS
     end_thr_alarm()
-      free_structures        Set to 1 if we should free memory used for
-                the alarm queue.
-                When we call this we should KNOW that there
-                is no active alarms
+      free_structures		Set to 1 if we should free memory used for
+				the alarm queue.
+				When we call this we should KNOW that there
+				is no active alarms
   IMPLEMENTATION
     Set alarm_abort to -1 which will change the behavior of alarms as follows:
     - All old alarms will be rescheduled at once
@@ -434,17 +434,17 @@ static sig_handler process_alarm_part2(int sig __attribute__((unused)))
 void end_thr_alarm(my_bool free_structures)
 {
   DBUG_ENTER("end_thr_alarm");
-  if (alarm_aborted != 1)            /* If memory not freed */
+  if (alarm_aborted != 1)			/* If memory not freed */
   {
     mysql_mutex_lock(&LOCK_alarm);
     DBUG_PRINT("info",("Resheduling %d waiting alarms",alarm_queue.elements));
-    alarm_aborted= -1;                /* mark aborted */
+    alarm_aborted= -1;				/* mark aborted */
     if (alarm_queue.elements || (alarm_thread_running && free_structures))
     {
       if (pthread_equal(pthread_self(),alarm_thread))
-    alarm(1);                /* Shut down everything soon */
+	alarm(1);				/* Shut down everything soon */
       else
-    reschedule_alarms();
+	reschedule_alarms();
     }
     if (free_structures)
     {
@@ -453,12 +453,12 @@ void end_thr_alarm(my_bool free_structures)
       DBUG_ASSERT(!alarm_queue.elements);
 
       /* Wait until alarm thread dies */
-      set_timespec(abstime, 10);        /* Wait up to 10 seconds */
+      set_timespec(abstime, 10);		/* Wait up to 10 seconds */
       while (alarm_thread_running)
       {
         int error= mysql_cond_timedwait(&COND_alarm, &LOCK_alarm, &abstime);
-    if (error == ETIME || error == ETIMEDOUT)
-      break;                /* Don't wait forever */
+	if (error == ETIME || error == ETIMEDOUT)
+	  break;				/* Don't wait forever */
       }
       delete_queue(&alarm_queue);
       alarm_aborted= 1;
@@ -529,7 +529,7 @@ static sig_handler thread_alarm(int sig __attribute__((unused)))
   printf("thread_alarm\n"); fflush(stdout);
 #endif
 #ifdef SIGNAL_HANDLER_RESET_ON_DELIVERY
-  my_sigset(sig,thread_alarm);        /* int. thread system calls */
+  my_sigset(sig,thread_alarm);		/* int. thread system calls */
 #endif
 }
 
@@ -558,22 +558,22 @@ static void *alarm_handler(void *arg __attribute__((unused)))
     {
       ulong sleep_time,now= my_time(0);
       if (alarm_aborted)
-    sleep_time=now+1;
+	sleep_time=now+1;
       else
-    sleep_time= ((ALARM*) queue_top(&alarm_queue))->expire_time;
+	sleep_time= ((ALARM*) queue_top(&alarm_queue))->expire_time;
       if (sleep_time > now)
       {
-    abstime.tv_sec=sleep_time;
-    abstime.tv_nsec=0;
+	abstime.tv_sec=sleep_time;
+	abstime.tv_nsec=0;
         next_alarm_expire_time= sleep_time;
         if ((error= mysql_cond_timedwait(&COND_alarm, &LOCK_alarm, &abstime)) &&
-        error != ETIME && error != ETIMEDOUT)
-    {
+	    error != ETIME && error != ETIMEDOUT)
+	{
 #ifdef MAIN
-      printf("Got error: %d from ptread_cond_timedwait (errno: %d)\n",
-         error,errno);
+	  printf("Got error: %d from ptread_cond_timedwait (errno: %d)\n",
+		 error,errno);
 #endif
-    }
+	}
       }
     }
     else if (alarm_aborted == -1)
@@ -596,7 +596,7 @@ static void *alarm_handler(void *arg __attribute__((unused)))
   mysql_cond_signal(&COND_alarm);
   mysql_mutex_unlock(&LOCK_alarm);
   pthread_exit(0);
-  return 0;                    /* Impossible */
+  return 0;					/* Impossible */
 }
 #endif /* USE_ALARM_THREAD */
 
@@ -626,7 +626,7 @@ my_bool thr_alarm(thr_alarm_t *alrm, uint sec, ALARM *alarm)
     return 1;
   }
   if (!(alarm->alarmed.crono=SetTimer((HWND) NULL,0, sec*1000,
-                      (TIMERPROC) NULL)))
+				      (TIMERPROC) NULL)))
     return 1;
   return 0;
 }
@@ -664,14 +664,14 @@ void thr_end_alarm(thr_alarm_t *alrm_ptr)
 void end_thr_alarm(my_bool free_structures)
 {
   DBUG_ENTER("end_thr_alarm");
-  alarm_aborted=1;                /* No more alarms */
+  alarm_aborted=1;				/* No more alarms */
   DBUG_VOID_RETURN;
 }
 
 void init_thr_alarm(uint max_alarm)
 {
   DBUG_ENTER("init_thr_alarm");
-  alarm_aborted=0;                /* Yes, Gimmie alarms */
+  alarm_aborted=0;				/* Yes, Gimmie alarms */
   DBUG_VOID_RETURN;
 }
 
@@ -732,54 +732,54 @@ static void *test_thread(void *arg)
     {
       for (retry=0 ; !thr_got_alarm(&got_alarm) && retry < 10 ; retry++)
       {
-    printf("Thread: %s  Waiting %d sec\n",my_thread_name(),wait_time);
-    select(0,(fd_set_ptr) &fd,0,0,0);
+	printf("Thread: %s  Waiting %d sec\n",my_thread_name(),wait_time);
+	select(0,(fd_set_ptr) &fd,0,0,0);
       }
       if (!thr_got_alarm(&got_alarm))
       {
-    printf("Thread: %s  didn't get an alarm. Aborting!\n",
-           my_thread_name());
-    break;
+	printf("Thread: %s  didn't get an alarm. Aborting!\n",
+	       my_thread_name());
+	break;
       }
       if (wait_time == 7)
-      {                        /* Simulate alarm-miss */
-    fd_set readFDs;
-    uint max_connection=fileno(stdin);
-    FD_ZERO(&readFDs);
-    FD_SET(max_connection,&readFDs);
-    retry=0;
-    for (;;)
-    {
-      printf("Thread: %s  Simulating alarm miss\n",my_thread_name());
-      fflush(stdout);
-      if (select(max_connection+1, (fd_set_ptr) &readFDs,0,0,0) < 0)
-      {
-        if (errno == EINTR)
-          break;                /* Got new interrupt */
-        printf("Got errno: %d from select.  Retrying..\n",errno);
-        if (retry++ >= 3)
-        {
-          printf("Warning:  Interrupt of select() doesn't set errno!\n");
-          break;
-        }
-      }
-      else                    /* This shouldn't happen */
-      {
-        if (!FD_ISSET(max_connection,&readFDs))
-        {
-          printf("Select interrupted, but errno not set\n");
-          fflush(stdout);
-          if (retry++ >= 3)
-        break;
-          continue;
-        }
-        (void) getchar();            /* Somebody was playing */
-      }
-    }
+      {						/* Simulate alarm-miss */
+	fd_set readFDs;
+	uint max_connection=fileno(stdin);
+	FD_ZERO(&readFDs);
+	FD_SET(max_connection,&readFDs);
+	retry=0;
+	for (;;)
+	{
+	  printf("Thread: %s  Simulating alarm miss\n",my_thread_name());
+	  fflush(stdout);
+	  if (select(max_connection+1, (fd_set_ptr) &readFDs,0,0,0) < 0)
+	  {
+	    if (errno == EINTR)
+	      break;				/* Got new interrupt */
+	    printf("Got errno: %d from select.  Retrying..\n",errno);
+	    if (retry++ >= 3)
+	    {
+	      printf("Warning:  Interrupt of select() doesn't set errno!\n");
+	      break;
+	    }
+	  }
+	  else					/* This shouldn't happen */
+	  {
+	    if (!FD_ISSET(max_connection,&readFDs))
+	    {
+	      printf("Select interrupted, but errno not set\n");
+	      fflush(stdout);
+	      if (retry++ >= 3)
+		break;
+	      continue;
+	    }
+	    (void) getchar();			/* Somebody was playing */
+	  }
+	}
       }
     }
     printf("Thread: %s  Slept for %d (%d) sec\n",my_thread_name(),
-       (int) (my_time(0)-start_time), wait_time); fflush(stdout);
+	   (int) (my_time(0)-start_time), wait_time); fflush(stdout);
     thr_end_alarm(&got_alarm);
     fflush(stdout);
   }
@@ -797,10 +797,10 @@ static sig_handler print_signal_warning(int sig)
   printf("Warning: Got signal %d from thread %s\n",sig,my_thread_name());
   fflush(stdout);
 #ifdef SIGNAL_HANDLER_RESET_ON_DELIVERY
-  my_sigset(sig,print_signal_warning);        /* int. thread system calls */
+  my_sigset(sig,print_signal_warning);		/* int. thread system calls */
 #endif
   if (sig == SIGALRM)
-    alarm(2);                    /* reschedule alarm */
+    alarm(2);					/* reschedule alarm */
 }
 #endif /* USE_ONE_SIGNAL_HAND */
 
@@ -812,12 +812,12 @@ static void *signal_hand(void *arg __attribute__((unused)))
 
   my_thread_init();
   pthread_detach_this_thread();
-  init_thr_alarm(10);                /* Setup alarm handler */
+  init_thr_alarm(10);				/* Setup alarm handler */
   mysql_mutex_lock(&LOCK_thread_count);         /* Required by bsdi */
   mysql_cond_signal(&COND_thread_count);        /* Tell main we are ready */
   mysql_mutex_unlock(&LOCK_thread_count);
 
-  sigemptyset(&set);                /* Catch all signals */
+  sigemptyset(&set);				/* Catch all signals */
   sigaddset(&set,SIGINT);
   sigaddset(&set,SIGQUIT);
   sigaddset(&set,SIGTERM);
@@ -826,7 +826,7 @@ static void *signal_hand(void *arg __attribute__((unused)))
   sigaddset(&set,SIGTSTP);
 #endif
 #ifdef USE_ONE_SIGNAL_HAND
-  sigaddset(&set,THR_SERVER_ALARM);        /* For alarms */
+  sigaddset(&set,THR_SERVER_ALARM);		/* For alarms */
   puts("Starting signal and alarm handling thread");
 #else
   puts("Starting signal handling thread");
@@ -842,7 +842,7 @@ static void *signal_hand(void *arg __attribute__((unused)))
     {
       fprintf(stderr,"Got error %d from sigwait\n",error);
       if (err_count++ > 5)
-    exit(1);                /* Too many errors in test */
+	exit(1);				/* Too many errors in test */
       continue;
     }
 #ifdef USE_ONE_SIGNAL_HAND
@@ -861,7 +861,7 @@ static void *signal_hand(void *arg __attribute__((unused)))
     case SIGTSTP:
       printf("Aborting\n");
       exit(1);
-      return 0;                    /* Keep some compilers happy */
+      return 0;					/* Keep some compilers happy */
 #endif
 #ifdef USE_ONE_SIGNAL_HAND
      case THR_SERVER_ALARM:
@@ -895,7 +895,7 @@ int main(int argc __attribute__((unused)),char **argv __attribute__((unused)))
   sigaddset(&set,SIGQUIT);
   sigaddset(&set,SIGTERM);
   sigaddset(&set,SIGHUP);
-  signal(SIGTERM,SIG_DFL);            /* If it's blocked by parent */
+  signal(SIGTERM,SIG_DFL);			/* If it's blocked by parent */
 #ifdef SIGTSTP
   sigaddset(&set,SIGTSTP);
 #endif
@@ -939,8 +939,8 @@ int main(int argc __attribute__((unused)),char **argv __attribute__((unused)))
   mysql_mutex_lock(&LOCK_thread_count);
   thr_alarm_info(&alarm_info);
   printf("Main_thread:  Alarms: %u  max_alarms: %u  next_alarm_time: %lu\n",
-     alarm_info.active_alarms, alarm_info.max_used_alarms,
-     alarm_info.next_alarm_time);
+	 alarm_info.active_alarms, alarm_info.max_used_alarms,
+	 alarm_info.next_alarm_time);
   while (thread_count)
   {
     mysql_cond_wait(&COND_thread_count, &LOCK_thread_count);
@@ -954,8 +954,8 @@ int main(int argc __attribute__((unused)),char **argv __attribute__((unused)))
   thr_alarm_info(&alarm_info);
   end_thr_alarm(1);
   printf("Main_thread:  Alarms: %u  max_alarms: %u  next_alarm_time: %lu\n",
-     alarm_info.active_alarms, alarm_info.max_used_alarms,
-     alarm_info.next_alarm_time);
+	 alarm_info.active_alarms, alarm_info.max_used_alarms,
+	 alarm_info.next_alarm_time);
   printf("Test succeeded\n");
   return 0;
 }

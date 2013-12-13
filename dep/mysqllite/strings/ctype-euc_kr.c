@@ -34,23 +34,23 @@
 
 static uchar ctype_euc_kr[257] =
 {
-    0,                /* For standard library */
-    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,    /* NUL ^A - ^G */
-    0040, 0050, 0050, 0050, 0050, 0050, 0040, 0040,    /* ^H - ^O */
-    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,    /* ^P - ^W */
-    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,    /* ^X - ^Z ^[ ^\ ^] ^^ ^_ */
-    0110, 0020, 0020, 0020, 0020, 0020, 0020, 0020,    /* SPC ! " # $ % ^ ' */
-    0020, 0020, 0020, 0020, 0020, 0020, 0020, 0020,    /* ( ) * + , - . / */
-    0204, 0204, 0204, 0204, 0204, 0204, 0204, 0204,    /* 0 1 2 3 4 5 6 7 */
-    0204, 0204, 0020, 0020, 0020, 0020, 0020, 0020,    /* 8 9 : ; < = > ? */
-    0020, 0201, 0201, 0201, 0201, 0201, 0201, 0001,    /* @ A B C D E F G */
-    0001, 0001, 0001, 0001, 0001, 0001, 0001, 0001,    /* H I J K L M N O */
-    0001, 0001, 0001, 0001, 0001, 0001, 0001, 0001,    /* P Q R S T U V W */
-    0001, 0001, 0001, 0020, 0020, 0020, 0020, 0020,    /* X Y Z [ \ ] ^ _ */
-    0020, 0202, 0202, 0202, 0202, 0202, 0202, 0002,    /* ` a b c d e f g */
-    0002, 0002, 0002, 0002, 0002, 0002, 0002, 0002,    /* h i j k l m n o */
-    0002, 0002, 0002, 0002, 0002, 0002, 0002, 0002,    /* p q r s t u v w */
-    0002, 0002, 0002, 0020, 0020, 0020, 0020, 0040,    /* x y z { | } + DEL */
+    0,				/* For standard library */
+    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,	/* NUL ^A - ^G */
+    0040, 0050, 0050, 0050, 0050, 0050, 0040, 0040,	/* ^H - ^O */
+    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,	/* ^P - ^W */
+    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,	/* ^X - ^Z ^[ ^\ ^] ^^ ^_ */
+    0110, 0020, 0020, 0020, 0020, 0020, 0020, 0020,	/* SPC ! " # $ % ^ ' */
+    0020, 0020, 0020, 0020, 0020, 0020, 0020, 0020,	/* ( ) * + , - . / */
+    0204, 0204, 0204, 0204, 0204, 0204, 0204, 0204,	/* 0 1 2 3 4 5 6 7 */
+    0204, 0204, 0020, 0020, 0020, 0020, 0020, 0020,	/* 8 9 : ; < = > ? */
+    0020, 0201, 0201, 0201, 0201, 0201, 0201, 0001,	/* @ A B C D E F G */
+    0001, 0001, 0001, 0001, 0001, 0001, 0001, 0001,	/* H I J K L M N O */
+    0001, 0001, 0001, 0001, 0001, 0001, 0001, 0001,	/* P Q R S T U V W */
+    0001, 0001, 0001, 0020, 0020, 0020, 0020, 0020,	/* X Y Z [ \ ] ^ _ */
+    0020, 0202, 0202, 0202, 0202, 0202, 0202, 0002,	/* ` a b c d e f g */
+    0002, 0002, 0002, 0002, 0002, 0002, 0002, 0002,	/* h i j k l m n o */
+    0002, 0002, 0002, 0002, 0002, 0002, 0002, 0002,	/* p q r s t u v w */
+    0002, 0002, 0002, 0020, 0020, 0020, 0020, 0040,	/* x y z { | } + DEL */
     0020, 0020, 0020, 0020, 0020, 0020, 0020, 0020,
     0020, 0020, 0020, 0020, 0020, 0020, 0020, 0020,
     0020, 0020, 0020, 0020, 0020, 0020, 0020, 0020,
@@ -75,18 +75,18 @@ static uchar to_lower_euc_kr[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'a',    'b',   'c',   'd',   'e',   'f',   'g',
-  'h',     'i',    'j',   'k',   'l',   'm',   'n',   'o',
-  'p',     'q',    'r',   's',   't',   'u',   'v',   'w',
-  'x',     'y',    'z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'a',    'b',   'c',   'd',   'e',   'f',   'g',
-  'h',     'i',    'j',   'k',   'l',   'm',   'n',   'o',
-  'p',     'q',    'r',   's',   't',   'u',   'v',   'w',
-  'x',     'y',    'z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'a',	'b',   'c',   'd',   'e',   'f',   'g',
+  'h',	 'i',	'j',   'k',   'l',   'm',   'n',   'o',
+  'p',	 'q',	'r',   's',   't',   'u',   'v',   'w',
+  'x',	 'y',	'z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'a',	'b',   'c',   'd',   'e',   'f',   'g',
+  'h',	 'i',	'j',   'k',   'l',   'm',   'n',   'o',
+  'p',	 'q',	'r',   's',   't',   'u',   'v',   'w',
+  'x',	 'y',	'z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -111,18 +111,18 @@ static uchar to_upper_euc_kr[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -147,18 +147,18 @@ static uchar sort_order_euc_kr[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -9870,7 +9870,7 @@ static int func_uni_ksc5601_onechar(int code){
 
 static int
 my_wc_mb_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
-         my_wc_t wc, uchar *s, uchar *e)
+		 my_wc_t wc, uchar *s, uchar *e)
 {
   int code;
   
@@ -9898,7 +9898,7 @@ my_wc_mb_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
 
 static int 
 my_mb_wc_euc_kr(CHARSET_INFO *cs __attribute__((unused)),
-         my_wc_t *pwc, const uchar *s, const uchar *e)
+		 my_wc_t *pwc, const uchar *s, const uchar *e)
 {
   
   int hi;
@@ -9959,13 +9959,13 @@ my_well_formed_len_euckr(CHARSET_INFO *cs __attribute__((unused)),
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
-  NULL,            /* init */
+  NULL,			/* init */
   my_strnncoll_simple,  /* strnncoll  */
   my_strnncollsp_simple,
-  my_strnxfrm_simple,    /* strnxfrm   */
+  my_strnxfrm_simple,	/* strnxfrm   */
   my_strnxfrmlen_simple,
   my_like_range_mb,     /* like_range */
-  my_wildcmp_mb,    /* wildcmp    */
+  my_wildcmp_mb,	/* wildcmp    */
   my_strcasecmp_mb,
   my_instr_mb,
   my_hash_sort_simple,
@@ -9974,7 +9974,7 @@ static MY_COLLATION_HANDLER my_collation_ci_handler =
 
 static MY_CHARSET_HANDLER my_charset_handler=
 {
-  NULL,            /* init */
+  NULL,			/* init */
   ismbchar_euc_kr,
   mbcharlen_euc_kr,
   my_numchars_mb,
@@ -9982,8 +9982,8 @@ static MY_CHARSET_HANDLER my_charset_handler=
   my_well_formed_len_euckr,
   my_lengthsp_8bit,
   my_numcells_8bit,
-  my_mb_wc_euc_kr,    /* mb_wc   */
-  my_wc_mb_euc_kr,    /* wc_mb   */
+  my_mb_wc_euc_kr,	/* mb_wc   */
+  my_wc_mb_euc_kr,	/* wc_mb   */
   my_mb_ctype_mb,
   my_caseup_str_mb,
   my_casedn_str_mb,
@@ -10006,30 +10006,30 @@ static MY_CHARSET_HANDLER my_charset_handler=
 
 CHARSET_INFO my_charset_euckr_korean_ci=
 {
-    19,0,0,        /* number */
-    MY_CS_COMPILED|MY_CS_PRIMARY,    /* state      */
-    "euckr",        /* cs name    */
-    "euckr_korean_ci",    /* name */
-    "",            /* comment    */
-    NULL,        /* tailoring */
+    19,0,0,		/* number */
+    MY_CS_COMPILED|MY_CS_PRIMARY,	/* state      */
+    "euckr",		/* cs name    */
+    "euckr_korean_ci",	/* name */
+    "",			/* comment    */
+    NULL,		/* tailoring */
     ctype_euc_kr,
     to_lower_euc_kr,
     to_upper_euc_kr,
     sort_order_euc_kr,
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_caseinfo_euckr,  /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen   */
-    2,            /* mbmaxlen   */
-    0,            /* min_sort_char */
-    0xFEFE,        /* max_sort_char */
+    1,			/* mbminlen   */
+    2,			/* mbmaxlen   */
+    0,			/* min_sort_char */
+    0xFEFE,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_handler,
@@ -10039,30 +10039,30 @@ CHARSET_INFO my_charset_euckr_korean_ci=
 
 CHARSET_INFO my_charset_euckr_bin=
 {
-    85,0,0,        /* number */
-    MY_CS_COMPILED|MY_CS_BINSORT,    /* state      */
-    "euckr",        /* cs name    */
-    "euckr_bin",    /* name */
-    "",            /* comment    */
-    NULL,        /* tailoring */
+    85,0,0,		/* number */
+    MY_CS_COMPILED|MY_CS_BINSORT,	/* state      */
+    "euckr",		/* cs name    */
+    "euckr_bin",	/* name */
+    "",			/* comment    */
+    NULL,		/* tailoring */
     ctype_euc_kr,
     to_lower_euc_kr,
     to_upper_euc_kr,
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_caseinfo_euckr,  /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen   */
-    2,            /* mbmaxlen   */
-    0,            /* min_sort_char */
-    0xFEFE,        /* max_sort_char */
+    1,			/* mbminlen   */
+    2,			/* mbmaxlen   */
+    0,			/* min_sort_char */
+    0xFEFE,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_handler,

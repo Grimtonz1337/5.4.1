@@ -76,7 +76,7 @@ enum WintergraspSpells
     // Other spells
     SPELL_WINTERGRASP_WATER                     = 36444,
     SPELL_ESSENCE_OF_WINTERGRASP                = 58045,
-    SPELL_WINTERGRASP_RESTRICTED_FLIGHT_AREA    = 58730,
+    SPELL_WINTERGRASP_RESTRICTED_FLIGHT_AREA    = 91604,
 
     // Phasing spells
     SPELL_HORDE_CONTROLS_FACTORY_PHASE_SHIFT    = 56618, // ADDS PHASE 16
@@ -208,7 +208,6 @@ enum WintergraspNpcs
 
     NPC_TAUNKA_SPIRIT_GUIDE                         = 31841, // Horde spirit guide for Wintergrasp
     NPC_DWARVEN_SPIRIT_GUIDE                        = 31842, // Alliance spirit guide for Wintergrasp
-    NPC_TOWER_CANNON                                = 28366,
 
     NPC_WINTERGRASP_SIEGE_ENGINE_ALLIANCE           = 28312,
     NPC_WINTERGRASP_SIEGE_ENGINE_HORDE              = 32627,
@@ -579,8 +578,8 @@ struct WintergraspBuildingSpawnData
 
 struct WintergraspRebuildableBuildingData
 {
-    uint32 entry;
     uint64 Guid;
+    uint32 entry;
     uint32 WorldState;
     float x;
     float y;
@@ -1134,7 +1133,7 @@ struct BfWGGameObjectBuilding
                 m_WG->SendUpdateWorldState(m_WorldState, m_State);
             }
             UpdateCreatureAndGo();
-            build->SetUInt32Value(GAMEOBJECT_FACTION, WintergraspFaction[m_Team]);
+            build->SetUInt32Value(GAMEOBJECT_FIELD_FACTION_TEMPLATE, WintergraspFaction[m_Team]);
         }
     }
 
@@ -1187,9 +1186,9 @@ struct BfWGGameObjectBuilding
                         go->SetGoState(GO_STATE_ACTIVE);
                 m_WG->SetRelicInteractible(true);
                 if (m_WG->GetRelic())
-                    m_WG->GetRelic()->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_IN_USE);
+                    m_WG->GetRelic()->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_IN_USE);
                 else
-                    TC_LOG_ERROR(LOG_FILTER_GENERAL, "BattlefieldWG: Relic not found.");
+                    TC_LOG_ERROR("misc", "BattlefieldWG: Relic not found.");
                 break;
         }
 
@@ -1338,7 +1337,7 @@ struct BfWGGameObjectBuilding
             {
                 Position towerCannonPos;
                 TowerCannon[towerid].TurretTop[i].GetPosition(&towerCannonPos);
-                if (Creature* turret = m_WG->SpawnCreature(28366, towerCannonPos, TeamId(0)))
+                if (Creature* turret = m_WG->SpawnCreature(NPC_WINTERGRASP_TOWER_CANNON, towerCannonPos, TeamId(0)))
                 {
                     m_TurretTopList.insert(turret->GetGUID());
                     switch (go->GetEntry())
@@ -1559,7 +1558,7 @@ struct WintergraspWorkshopData
     }
 
     // Spawning associate creature and store them
-    void AddCreature(WintergraspObjectPositionData obj)
+    void AddCreature(const WintergraspObjectPositionData& obj)
     {
         if (Creature* creature = m_WG->SpawnCreature(obj.entryHorde, obj.x, obj.y, obj.z, obj.o, TEAM_HORDE))
             m_CreatureOnPoint[TEAM_HORDE].insert(creature->GetGUID());
@@ -1569,7 +1568,7 @@ struct WintergraspWorkshopData
     }
 
     // Spawning Associate gameobject and store them
-    void AddGameObject(WintergraspObjectPositionData obj)
+    void AddGameObject(const WintergraspObjectPositionData& obj)
     {
         if (GameObject* gameobject = m_WG->SpawnGameObject(obj.entryHorde, obj.x, obj.y, obj.z, obj.o))
             m_GameObjectOnPoint[TEAM_HORDE].insert(gameobject->GetGUID());

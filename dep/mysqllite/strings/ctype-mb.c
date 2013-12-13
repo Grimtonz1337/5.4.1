@@ -242,9 +242,9 @@ int my_strcasecmp_mb(CHARSET_INFO * cs,const char *s, const char *t)
 
 /*
 ** Compare string against string with wildcard
-**    0 if matched
-**    -1 if not matched with wildcard
-**     1 if matched with wildcard
+**	0 if matched
+**	-1 if not matched with wildcard
+**	 1 if matched with wildcard
 */
 
 #define INC_PTR(cs,A,B) A+=(my_ismbchar(cs,A,B) ? my_ismbchar(cs,A,B) : 1)
@@ -252,11 +252,11 @@ int my_strcasecmp_mb(CHARSET_INFO * cs,const char *s, const char *t)
 #define likeconv(s,A) (uchar) (s)->sort_order[(uchar) (A)]
 
 int my_wildcmp_mb(CHARSET_INFO *cs,
-          const char *str,const char *str_end,
-          const char *wildstr,const char *wildend,
-          int escape, int w_one, int w_many)
+		  const char *str,const char *str_end,
+		  const char *wildstr,const char *wildend,
+		  int escape, int w_one, int w_many)
 {
-  int result= -1;                /* Not found, using wildcards */
+  int result= -1;				/* Not found, using wildcards */
 
   while (wildstr != wildend)
   {
@@ -264,34 +264,34 @@ int my_wildcmp_mb(CHARSET_INFO *cs,
     {
       int l;
       if (*wildstr == escape && wildstr+1 != wildend)
-    wildstr++;
+	wildstr++;
       if ((l = my_ismbchar(cs, wildstr, wildend)))
       {
-      if (str+l > str_end || memcmp(str, wildstr, l) != 0)
-          return 1;
-      str += l;
-      wildstr += l;
+	  if (str+l > str_end || memcmp(str, wildstr, l) != 0)
+	      return 1;
+	  str += l;
+	  wildstr += l;
       }
       else
       if (str == str_end || likeconv(cs,*wildstr++) != likeconv(cs,*str++))
-    return(1);                /* No match */
+	return(1);				/* No match */
       if (wildstr == wildend)
-    return (str != str_end);        /* Match if both are at end */
-      result=1;                    /* Found an anchor char */
+	return (str != str_end);		/* Match if both are at end */
+      result=1;					/* Found an anchor char */
     }
     if (*wildstr == w_one)
     {
       do
       {
-    if (str == str_end)            /* Skip one char if possible */
-      return (result);
-    INC_PTR(cs,str,str_end);
+	if (str == str_end)			/* Skip one char if possible */
+	  return (result);
+	INC_PTR(cs,str,str_end);
       } while (++wildstr < wildend && *wildstr == w_one);
       if (wildstr == wildend)
-    break;
+	break;
     }
     if (*wildstr == w_many)
-    {                        /* Found w_many */
+    {						/* Found w_many */
       uchar cmp;
       const char* mb = wildstr;
       int mb_len=0;
@@ -300,28 +300,28 @@ int my_wildcmp_mb(CHARSET_INFO *cs,
       /* Remove any '%' and '_' from the wild search string */
       for (; wildstr != wildend ; wildstr++)
       {
-    if (*wildstr == w_many)
-      continue;
-    if (*wildstr == w_one)
-    {
-      if (str == str_end)
-        return (-1);
-      INC_PTR(cs,str,str_end);
-      continue;
-    }
-    break;                    /* Not a wild character */
+	if (*wildstr == w_many)
+	  continue;
+	if (*wildstr == w_one)
+	{
+	  if (str == str_end)
+	    return (-1);
+	  INC_PTR(cs,str,str_end);
+	  continue;
+	}
+	break;					/* Not a wild character */
       }
       if (wildstr == wildend)
-    return(0);                /* Ok if w_many is last */
+	return(0);				/* Ok if w_many is last */
       if (str == str_end)
-    return -1;
+	return -1;
       
       if ((cmp= *wildstr) == escape && wildstr+1 != wildend)
-    cmp= *++wildstr;
-    
+	cmp= *++wildstr;
+	
       mb=wildstr;
       mb_len= my_ismbchar(cs, wildstr, wildend);
-      INC_PTR(cs,wildstr,wildend);        /* This is compared trough cmp */
+      INC_PTR(cs,wildstr,wildend);		/* This is compared trough cmp */
       cmp=likeconv(cs,cmp);   
       do
       {
@@ -345,12 +345,12 @@ int my_wildcmp_mb(CHARSET_INFO *cs,
           }
           INC_PTR(cs,str, str_end);
         }
-    {
-      int tmp=my_wildcmp_mb(cs,str,str_end,wildstr,wildend,escape,w_one,
+	{
+	  int tmp=my_wildcmp_mb(cs,str,str_end,wildstr,wildend,escape,w_one,
                                 w_many);
-      if (tmp <= 0)
-        return (tmp);
-    }
+	  if (tmp <= 0)
+	    return (tmp);
+	}
       } while (str != str_end && wildstr[0] != w_many);
       return(-1);
     }
@@ -360,7 +360,7 @@ int my_wildcmp_mb(CHARSET_INFO *cs,
 
 
 size_t my_numchars_mb(CHARSET_INFO *cs __attribute__((unused)),
-              const char *pos, const char *end)
+		      const char *pos, const char *end)
 {
   register size_t count= 0;
   while (pos < end) 
@@ -374,7 +374,7 @@ size_t my_numchars_mb(CHARSET_INFO *cs __attribute__((unused)),
 
 
 size_t my_charpos_mb(CHARSET_INFO *cs __attribute__((unused)),
-             const char *pos, const char *end, size_t length)
+		     const char *pos, const char *end, size_t length)
 {
   const char *start= pos;
   
@@ -428,7 +428,7 @@ uint my_instr_mb(CHARSET_INFO *cs,
         match->end= 0;
         match->mb_len= 0;
       }
-      return 1;        /* Empty string is always found */
+      return 1;		/* Empty string is always found */
     }
     
     b0= b;
@@ -439,7 +439,7 @@ uint my_instr_mb(CHARSET_INFO *cs,
       int mb_len;
       
       if (!cs->coll->strnncoll(cs, (uchar*) b,   s_length, 
-                         (uchar*) s, s_length, 0))
+      				   (uchar*) s, s_length, 0))
       {
         if (nmatch)
         {
@@ -450,7 +450,7 @@ uint my_instr_mb(CHARSET_INFO *cs,
           {
             match[1].beg= match[0].end;
             match[1].end= match[0].end+s_length;
-            match[1].mb_len= 0;    /* Not computed */
+            match[1].mb_len= 0;	/* Not computed */
           }
         }
         return 2;
@@ -484,13 +484,13 @@ my_strnncoll_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
   
   SYNOPSIS
     my_strnncollsp_mb_bin()
-    cs            Chararacter set
-    s            String to compare
-    slen        Length of 's'
-    t            String to compare
-    tlen        Length of 't'
+    cs			Chararacter set
+    s			String to compare
+    slen		Length of 's'
+    t			String to compare
+    tlen		Length of 't'
     diff_if_only_endspace_difference
-                Set to 1 if the strings should be regarded as different
+		        Set to 1 if the strings should be regarded as different
                         if they only difference in end space
 
   NOTE
@@ -539,13 +539,13 @@ my_strnncollsp_mb_bin(CHARSET_INFO * cs __attribute__((unused)),
       /* put shorter key in s */
       a_length= b_length;
       a= b;
-      swap= -1;                    /* swap sign of result */
+      swap= -1;					/* swap sign of result */
       res= -res;
     }
     for (end= a + a_length-length; a < end ; a++)
     {
       if (*a != ' ')
-    return (*a < ' ') ? -swap : swap;
+	return (*a < ' ') ? -swap : swap;
     }
   }
   return res;
@@ -587,7 +587,7 @@ my_hash_sort_mb_bin(CHARSET_INFO *cs __attribute__((unused)),
   for (; pos < (uchar*) key ; pos++)
   {
     nr1[0]^=(ulong) ((((uint) nr1[0] & 63)+nr2[0]) * 
-         ((uint)*pos)) + (nr1[0] << 8);
+	     ((uint)*pos)) + (nr1[0] << 8);
     nr2[0]+=3;
   }
 }
@@ -656,26 +656,26 @@ static void pad_max_char(CHARSET_INFO *cs, char *str, char *end)
 /*
 ** Calculate min_str and max_str that ranges a LIKE string.
 ** Arguments:
-** ptr        Pointer to LIKE string.
-** ptr_length    Length of LIKE string.
-** escape    Escape character in LIKE.  (Normally '\').
-**        All escape characters should be removed from min_str and max_str
-** res_length    Length of min_str and max_str.
-** min_str    Smallest case sensitive string that ranges LIKE.
-**        Should be space padded to res_length.
-** max_str    Largest case sensitive string that ranges LIKE.
-**        Normally padded with the biggest character sort value.
+** ptr		Pointer to LIKE string.
+** ptr_length	Length of LIKE string.
+** escape	Escape character in LIKE.  (Normally '\').
+**		All escape characters should be removed from min_str and max_str
+** res_length	Length of min_str and max_str.
+** min_str	Smallest case sensitive string that ranges LIKE.
+**		Should be space padded to res_length.
+** max_str	Largest case sensitive string that ranges LIKE.
+**		Normally padded with the biggest character sort value.
 **
 ** The function should return 0 if ok and 1 if the LIKE string can't be
 ** optimized !
 */
 
 my_bool my_like_range_mb(CHARSET_INFO *cs,
-             const char *ptr,size_t ptr_length,
-             pbool escape, pbool w_one, pbool w_many,
-             size_t res_length,
-             char *min_str,char *max_str,
-             size_t *min_length,size_t *max_length)
+			 const char *ptr,size_t ptr_length,
+			 pbool escape, pbool w_one, pbool w_many,
+			 size_t res_length,
+			 char *min_str,char *max_str,
+			 size_t *min_length,size_t *max_length)
 {
   uint mb_len;
   const char *end= ptr + ptr_length;
@@ -705,7 +705,7 @@ fill_max_and_min:
       /* Create min key  */
       do
       {
-    *min_str++= (char) cs->min_sort_char;
+	*min_str++= (char) cs->min_sort_char;
       } while (min_str != min_end);
       
       /* 
@@ -994,7 +994,7 @@ my_wildcmp_mb_bin(CHARSET_INFO *cs,
                   const char *wildstr,const char *wildend,
                   int escape, int w_one, int w_many)
 {
-  int result= -1;                /* Not found, using wildcards */
+  int result= -1;				/* Not found, using wildcards */
 
   while (wildstr != wildend)
   {
@@ -1002,34 +1002,34 @@ my_wildcmp_mb_bin(CHARSET_INFO *cs,
     {
       int l;
       if (*wildstr == escape && wildstr+1 != wildend)
-    wildstr++;
+	wildstr++;
       if ((l = my_ismbchar(cs, wildstr, wildend)))
       {
-      if (str+l > str_end || memcmp(str, wildstr, l) != 0)
-          return 1;
-      str += l;
-      wildstr += l;
+	  if (str+l > str_end || memcmp(str, wildstr, l) != 0)
+	      return 1;
+	  str += l;
+	  wildstr += l;
       }
       else
       if (str == str_end || *wildstr++ != *str++)
-    return(1);                /* No match */
+	return(1);				/* No match */
       if (wildstr == wildend)
-    return (str != str_end);        /* Match if both are at end */
-      result=1;                    /* Found an anchor char */
+	return (str != str_end);		/* Match if both are at end */
+      result=1;					/* Found an anchor char */
     }
     if (*wildstr == w_one)
     {
       do
       {
-    if (str == str_end)            /* Skip one char if possible */
-      return (result);
-    INC_PTR(cs,str,str_end);
+	if (str == str_end)			/* Skip one char if possible */
+	  return (result);
+	INC_PTR(cs,str,str_end);
       } while (++wildstr < wildend && *wildstr == w_one);
       if (wildstr == wildend)
-    break;
+	break;
     }
     if (*wildstr == w_many)
-    {                        /* Found w_many */
+    {						/* Found w_many */
       uchar cmp;
       const char* mb = wildstr;
       int mb_len=0;
@@ -1038,28 +1038,28 @@ my_wildcmp_mb_bin(CHARSET_INFO *cs,
       /* Remove any '%' and '_' from the wild search string */
       for (; wildstr != wildend ; wildstr++)
       {
-    if (*wildstr == w_many)
-      continue;
-    if (*wildstr == w_one)
-    {
-      if (str == str_end)
-        return (-1);
-      INC_PTR(cs,str,str_end);
-      continue;
-    }
-    break;                    /* Not a wild character */
+	if (*wildstr == w_many)
+	  continue;
+	if (*wildstr == w_one)
+	{
+	  if (str == str_end)
+	    return (-1);
+	  INC_PTR(cs,str,str_end);
+	  continue;
+	}
+	break;					/* Not a wild character */
       }
       if (wildstr == wildend)
-    return(0);                /* Ok if w_many is last */
+	return(0);				/* Ok if w_many is last */
       if (str == str_end)
-    return -1;
+	return -1;
       
       if ((cmp= *wildstr) == escape && wildstr+1 != wildend)
-    cmp= *++wildstr;
-    
+	cmp= *++wildstr;
+	
       mb=wildstr;
       mb_len= my_ismbchar(cs, wildstr, wildend);
-      INC_PTR(cs,wildstr,wildend);        /* This is compared trough cmp */
+      INC_PTR(cs,wildstr,wildend);		/* This is compared trough cmp */
       do
       {
         for (;;)
@@ -1081,11 +1081,11 @@ my_wildcmp_mb_bin(CHARSET_INFO *cs,
           }
           INC_PTR(cs,str, str_end);
         }
-    {
-      int tmp=my_wildcmp_mb_bin(cs,str,str_end,wildstr,wildend,escape,w_one,w_many);
-      if (tmp <= 0)
-        return (tmp);
-    }
+	{
+	  int tmp=my_wildcmp_mb_bin(cs,str,str_end,wildstr,wildend,escape,w_one,w_many);
+	  if (tmp <= 0)
+	    return (tmp);
+	}
       } while (str != str_end && wildstr[0] != w_many);
       return(-1);
     }
@@ -1352,7 +1352,7 @@ int my_mb_ctype_mb(CHARSET_INFO *cs, int *ctype,
 
 MY_COLLATION_HANDLER my_collation_mb_bin_handler =
 {
-    NULL,        /* init */
+    NULL,		/* init */
     my_strnncoll_mb_bin,
     my_strnncollsp_mb_bin,
     my_strnxfrm_mb_bin,

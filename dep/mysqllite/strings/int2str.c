@@ -137,7 +137,7 @@ char *int10_to_str(long int val,char *dst,int radix)
   long int new_val;
   unsigned long int uval = (unsigned long int) val;
 
-  if (radix < 0)                /* -10 */
+  if (radix < 0)				/* -10 */
   {
     if (val < 0)
     {

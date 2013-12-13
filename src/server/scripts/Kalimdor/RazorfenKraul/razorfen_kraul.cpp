@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2013 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -66,7 +66,7 @@ public:
 
     struct npc_willixAI : public npc_escortAI
     {
-        npc_willixAI(Creature* creature) : npc_escortAI(creature) {}
+        npc_willixAI(Creature* creature) : npc_escortAI(creature) { }
 
         void WaypointReached(uint32 waypointId) OVERRIDE
         {
@@ -109,7 +109,7 @@ public:
                     break;
                 case 45:
                     Talk(SAY_WIN, player->GetGUID());
-                    me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                    me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
                     player->GroupEventHappens(QUEST_WILLIX_THE_IMPORTER, me);
                     break;
                 case 46:
@@ -118,7 +118,7 @@ public:
             }
         }
 
-        void Reset() OVERRIDE {}
+        void Reset() OVERRIDE { }
 
         void EnterCombat(Unit* /*who*/) OVERRIDE
         {
@@ -149,7 +149,7 @@ enum SnufflenoseGopher
 
 struct DistanceOrder : public std::binary_function<GameObject, GameObject, bool>
 {
-    DistanceOrder(Creature* me) : me(me) {}
+    DistanceOrder(Creature* me) : me(me) { }
 
     bool operator() (GameObject* first, GameObject* second)
     {
@@ -186,7 +186,7 @@ public:
                 {
                     go->SetRespawnTime(5 * MINUTE);
                     go->Refresh();
-                    go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND);
+                    go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND);
                 }
 
                 IsMovementActive = false;
@@ -208,7 +208,7 @@ public:
 
             for (std::list<GameObject*>::const_iterator itr = tubbersInRange.begin(); itr != tubbersInRange.end(); ++itr)
             {
-                if (!(*itr)->isSpawned() && (*itr)->HasFlag(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND))
+                if (!(*itr)->isSpawned() && (*itr)->HasFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND))
                 {
                     nearestTubber = *itr;
                     break;

@@ -36,7 +36,7 @@ static uchar internal_format_positions[]=
 
 static char time_separator=':';
 
-static ulong const days_at_timestart=719528;    /* daynr at 1970.01.01 */
+static ulong const days_at_timestart=719528;	/* daynr at 1970.01.01 */
 uchar days_in_month[]= {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31, 0};
 
 /*
@@ -114,12 +114,12 @@ my_bool check_date(const MYSQL_TIME *ltime, my_bool not_zero_date,
     flags               Bitmap of following items
                         TIME_FUZZY_DATE    Set if we should allow partial dates
                         TIME_DATETIME_ONLY Set if we only allow full datetimes.
-                        TIME_NO_ZERO_IN_DATE    Don't allow partial dates
-                        TIME_NO_ZERO_DATE    Don't allow 0000-00-00 date
-                        TIME_INVALID_DATES    Allow 2000-02-31
-    was_cut             0    Value OK
-            1       If value was cut during conversion
-            2    check_date(date,flags) considers date invalid
+                        TIME_NO_ZERO_IN_DATE	Don't allow partial dates
+                        TIME_NO_ZERO_DATE	Don't allow 0000-00-00 date
+                        TIME_INVALID_DATES	Allow 2000-02-31
+    was_cut             0	Value OK
+			1       If value was cut during conversion
+			2	check_date(date,flags) considers date invalid
 
   DESCRIPTION
     At least the following formats are recogniced (based on number of digits)
@@ -720,13 +720,13 @@ void my_init_time(void)
   seconds= (time_t) time((time_t*) 0);
   localtime_r(&seconds,&tm_tmp);
   l_time= &tm_tmp;
-  my_time_zone=        3600;        /* Comp. for -3600 in my_gmt_sec */
-  my_time.year=        (uint) l_time->tm_year+1900;
-  my_time.month=    (uint) l_time->tm_mon+1;
-  my_time.day=        (uint) l_time->tm_mday;
-  my_time.hour=        (uint) l_time->tm_hour;
-  my_time.minute=    (uint) l_time->tm_min;
-  my_time.second=    (uint) l_time->tm_sec;
+  my_time_zone=		3600;		/* Comp. for -3600 in my_gmt_sec */
+  my_time.year=		(uint) l_time->tm_year+1900;
+  my_time.month=	(uint) l_time->tm_mon+1;
+  my_time.day=		(uint) l_time->tm_mday;
+  my_time.hour=		(uint) l_time->tm_hour;
+  my_time.minute=	(uint) l_time->tm_min;
+  my_time.second=	(uint) l_time->tm_sec;
   my_system_gmt_sec(&my_time, &my_time_zone, &not_used); /* Init my_time_zone */
 }
 
@@ -755,9 +755,9 @@ uint year_2000_handling(uint year)
 
   SYNOPSIS
     calc_daynr()
-    year         Year (exact 4 digit year, no year conversions)
-    month         Month
-    day             Day
+    year		 Year (exact 4 digit year, no year conversions)
+    month		 Month
+    day			 Day
 
   NOTES: 0000-00-00 is a valid date, and will return 0
 
@@ -773,7 +773,7 @@ long calc_daynr(uint year,uint month,uint day)
   DBUG_ENTER("calc_daynr");
 
   if (y == 0 && month == 0 && day == 0)
-    DBUG_RETURN(0);                /* Skip errors */
+    DBUG_RETURN(0);				/* Skip errors */
   /* Cast to int to be able to handle month == 0 */
   delsum= (long) (365 * y + 31 *((int) month - 1) + (int) day);
   if (month <= 2)
@@ -782,7 +782,7 @@ long calc_daynr(uint year,uint month,uint day)
     delsum-= (long) ((int) month * 4 + 23) / 10;
   temp=(int) ((y/100+1)*3)/4;
   DBUG_PRINT("exit",("year: %d  month: %d  day: %d -> daynr: %ld",
-             y+(month <= 2),month,day,delsum+y/4-temp));
+		     y+(month <= 2),month,day,delsum+y/4-temp));
   DBUG_RETURN(delsum+(int) y/4-temp);
 } /* calc_daynr */
 
@@ -930,21 +930,21 @@ my_system_gmt_sec(const MYSQL_TIME *t_src, long *my_timezone,
   l_time=&tm_tmp;
   for (loop=0;
        loop < 2 &&
-     (t->hour != (uint) l_time->tm_hour ||
-      t->minute != (uint) l_time->tm_min ||
+	 (t->hour != (uint) l_time->tm_hour ||
+	  t->minute != (uint) l_time->tm_min ||
           t->second != (uint) l_time->tm_sec);
        loop++)
-  {                    /* One check should be enough ? */
+  {					/* One check should be enough ? */
     /* Get difference in days */
     int days= t->day - l_time->tm_mday;
     if (days < -1)
-      days= 1;                    /* Month has wrapped */
+      days= 1;					/* Month has wrapped */
     else if (days > 1)
       days= -1;
     diff=(3600L*(long) (days*24+((int) t->hour - (int) l_time->tm_hour)) +
           (long) (60*((int) t->minute - (int) l_time->tm_min)) +
           (long) ((int) t->second - (int) l_time->tm_sec));
-    current_timezone+= diff+3600;        /* Compensate for -3600 above */
+    current_timezone+= diff+3600;		/* Compensate for -3600 above */
     tmp+= (time_t) diff;
     localtime_r(&tmp,&tm_tmp);
     l_time=&tm_tmp;
@@ -963,16 +963,16 @@ my_system_gmt_sec(const MYSQL_TIME *t_src, long *my_timezone,
   {
     int days= t->day - l_time->tm_mday;
     if (days < -1)
-      days=1;                    /* Month has wrapped */
+      days=1;					/* Month has wrapped */
     else if (days > 1)
       days= -1;
     diff=(3600L*(long) (days*24+((int) t->hour - (int) l_time->tm_hour))+
-      (long) (60*((int) t->minute - (int) l_time->tm_min)) +
+	  (long) (60*((int) t->minute - (int) l_time->tm_min)) +
           (long) ((int) t->second - (int) l_time->tm_sec));
     if (diff == 3600)
-      tmp+=3600 - t->minute*60 - t->second;    /* Move to next hour */
+      tmp+=3600 - t->minute*60 - t->second;	/* Move to next hour */
     else if (diff == -3600)
-      tmp-=t->minute*60 + t->second;        /* Move to previous hour */
+      tmp-=t->minute*60 + t->second;		/* Move to previous hour */
 
     *in_dst_time_gap= 1;
   }
@@ -1152,7 +1152,7 @@ longlong number_to_datetime(longlong nr, MYSQL_TIME *time_res,
   if (nr <  YY_PART_YEAR*LL(10000000000)+ LL(101000000))
     goto err;
   if (nr <= LL(991231235959))
-    nr= nr+LL(19000000000000);        /* YYMMDDHHMMSS, 1970-1999 */
+    nr= nr+LL(19000000000000);		/* YYMMDDHHMMSS, 1970-1999 */
 
  ok:
   part1=(long) (nr/LL(1000000));

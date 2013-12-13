@@ -63,7 +63,7 @@ class go_time_lost_shrine_ti : public GameObjectScript
             bool OnGossipHello(Player* player, GameObject* go) OVERRIDE
         	{
             	player->CLOSE_GOSSIP_MENU();
-            	go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND);
+            	go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND);
             	WorldPacket packet(SMSG_MESSAGECHAT, 200);
 
             	if (used == false)
@@ -135,7 +135,7 @@ class go_time_lost_shrine_ti : public GameObjectScript
                     switch (eventId)
                     {
                         case EVENT_BACK_TO_USE:
-                            go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_INTERACT_COND);
+                            go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND);
                             break;
                         default:
                         	break;

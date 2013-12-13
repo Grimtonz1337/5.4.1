@@ -306,7 +306,7 @@ public:
 
     struct npc_vereth_the_cunningAI : public ScriptedAI
     {
-        npc_vereth_the_cunningAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_vereth_the_cunningAI(Creature* creature) : ScriptedAI(creature) { }
 
         void MoveInLineOfSight(Unit* who) OVERRIDE
 
@@ -364,7 +364,7 @@ enum TournamentDummy
 class npc_tournament_training_dummy : public CreatureScript
 {
     public:
-        npc_tournament_training_dummy(): CreatureScript("npc_tournament_training_dummy"){}
+        npc_tournament_training_dummy(): CreatureScript("npc_tournament_training_dummy"){ }
 
         struct npc_tournament_training_dummyAI : ScriptedAI
         {
@@ -483,7 +483,7 @@ class npc_tournament_training_dummy : public CreatureScript
                     me->SetControlled(true, UNIT_STATE_STUNNED);
             }
 
-            void MoveInLineOfSight(Unit* /*who*/)OVERRIDE {}
+            void MoveInLineOfSight(Unit* /*who*/)OVERRIDE { }
 
         };
 
@@ -616,9 +616,9 @@ public:
             events.ScheduleEvent(EVENT_SPAWN, 3000);
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
-        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE {}
+        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE { }
 
 
         void JustSummoned(Creature* Summoned) OVERRIDE
@@ -1001,8 +1001,8 @@ class npc_margrave_dhakar : public CreatureScript
 
             void Reset() OVERRIDE
             {
-                me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
-                me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_NONE);
+                me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_STATE_NONE);
 
                 _events.Reset();
                 _summons.DespawnAll();
@@ -1015,7 +1015,7 @@ class npc_margrave_dhakar : public CreatureScript
                     if (me->GetCreatureTemplate()->GossipMenuId == sender && !action)
                     {
                         _events.ScheduleEvent(EVENT_INTRO, 1000);
-                        me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+                        me->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
                     }
                 }
             }
@@ -1031,7 +1031,7 @@ class npc_margrave_dhakar : public CreatureScript
                         case EVENT_INTRO:
                         {
                             Talk(SAY_DHAKAR_START);
-                            me->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_READY2H);
+                            me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, EMOTE_STATE_READY2H);
 
                             if (Creature* morbidus = me->FindNearestCreature(NPC_MORBIDUS, 50.0f, true))
                             {

@@ -6648,7 +6648,7 @@ static const char slovak[]=
     "& S < \\u0161 <<< \\u0160"
     "& Z < \\u017E <<< \\u017D";
 
-static const char spanish2[]=    /* Also good for Asturian and Galician */
+static const char spanish2[]=	/* Also good for Asturian and Galician */
     "&C <  ch <<< Ch <<< CH"
     "&L <  ll <<< Ll <<< LL"
     "&N < \\u00F1 <<< \\u00D1";
@@ -6749,9 +6749,9 @@ static const char sinhala[]=
 */
 typedef struct my_uca_scanner_st
 {
-  const uint16 *wbeg;    /* Beginning of the current weight string */
-  const uchar  *sbeg;    /* Beginning of the input string          */
-  const uchar  *send;    /* End of the input string                */
+  const uint16 *wbeg;	/* Beginning of the current weight string */
+  const uchar  *sbeg;	/* Beginning of the input string          */
+  const uchar  *send;	/* End of the input string                */
   uchar *uca_length;
   uint16 **uca_weight;
   uint16 *contractions;
@@ -6781,10 +6781,10 @@ static uint16 nochar[]= {0,0};
 
   SYNOPSIS:
     my_uca_scanner_init()
-    scanner    Pointer to an initialized scanner structure
-    cs        Character set + collation information
-    str        Beginning of the string
-    length    Length of the string.
+    scanner	Pointer to an initialized scanner structure
+    cs		Character set + collation information
+    str		Beginning of the string
+    length	Length of the string.
     
   NOTES:
     Optimized for UCS2
@@ -6832,7 +6832,7 @@ static void my_uca_scanner_init_ucs2(my_uca_scanner *scanner,
   
   SYNOPSIS:
     my_uca_scanner_next()
-    scanner    Address of a previously initialized scanner strucuture
+    scanner	Address of a previously initialized scanner strucuture
     
   NOTES:
     Optimized for UCS2
@@ -6946,8 +6946,8 @@ static my_uca_scanner_handler my_ucs2_uca_scanner_handler=
   The same two functions for any character set
 */
 static void my_uca_scanner_init_any(my_uca_scanner *scanner,
-                    CHARSET_INFO *cs __attribute__((unused)),
-                    const uchar *str, size_t length)
+				    CHARSET_INFO *cs __attribute__((unused)),
+				    const uchar *str, size_t length)
 {
   /* Note, no needs to initialize scanner->wbeg */
   scanner->sbeg= str;
@@ -7054,11 +7054,11 @@ static my_uca_scanner_handler my_any_uca_scanner_handler=
 
   SYNOPSIS:
     my_strnncoll_uca()
-    cs        Character set information
-    s        First string
-    slen    First string length
-    t        Second string
-    tlen    Seconf string length
+    cs		Character set information
+    s		First string
+    slen	First string length
+    t		Second string
+    tlen	Seconf string length
   
   NOTES:
     Initializes two weight scanners and gets weights
@@ -7092,7 +7092,7 @@ static my_uca_scanner_handler my_any_uca_scanner_handler=
 
 static int my_strnncoll_uca(CHARSET_INFO *cs, 
                             my_uca_scanner_handler *scanner_handler,
-                const uchar *s, size_t slen,
+			    const uchar *s, size_t slen,
                             const uchar *t, size_t tlen,
                             my_bool t_is_prefix)
 {
@@ -7119,13 +7119,13 @@ static int my_strnncoll_uca(CHARSET_INFO *cs,
 
   SYNOPSIS:
     my_strnncollsp_uca()
-    cs        Character set information
-    s        First string
-    slen    First string length
-    t        Second string
-    tlen    Seconf string length
+    cs		Character set information
+    s		First string
+    slen	First string length
+    t		Second string
+    tlen	Seconf string length
     diff_if_only_endspace_difference
-                Set to 1 if the strings should be regarded as different
+		        Set to 1 if the strings should be regarded as different
                         if they only difference in end space
   
   NOTES:
@@ -7222,11 +7222,11 @@ static int my_strnncollsp_uca(CHARSET_INFO *cs,
   
   SYNOPSIS:
     my_hash_sort_uca()
-    cs        Character set information
-    s        String
-    slen    String's length
-    n1        First hash parameter
-    n2        Second hash parameter
+    cs		Character set information
+    s		String
+    slen	String's length
+    n1		First hash parameter
+    n2		Second hash parameter
   
   NOTES:
     Scans consequently weights and updates
@@ -7241,8 +7241,8 @@ static int my_strnncollsp_uca(CHARSET_INFO *cs,
 
 static void my_hash_sort_uca(CHARSET_INFO *cs,
                              my_uca_scanner_handler *scanner_handler,
-                 const uchar *s, size_t slen,
-                 ulong *n1, ulong *n2)
+			     const uchar *s, size_t slen,
+			     ulong *n1, ulong *n2)
 {
   int   s_res;
   my_uca_scanner scanner;
@@ -7266,11 +7266,11 @@ static void my_hash_sort_uca(CHARSET_INFO *cs,
   
   SYNOPSIS:
     my_strnxfrm_uca()
-    cs        Character set information
-    dst        Where to write the image
-    dstlen    Space available for the image, in bytes
-    src        The source string
-    srclen    Length of the source string, in bytes
+    cs		Character set information
+    dst		Where to write the image
+    dstlen	Space available for the image, in bytes
+    src		The source string
+    srclen	Length of the source string, in bytes
   
   NOTES:
     In a loop, scans weights from the source string and writes
@@ -7357,18 +7357,18 @@ static int my_uca_charcmp(CHARSET_INFO *cs, my_wc_t wc1, my_wc_t wc2)
 
 /*
 ** Compare string against string with wildcard
-**    0 if matched
-**    -1 if not matched with wildcard
-**     1 if matched with wildcard
+**	0 if matched
+**	-1 if not matched with wildcard
+**	 1 if matched with wildcard
 */
 
 static
 int my_wildcmp_uca(CHARSET_INFO *cs,
-           const char *str,const char *str_end,
-           const char *wildstr,const char *wildend,
-           int escape, int w_one, int w_many)
+		   const char *str,const char *str_end,
+		   const char *wildstr,const char *wildend,
+		   int escape, int w_one, int w_many)
 {
-  int result= -1;            /* Not found, using wildcards */
+  int result= -1;			/* Not found, using wildcards */
   my_wc_t s_wc, w_wc;
   int scan;
   int (*mb_wc)(struct charset_info_st *, my_wc_t *,
@@ -7381,12 +7381,12 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
     {
       my_bool escaped= 0;
       if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
-               (const uchar*)wildend)) <= 0)
-    return 1;
+		       (const uchar*)wildend)) <= 0)
+	return 1;
 
       if (w_wc == (my_wc_t)w_many)
       {
-        result= 1;                /* Found an anchor char */
+        result= 1;				/* Found an anchor char */
         break;
       }
 
@@ -7394,20 +7394,20 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
       if (w_wc ==  (my_wc_t)escape)
       {
         if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
-            (const uchar*)wildend)) <= 0)
+			(const uchar*)wildend)) <= 0)
           return 1;
         wildstr+= scan;
         escaped= 1;
       }
       
       if ((scan= mb_wc(cs, &s_wc, (const uchar*)str,
-                     (const uchar*)str_end)) <= 0)
+      		       (const uchar*)str_end)) <= 0)
         return 1;
       str+= scan;
       
       if (!escaped && w_wc == (my_wc_t)w_one)
       {
-        result= 1;                /* Found an anchor char */
+        result= 1;				/* Found an anchor char */
       }
       else
       {
@@ -7415,53 +7415,53 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
           return 1;
       }
       if (wildstr == wildend)
-    return (str != str_end);        /* Match if both are at end */
+	return (str != str_end);		/* Match if both are at end */
     }
     
     
     if (w_wc == (my_wc_t)w_many)
-    {                        /* Found w_many */
+    {						/* Found w_many */
     
       /* Remove any '%' and '_' from the wild search string */
       for ( ; wildstr != wildend ; )
       {
         if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
-             (const uchar*)wildend)) <= 0)
+			 (const uchar*)wildend)) <= 0)
           return 1;
         
-    if (w_wc == (my_wc_t)w_many)
-    {
-      wildstr+= scan;
-      continue;
-    } 
-    
-    if (w_wc == (my_wc_t)w_one)
-    {
-      wildstr+= scan;
-      if ((scan= mb_wc(cs, &s_wc, (const uchar*)str,
-               (const uchar*)str_end)) <= 0)
+	if (w_wc == (my_wc_t)w_many)
+	{
+	  wildstr+= scan;
+	  continue;
+	} 
+	
+	if (w_wc == (my_wc_t)w_one)
+	{
+	  wildstr+= scan;
+	  if ((scan= mb_wc(cs, &s_wc, (const uchar*)str,
+			   (const uchar*)str_end)) <= 0)
             return 1;
           str+= scan;
-      continue;
-    }
-    break;                    /* Not a wild character */
+	  continue;
+	}
+	break;					/* Not a wild character */
       }
       
       if (wildstr == wildend)
-    return 0;                /* Ok if w_many is last */
+	return 0;				/* Ok if w_many is last */
       
       if (str == str_end)
-    return -1;
+	return -1;
       
       if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
-               (const uchar*)wildend)) <= 0)
+		       (const uchar*)wildend)) <= 0)
         return 1;
       
       if (w_wc ==  (my_wc_t)escape)
       {
         wildstr+= scan;
         if ((scan= mb_wc(cs, &w_wc, (const uchar*)wildstr,
-             (const uchar*)wildend)) <= 0)
+			 (const uchar*)wildend)) <= 0)
           return 1;
       }
       
@@ -7471,7 +7471,7 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
         while (str != str_end)
         {
           if ((scan= mb_wc(cs, &s_wc, (const uchar*)str,
-               (const uchar*)str_end)) <= 0)
+			   (const uchar*)str_end)) <= 0)
             return 1;
           
           if (!my_uca_charcmp(cs,s_wc,w_wc))
@@ -7482,7 +7482,7 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
           return -1;
         
         result= my_wildcmp_uca(cs, str, str_end, wildstr, wildend,
-                       escape, w_one, w_many);
+        		       escape, w_one, w_many);
         
         if (result <= 0)
           return result;
@@ -7540,11 +7540,11 @@ int my_wildcmp_uca(CHARSET_INFO *cs,
 
 typedef enum my_coll_lexem_num_en
 {
-  MY_COLL_LEXEM_EOF    = 0,
-  MY_COLL_LEXEM_DIFF    = 1, 
-  MY_COLL_LEXEM_SHIFT    = 4,
-  MY_COLL_LEXEM_CHAR    = 5,
-  MY_COLL_LEXEM_ERROR    = 6
+  MY_COLL_LEXEM_EOF	= 0,
+  MY_COLL_LEXEM_DIFF	= 1, 
+  MY_COLL_LEXEM_SHIFT	= 4,
+  MY_COLL_LEXEM_CHAR	= 5,
+  MY_COLL_LEXEM_ERROR	= 6
 } my_coll_lexem_num;
 
 
@@ -8122,7 +8122,7 @@ static size_t my_strnxfrm_ucs2_uca(CHARSET_INFO *cs,
 
 MY_COLLATION_HANDLER my_collation_ucs2_uca_handler =
 {
-  my_coll_init_uca,    /* init */
+  my_coll_init_uca,	/* init */
   my_strnncoll_ucs2_uca,
   my_strnncollsp_ucs2_uca,
   my_strnxfrm_ucs2_uca,
@@ -8137,30 +8137,30 @@ MY_COLLATION_HANDLER my_collation_ucs2_uca_handler =
 
 CHARSET_INFO my_charset_ucs2_unicode_ci=
 {
-    128,0,0,        /* number       */
+    128,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_unicode_ci",    /* name         */
-    "",            /* comment      */
-    "",            /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    uca_length,        /* sort_order   */
-    NULL,        /* contractions */
-    uca_weight,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_unicode_ci",	/* name         */
+    "",			/* comment      */
+    "",			/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    uca_length,		/* sort_order   */
+    NULL,		/* contractions */
+    uca_weight,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8169,30 +8169,30 @@ CHARSET_INFO my_charset_ucs2_unicode_ci=
 
 CHARSET_INFO my_charset_ucs2_icelandic_uca_ci=
 {
-    129,0,0,        /* number       */
+    129,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
+    "ucs2",		/* cs name    */
     "ucs2_icelandic_ci",/* name         */
-    "",            /* comment      */
-    icelandic,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "",			/* comment      */
+    icelandic,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8201,30 +8201,30 @@ CHARSET_INFO my_charset_ucs2_icelandic_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_latvian_uca_ci=
 {
-    130,0,0,        /* number       */
+    130,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_latvian_ci",    /* name         */
-    "",            /* comment      */
-    latvian,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_latvian_ci",	/* name         */
+    "",			/* comment      */
+    latvian,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8233,30 +8233,30 @@ CHARSET_INFO my_charset_ucs2_latvian_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_romanian_uca_ci=
 {
-    131,0,0,        /* number       */
+    131,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_romanian_ci",    /* name         */
-    "",            /* comment      */
-    romanian,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_romanian_ci",	/* name         */
+    "",			/* comment      */
+    romanian,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8265,30 +8265,30 @@ CHARSET_INFO my_charset_ucs2_romanian_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_slovenian_uca_ci=
 {
-    132,0,0,        /* number       */
+    132,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
+    "ucs2",		/* cs name    */
     "ucs2_slovenian_ci",/* name         */
-    "",            /* comment      */
-    slovenian,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "",			/* comment      */
+    slovenian,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8297,30 +8297,30 @@ CHARSET_INFO my_charset_ucs2_slovenian_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_polish_uca_ci=
 {
-    133,0,0,        /* number       */
+    133,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_polish_ci",    /* name         */
-    "",            /* comment      */
-    polish,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_polish_ci",	/* name         */
+    "",			/* comment      */
+    polish,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8329,30 +8329,30 @@ CHARSET_INFO my_charset_ucs2_polish_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_estonian_uca_ci=
 {
-    134,0,0,        /* number       */
+    134,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_estonian_ci",    /* name         */
-    "",            /* comment      */
-    estonian,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_estonian_ci",	/* name         */
+    "",			/* comment      */
+    estonian,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8361,30 +8361,30 @@ CHARSET_INFO my_charset_ucs2_estonian_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_spanish_uca_ci=
 {
-    135,0,0,        /* number       */
+    135,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_spanish_ci",    /* name         */
-    "",            /* comment      */
-    spanish,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_spanish_ci",	/* name         */
+    "",			/* comment      */
+    spanish,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8393,30 +8393,30 @@ CHARSET_INFO my_charset_ucs2_spanish_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_swedish_uca_ci=
 {
-    136,0,0,        /* number       */
+    136,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_swedish_ci",    /* name         */
-    "",            /* comment      */
-    swedish,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_swedish_ci",	/* name         */
+    "",			/* comment      */
+    swedish,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8425,30 +8425,30 @@ CHARSET_INFO my_charset_ucs2_swedish_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_turkish_uca_ci=
 {
-    137,0,0,        /* number       */
+    137,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_turkish_ci",    /* name         */
-    "",            /* comment      */
-    turkish,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_turkish_ci",	/* name         */
+    "",			/* comment      */
+    turkish,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_turkish, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8457,30 +8457,30 @@ CHARSET_INFO my_charset_ucs2_turkish_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_czech_uca_ci=
 {
-    138,0,0,        /* number       */
+    138,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_czech_ci",    /* name         */
-    "",            /* comment      */
-    czech,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_czech_ci",	/* name         */
+    "",			/* comment      */
+    czech,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8490,30 +8490,30 @@ CHARSET_INFO my_charset_ucs2_czech_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_danish_uca_ci=
 {
-    139,0,0,        /* number       */
+    139,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_danish_ci",    /* name         */
-    "",            /* comment      */
-    danish,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_danish_ci",	/* name         */
+    "",			/* comment      */
+    danish,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8522,30 +8522,30 @@ CHARSET_INFO my_charset_ucs2_danish_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_lithuanian_uca_ci=
 {
-    140,0,0,        /* number       */
+    140,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
+    "ucs2",		/* cs name    */
     "ucs2_lithuanian_ci",/* name         */
-    "",            /* comment      */
-    lithuanian,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "",			/* comment      */
+    lithuanian,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8554,30 +8554,30 @@ CHARSET_INFO my_charset_ucs2_lithuanian_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_slovak_uca_ci=
 {
-    141,0,0,        /* number       */
+    141,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_slovak_ci",    /* name         */
-    "",            /* comment      */
-    slovak,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_slovak_ci",	/* name         */
+    "",			/* comment      */
+    slovak,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8586,30 +8586,30 @@ CHARSET_INFO my_charset_ucs2_slovak_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_spanish2_uca_ci=
 {
-    142,0,0,        /* number       */
+    142,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_spanish2_ci",    /* name         */
-    "",            /* comment      */
-    spanish2,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_spanish2_ci",	/* name         */
+    "",			/* comment      */
+    spanish2,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8619,30 +8619,30 @@ CHARSET_INFO my_charset_ucs2_spanish2_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_roman_uca_ci=
 {
-    143,0,0,        /* number       */
+    143,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_roman_ci",    /* name         */
-    "",            /* comment      */
-    roman,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_roman_ci",	/* name         */
+    "",			/* comment      */
+    roman,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8652,30 +8652,30 @@ CHARSET_INFO my_charset_ucs2_roman_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_persian_uca_ci=
 {
-    144,0,0,        /* number       */
+    144,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_persian_ci",    /* name         */
-    "",            /* comment      */
-    persian,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_persian_ci",	/* name         */
+    "",			/* comment      */
+    persian,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8685,30 +8685,30 @@ CHARSET_INFO my_charset_ucs2_persian_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_esperanto_uca_ci=
 {
-    145,0,0,        /* number       */
+    145,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
+    "ucs2",		/* cs name    */
     "ucs2_esperanto_ci",/* name         */
-    "",            /* comment      */
-    esperanto,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "",			/* comment      */
+    esperanto,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8718,30 +8718,30 @@ CHARSET_INFO my_charset_ucs2_esperanto_uca_ci=
 
 CHARSET_INFO my_charset_ucs2_hungarian_uca_ci=
 {
-    146,0,0,        /* number       */
+    146,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
+    "ucs2",		/* cs name    */
     "ucs2_hungarian_ci",/* name         */
-    "",            /* comment      */
-    hungarian,        /* tailoring    */
-    NULL,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "",			/* comment      */
+    hungarian,		/* tailoring    */
+    NULL,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -8788,7 +8788,7 @@ CHARSET_INFO my_charset_ucs2_sinhala_uca_ci=
 #ifdef HAVE_CHARSET_utf8
 MY_COLLATION_HANDLER my_collation_any_uca_handler =
 {
-    my_coll_init_uca,    /* init */
+    my_coll_init_uca,	/* init */
     my_strnncoll_any_uca,
     my_strnncollsp_any_uca,
     my_strnxfrm_any_uca,
@@ -8831,30 +8831,30 @@ extern MY_CHARSET_HANDLER my_charset_utf8_handler;
 
 CHARSET_INFO my_charset_utf8_unicode_ci=
 {
-    192,0,0,        /* number       */
+    192,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_unicode_ci",    /* name         */
-    "",            /* comment      */
-    "",            /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    uca_length,        /* sort_order   */
-    NULL,        /* contractions */
-    uca_weight,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_unicode_ci",	/* name         */
+    "",			/* comment      */
+    "",			/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    uca_length,		/* sort_order   */
+    NULL,		/* contractions */
+    uca_weight,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -8864,30 +8864,30 @@ CHARSET_INFO my_charset_utf8_unicode_ci=
 
 CHARSET_INFO my_charset_utf8_icelandic_uca_ci=
 {
-    193,0,0,        /* number       */
+    193,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
+    "utf8",		/* cs name    */
     "utf8_icelandic_ci",/* name         */
-    "",            /* comment      */
-    icelandic,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "",			/* comment      */
+    icelandic,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -8896,30 +8896,30 @@ CHARSET_INFO my_charset_utf8_icelandic_uca_ci=
 
 CHARSET_INFO my_charset_utf8_latvian_uca_ci=
 {
-    194,0,0,        /* number       */
+    194,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_latvian_ci",    /* name         */
-    "",            /* comment      */
-    latvian,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_latvian_ci",	/* name         */
+    "",			/* comment      */
+    latvian,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -8928,30 +8928,30 @@ CHARSET_INFO my_charset_utf8_latvian_uca_ci=
 
 CHARSET_INFO my_charset_utf8_romanian_uca_ci=
 {
-    195,0,0,        /* number       */
+    195,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_romanian_ci",    /* name         */
-    "",            /* comment      */
-    romanian,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_romanian_ci",	/* name         */
+    "",			/* comment      */
+    romanian,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -8960,30 +8960,30 @@ CHARSET_INFO my_charset_utf8_romanian_uca_ci=
 
 CHARSET_INFO my_charset_utf8_slovenian_uca_ci=
 {
-    196,0,0,        /* number       */
+    196,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
+    "utf8",		/* cs name    */
     "utf8_slovenian_ci",/* name         */
-    "",            /* comment      */
-    slovenian,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "",			/* comment      */
+    slovenian,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -8992,30 +8992,30 @@ CHARSET_INFO my_charset_utf8_slovenian_uca_ci=
 
 CHARSET_INFO my_charset_utf8_polish_uca_ci=
 {
-    197,0,0,        /* number       */
+    197,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_polish_ci",    /* name         */
-    "",            /* comment      */
-    polish,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_polish_ci",	/* name         */
+    "",			/* comment      */
+    polish,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9024,30 +9024,30 @@ CHARSET_INFO my_charset_utf8_polish_uca_ci=
 
 CHARSET_INFO my_charset_utf8_estonian_uca_ci=
 {
-    198,0,0,        /* number       */
+    198,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_estonian_ci",    /* name         */
-    "",            /* comment      */
-    estonian,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_estonian_ci",	/* name         */
+    "",			/* comment      */
+    estonian,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9056,30 +9056,30 @@ CHARSET_INFO my_charset_utf8_estonian_uca_ci=
 
 CHARSET_INFO my_charset_utf8_spanish_uca_ci=
 {
-    199,0,0,        /* number       */
+    199,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_spanish_ci",    /* name         */
-    "",            /* comment      */
-    spanish,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_spanish_ci",	/* name         */
+    "",			/* comment      */
+    spanish,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9088,30 +9088,30 @@ CHARSET_INFO my_charset_utf8_spanish_uca_ci=
 
 CHARSET_INFO my_charset_utf8_swedish_uca_ci=
 {
-    200,0,0,        /* number       */
+    200,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_swedish_ci",    /* name         */
-    "",            /* comment      */
-    swedish,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_swedish_ci",	/* name         */
+    "",			/* comment      */
+    swedish,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9120,30 +9120,30 @@ CHARSET_INFO my_charset_utf8_swedish_uca_ci=
 
 CHARSET_INFO my_charset_utf8_turkish_uca_ci=
 {
-    201,0,0,        /* number       */
+    201,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_turkish_ci",    /* name         */
-    "",            /* comment      */
-    turkish,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_turkish_ci",	/* name         */
+    "",			/* comment      */
+    turkish,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_turkish, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     2,                  /* caseup_multiply  */
     2,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9152,30 +9152,30 @@ CHARSET_INFO my_charset_utf8_turkish_uca_ci=
 
 CHARSET_INFO my_charset_utf8_czech_uca_ci=
 {
-    202,0,0,        /* number       */
+    202,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_czech_ci",    /* name         */
-    "",            /* comment      */
-    czech,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_czech_ci",	/* name         */
+    "",			/* comment      */
+    czech,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9185,30 +9185,30 @@ CHARSET_INFO my_charset_utf8_czech_uca_ci=
 
 CHARSET_INFO my_charset_utf8_danish_uca_ci=
 {
-    203,0,0,        /* number       */
+    203,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_danish_ci",    /* name         */
-    "",            /* comment      */
-    danish,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_danish_ci",	/* name         */
+    "",			/* comment      */
+    danish,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9217,30 +9217,30 @@ CHARSET_INFO my_charset_utf8_danish_uca_ci=
 
 CHARSET_INFO my_charset_utf8_lithuanian_uca_ci=
 {
-    204,0,0,        /* number       */
+    204,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
+    "utf8",		/* cs name    */
     "utf8_lithuanian_ci",/* name         */
-    "",            /* comment      */
-    lithuanian,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "",			/* comment      */
+    lithuanian,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9249,30 +9249,30 @@ CHARSET_INFO my_charset_utf8_lithuanian_uca_ci=
 
 CHARSET_INFO my_charset_utf8_slovak_uca_ci=
 {
-    205,0,0,        /* number       */
+    205,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_slovak_ci",    /* name         */
-    "",            /* comment      */
-    slovak,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_slovak_ci",	/* name         */
+    "",			/* comment      */
+    slovak,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9281,30 +9281,30 @@ CHARSET_INFO my_charset_utf8_slovak_uca_ci=
 
 CHARSET_INFO my_charset_utf8_spanish2_uca_ci=
 {
-    206,0,0,        /* number       */
+    206,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_spanish2_ci",    /* name         */
-    "",            /* comment      */
-    spanish2,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_spanish2_ci",	/* name         */
+    "",			/* comment      */
+    spanish2,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9313,30 +9313,30 @@ CHARSET_INFO my_charset_utf8_spanish2_uca_ci=
 
 CHARSET_INFO my_charset_utf8_roman_uca_ci=
 {
-    207,0,0,        /* number       */
+    207,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_roman_ci",    /* name         */
-    "",            /* comment      */
-    roman,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_roman_ci",	/* name         */
+    "",			/* comment      */
+    roman,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9345,30 +9345,30 @@ CHARSET_INFO my_charset_utf8_roman_uca_ci=
 
 CHARSET_INFO my_charset_utf8_persian_uca_ci=
 {
-    208,0,0,        /* number       */
+    208,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
-    "utf8_persian_ci",    /* name         */
-    "",            /* comment      */
-    persian,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "utf8",		/* cs name    */
+    "utf8_persian_ci",	/* name         */
+    "",			/* comment      */
+    persian,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9377,30 +9377,30 @@ CHARSET_INFO my_charset_utf8_persian_uca_ci=
 
 CHARSET_INFO my_charset_utf8_esperanto_uca_ci=
 {
-    209,0,0,        /* number       */
+    209,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
+    "utf8",		/* cs name    */
     "utf8_esperanto_ci",/* name         */
-    "",            /* comment      */
-    esperanto,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "",			/* comment      */
+    esperanto,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
@@ -9409,30 +9409,30 @@ CHARSET_INFO my_charset_utf8_esperanto_uca_ci=
 
 CHARSET_INFO my_charset_utf8_hungarian_uca_ci=
 {
-    210,0,0,        /* number       */
+    210,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "utf8",        /* cs name    */
+    "utf8",		/* cs name    */
     "utf8_hungarian_ci",/* name         */
-    "",            /* comment      */
-    hungarian,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    NULL,        /* to_lower     */
-    NULL,        /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "",			/* comment      */
+    hungarian,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    NULL,		/* to_lower     */
+    NULL,		/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    8,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    8,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    9,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    9,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,

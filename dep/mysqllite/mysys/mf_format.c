@@ -24,7 +24,7 @@
 */
 
 char * fn_format(char * to, const char *name, const char *dir,
-            const char *extension, uint flag)
+		    const char *extension, uint flag)
 {
   char dev[FN_REFLEN], buff[FN_REFLEN], *pos, *startpos;
   const char *ext;
@@ -32,14 +32,14 @@ char * fn_format(char * to, const char *name, const char *dir,
   size_t dev_length;
   DBUG_ENTER("fn_format");
   DBUG_PRINT("enter",("name: %s  dir: %s  extension: %s  flag: %d",
-               name,dir,extension,flag));
+		       name,dir,extension,flag));
 
   /* Copy and skip directory */
   name+=(length=dirname_part(dev, (startpos=(char *) name), &dev_length));
   if (length == 0 || (flag & MY_REPLACE_DIR))
   {
     /* Use given directory */
-    convert_dirname(dev,dir,NullS);        /* Fix to this OS */
+    convert_dirname(dev,dir,NullS);		/* Fix to this OS */
   }
   else if ((flag & MY_RELATIVE_PATH) && !test_if_hard_path(dev))
   {
@@ -50,27 +50,27 @@ char * fn_format(char * to, const char *name, const char *dir,
   }
 
   if (flag & MY_PACK_FILENAME)
-    pack_dirname(dev,dev);            /* Put in ./.. and ~/.. */
+    pack_dirname(dev,dev);			/* Put in ./.. and ~/.. */
   if (flag & MY_UNPACK_FILENAME)
-    (void) unpack_dirname(dev,dev);        /* Replace ~/.. with dir */
+    (void) unpack_dirname(dev,dev);		/* Replace ~/.. with dir */
 
   if (!(flag & MY_APPEND_EXT) &&
       (pos= (char*) strchr(name,FN_EXTCHAR)) != NullS)
   {
-    if ((flag & MY_REPLACE_EXT) == 0)        /* If we should keep old ext */
+    if ((flag & MY_REPLACE_EXT) == 0)		/* If we should keep old ext */
     {
-      length=strlength(name);            /* Use old extension */
+      length=strlength(name);			/* Use old extension */
       ext = "";
     }
     else
     {
-      length= (size_t) (pos-(char*) name);    /* Change extension */
+      length= (size_t) (pos-(char*) name);	/* Change extension */
       ext= extension;
     }
   }
   else
   {
-    length=strlength(name);            /* No ext, use the now one */
+    length=strlength(name);			/* No ext, use the now one */
     ext=extension;
   }
 
@@ -89,11 +89,11 @@ char * fn_format(char * to, const char *name, const char *dir,
   {
     if (to == startpos)
     {
-      bmove(buff,(uchar*) name,length);        /* Save name for last copy */
+      bmove(buff,(uchar*) name,length);		/* Save name for last copy */
       name=buff;
     }
     pos=strmake(strmov(to,dev),name,length);
-    (void) strmov(pos,ext);            /* Don't convert extension */
+    (void) strmov(pos,ext);			/* Don't convert extension */
   }
   /*
     If MY_RETURN_REAL_PATH and MY_RESOLVE_SYMLINK is given, only do
@@ -101,7 +101,7 @@ char * fn_format(char * to, const char *name, const char *dir,
   */
   if (flag & MY_RETURN_REAL_PATH)
     (void) my_realpath(to, to, MYF(flag & MY_RESOLVE_SYMLINKS ?
-                   MY_RESOLVE_LINK: 0));
+				   MY_RESOLVE_LINK: 0));
   else if (flag & MY_RESOLVE_SYMLINKS)
   {
     strmov(buff,to);
@@ -131,8 +131,8 @@ size_t strlength(const char *str)
       while (*++pos && *pos != ' ') {};
       if (!*pos)
       {
-    found=pos;            /* String ends here */
-    break;
+	found=pos;			/* String ends here */
+	break;
       }
     }
     found=pos;

@@ -74,8 +74,8 @@ public:
 
         void Reset() OVERRIDE
         {
-            me->SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, 9.0f);
-            me->SetFloatValue(UNIT_FIELD_COMBATREACH, 9.0f);
+            me->SetFloatValue(UNIT_FIELD_BOUNDING_RADIUS, 9.0f);
+            me->SetFloatValue(UNIT_FIELD_COMBAT_REACH, 9.0f);
 
             uiAcidTimer = urand(10*IN_MILLISECONDS, 14*IN_MILLISECONDS);
             uiLeechTimer = urand(3*IN_MILLISECONDS, 9*IN_MILLISECONDS);
@@ -84,8 +84,8 @@ public:
             uiDoorsTimer = urand(20*IN_MILLISECONDS, 30*IN_MILLISECONDS);
             uiCheckDistanceTimer = 2*IN_MILLISECONDS;
 
-            if (instance && (instance->GetData(DATA_HADRONOX_EVENT) != DONE && !bFirstTime))
-                instance->SetData(DATA_HADRONOX_EVENT, FAIL);
+            if (instance && (instance->GetBossState(DATA_HADRONOX) != DONE && !bFirstTime))
+                instance->SetBossState(DATA_HADRONOX, FAIL);
 
             bFirstTime = false;
         }
@@ -103,13 +103,13 @@ public:
         void JustDied(Unit* /*killer*/) OVERRIDE
         {
             if (instance)
-                instance->SetData(DATA_HADRONOX_EVENT, DONE);
+                instance->SetBossState(DATA_HADRONOX, DONE);
         }
 
         void EnterCombat(Unit* /*who*/) OVERRIDE
         {
             if (instance)
-                instance->SetData(DATA_HADRONOX_EVENT, IN_PROGRESS);
+                instance->SetBossState(DATA_HADRONOX, IN_PROGRESS);
             me->SetInCombatWithZone();
         }
 

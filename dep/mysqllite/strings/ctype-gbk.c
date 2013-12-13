@@ -46,7 +46,7 @@
 
 static uchar ctype_gbk[257] =
 {
-  0,                /* For standard library */
+  0,				/* For standard library */
   32,32,32,32,32,32,32,32,32,40,40,40,40,40,32,32,
   32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,32,
   72,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,
@@ -71,18 +71,18 @@ static uchar to_lower_gbk[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'a',    'b',   'c',   'd',   'e',   'f',   'g',
-  'h',     'i',    'j',   'k',   'l',   'm',   'n',   'o',
-  'p',     'q',    'r',   's',   't',   'u',   'v',   'w',
-  'x',     'y',    'z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'a',    'b',   'c',   'd',   'e',   'f',   'g',
-  'h',     'i',    'j',   'k',   'l',   'm',   'n',   'o',
-  'p',     'q',    'r',   's',   't',   'u',   'v',   'w',
-  'x',     'y',    'z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'a',	'b',   'c',   'd',   'e',   'f',   'g',
+  'h',	 'i',	'j',   'k',   'l',   'm',   'n',   'o',
+  'p',	 'q',	'r',   's',   't',   'u',   'v',   'w',
+  'x',	 'y',	'z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'a',	'b',   'c',   'd',   'e',   'f',   'g',
+  'h',	 'i',	'j',   'k',   'l',   'm',   'n',   'o',
+  'p',	 'q',	'r',   's',   't',   'u',   'v',   'w',
+  'x',	 'y',	'z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -107,18 +107,18 @@ static uchar to_upper_gbk[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -1001,18 +1001,18 @@ static uchar sort_order_gbk[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '\\',  ']',   '[',   '^',   '_',
-  '`',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '{',   '|',   '}',   'Y',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '\\',  ']',   '[',   '^',   '_',
+  '`',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '{',   '|',   '}',   'Y',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -3440,7 +3440,7 @@ static uint16 gbksortorder(uint16 i)
 
 
 int my_strnncoll_gbk_internal(const uchar **a_res, const uchar **b_res,
-                  size_t length)
+			      size_t length)
 {
   const uchar *a= *a_res, *b= *b_res;
   uint a_char,b_char; 
@@ -3453,14 +3453,14 @@ int my_strnncoll_gbk_internal(const uchar **a_res, const uchar **b_res,
       b_char= gbkcode(*b,*(b+1));
       if (a_char != b_char)
         return ((int) gbksortorder((uint16) a_char) -
-        (int) gbksortorder((uint16) b_char));
+		(int) gbksortorder((uint16) b_char));
       a+= 2;
       b+= 2;
       length--;
     }
     else if (sort_order_gbk[*a++] != sort_order_gbk[*b++])
       return ((int) sort_order_gbk[a[-1]] -
-          (int) sort_order_gbk[b[-1]]);
+	      (int) sort_order_gbk[b[-1]]);
   }
   *a_res= a;
   *b_res= b;
@@ -3470,7 +3470,7 @@ int my_strnncoll_gbk_internal(const uchar **a_res, const uchar **b_res,
 
 
 int my_strnncoll_gbk(CHARSET_INFO *cs __attribute__((unused)),
-             const uchar *a, size_t a_length,
+		     const uchar *a, size_t a_length,
                      const uchar *b, size_t b_length,
                      my_bool b_is_prefix)
 {
@@ -3481,8 +3481,8 @@ int my_strnncoll_gbk(CHARSET_INFO *cs __attribute__((unused)),
 
 
 static int my_strnncollsp_gbk(CHARSET_INFO * cs __attribute__((unused)),
-                  const uchar *a, size_t a_length, 
-                  const uchar *b, size_t b_length,
+			      const uchar *a, size_t a_length, 
+			      const uchar *b, size_t b_length,
                               my_bool diff_if_only_endspace_difference)
 {
   size_t length= min(a_length, b_length);
@@ -3507,13 +3507,13 @@ static int my_strnncollsp_gbk(CHARSET_INFO * cs __attribute__((unused)),
       /* put shorter key in a */
       a_length= b_length;
       a= b;
-      swap= -1;                /* swap sign of result */
+      swap= -1;				/* swap sign of result */
       res= -res;
     }
     for (end= a + a_length-length; a < end ; a++)
     {
       if (*a != ' ')
-    return (*a < ' ') ? -swap : swap;
+	return (*a < ' ') ? -swap : swap;
     }
   }
   return res;
@@ -3549,7 +3549,7 @@ static size_t my_strnxfrm_gbk(CHARSET_INFO *cs __attribute__((unused)),
 
 
 static uint ismbchar_gbk(CHARSET_INFO *cs __attribute__((unused)),
-         const char* p, const char *e)
+		 const char* p, const char *e)
 {
   return (isgbkhead(*(p)) && (e)-(p)>1 && isgbktail(*((p)+1))? 2: 0);
 }
@@ -10665,7 +10665,7 @@ static int func_uni_gbk_onechar(int code){
 
 static int
 my_wc_mb_gbk(CHARSET_INFO *cs  __attribute__((unused)),
-          my_wc_t wc, uchar *s, uchar *e)
+	      my_wc_t wc, uchar *s, uchar *e)
 {
   int code;
   
@@ -10691,7 +10691,7 @@ my_wc_mb_gbk(CHARSET_INFO *cs  __attribute__((unused)),
 
 static int
 my_mb_wc_gbk(CHARSET_INFO *cs __attribute__((unused)),
-          my_wc_t *pwc, const uchar *s, const uchar *e)
+	      my_wc_t *pwc, const uchar *s, const uchar *e)
 {
   int hi;
   
@@ -10756,7 +10756,7 @@ size_t my_well_formed_len_gbk(CHARSET_INFO *cs __attribute__((unused)),
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
-  NULL,            /* init */
+  NULL,			/* init */
   my_strnncoll_gbk,
   my_strnncollsp_gbk,
   my_strnxfrm_gbk,
@@ -10771,7 +10771,7 @@ static MY_COLLATION_HANDLER my_collation_ci_handler =
 
 static MY_CHARSET_HANDLER my_charset_handler=
 {
-  NULL,            /* init */
+  NULL,			/* init */
   ismbchar_gbk,
   mbcharlen_gbk,
   my_numchars_mb,
@@ -10803,30 +10803,30 @@ static MY_CHARSET_HANDLER my_charset_handler=
 
 CHARSET_INFO my_charset_gbk_chinese_ci=
 {
-    28,0,0,        /* number */
-    MY_CS_COMPILED|MY_CS_PRIMARY|MY_CS_STRNXFRM,    /* state      */
-    "gbk",        /* cs name    */
-    "gbk_chinese_ci",    /* name */
-    "",            /* comment    */
-    NULL,        /* tailoring */
+    28,0,0,		/* number */
+    MY_CS_COMPILED|MY_CS_PRIMARY|MY_CS_STRNXFRM,	/* state      */
+    "gbk",		/* cs name    */
+    "gbk_chinese_ci",	/* name */
+    "",			/* comment    */
+    NULL,		/* tailoring */
     ctype_gbk,
     to_lower_gbk,
     to_upper_gbk,
     sort_order_gbk,
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_caseinfo_gbk,    /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen   */
-    2,            /* mbmaxlen */
-    0,            /* min_sort_char */
-    0xA967,        /* max_sort_char */
+    1,			/* mbminlen   */
+    2,			/* mbmaxlen */
+    0,			/* min_sort_char */
+    0xA967,		/* max_sort_char */
     ' ',                /* pad char      */
     1,                  /* escape_with_backslash_is_dangerous */
     &my_charset_handler,
@@ -10835,30 +10835,30 @@ CHARSET_INFO my_charset_gbk_chinese_ci=
 
 CHARSET_INFO my_charset_gbk_bin=
 {
-    87,0,0,        /* number */
-    MY_CS_COMPILED|MY_CS_BINSORT,    /* state      */
-    "gbk",        /* cs name    */
-    "gbk_bin",        /* name */
-    "",            /* comment    */
-    NULL,        /* tailoring */
+    87,0,0,		/* number */
+    MY_CS_COMPILED|MY_CS_BINSORT,	/* state      */
+    "gbk",		/* cs name    */
+    "gbk_bin",		/* name */
+    "",			/* comment    */
+    NULL,		/* tailoring */
     ctype_gbk,
     to_lower_gbk,
     to_upper_gbk,
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_caseinfo_gbk,    /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen   */
-    2,            /* mbmaxlen */
-    0,            /* min_sort_char */
-    0xFEFE,        /* max_sort_char */
+    1,			/* mbminlen   */
+    2,			/* mbmaxlen */
+    0,			/* min_sort_char */
+    0xFEFE,		/* max_sort_char */
     ' ',                /* pad char      */
     1,                  /* escape_with_backslash_is_dangerous */
     &my_charset_handler,

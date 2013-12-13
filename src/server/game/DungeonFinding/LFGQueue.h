@@ -71,7 +71,7 @@ struct LfgQueueData
 
 struct LfgWaitTime
 {
-    LfgWaitTime(): time(-1), number(0) {}
+    LfgWaitTime(): time(-1), number(0) { }
     int32 time;                                            ///< Wait time
     uint32 number;                                         ///< Number of people used to get that wait time
 };
@@ -101,7 +101,7 @@ class LFGQueue
 
         // Update Queue timers
         void UpdateQueueTimers(uint8 queueId, time_t currTime);
-        time_t GetJoinTime(uint64 guid);
+        time_t GetJoinTime(uint64 guid) const;
 
         // Find new group
         uint8 FindGroups();

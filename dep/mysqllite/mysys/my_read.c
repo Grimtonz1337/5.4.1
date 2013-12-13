@@ -43,7 +43,7 @@ size_t my_read(File Filedes, uchar *Buffer, size_t Count, myf MyFlags)
 
   for (;;)
   {
-    errno= 0;                    /* Linux, Windows don't reset this on EOF/success */
+    errno= 0;					/* Linux, Windows don't reset this on EOF/success */
 #ifdef _WIN32
     readbytes= my_win_read(Filedes, Buffer, Count);
 #else
@@ -78,7 +78,7 @@ size_t my_read(File Filedes, uchar *Buffer, size_t Count, myf MyFlags)
       }
       if (readbytes == (size_t) -1 ||
           ((MyFlags & (MY_FNABP | MY_NABP)) && !(MyFlags & MY_FULL_IO)))
-        DBUG_RETURN(MY_FILE_ERROR);    /* Return with error */
+        DBUG_RETURN(MY_FILE_ERROR);	/* Return with error */
       if (readbytes != (size_t) -1 && (MyFlags & MY_FULL_IO))
       {
         Buffer+= readbytes;
@@ -88,7 +88,7 @@ size_t my_read(File Filedes, uchar *Buffer, size_t Count, myf MyFlags)
     }
 
     if (MyFlags & (MY_NABP | MY_FNABP))
-      readbytes= 0;            /* Ok on read */
+      readbytes= 0;			/* Ok on read */
     else if (MyFlags & MY_FULL_IO)
       readbytes= save_count;
     break;

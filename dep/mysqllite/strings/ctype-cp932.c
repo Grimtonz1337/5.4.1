@@ -33,23 +33,23 @@
 
 static uchar ctype_cp932[257] =
 {
-    0,                /* For standard library */
-    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,    /* NUL ^A - ^G */
-    0040, 0050, 0050, 0050, 0050, 0050, 0040, 0040,    /* ^H - ^O */
-    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,    /* ^P - ^W */
-    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,    /* ^X - ^Z ^[ ^\ ^] ^^ ^_ */
-    0110, 0020, 0020, 0020, 0020, 0020, 0020, 0020,    /* SPC ! " # $ % ^ ' */
-    0020, 0020, 0020, 0020, 0020, 0020, 0020, 0020,    /* ( ) * + , - . / */
-    0204, 0204, 0204, 0204, 0204, 0204, 0204, 0204,    /* 0 1 2 3 4 5 6 7 */
-    0204, 0204, 0020, 0020, 0020, 0020, 0020, 0020,    /* 8 9 : ; < = > ? */
-    0020, 0201, 0201, 0201, 0201, 0201, 0201, 0001,    /* @ A B C D E F G */
-    0001, 0001, 0001, 0001, 0001, 0001, 0001, 0001,    /* H I J K L M N O */
-    0001, 0001, 0001, 0001, 0001, 0001, 0001, 0001,    /* P Q R S T U V W */
-    0001, 0001, 0001, 0020, 0020, 0020, 0020, 0020,    /* X Y Z [ \ ] ^ _ */
-    0020, 0202, 0202, 0202, 0202, 0202, 0202, 0002,    /* ` a b c d e f g */
-    0002, 0002, 0002, 0002, 0002, 0002, 0002, 0002,    /* h i j k l m n o */
-    0002, 0002, 0002, 0002, 0002, 0002, 0002, 0002,    /* p q r s t u v w */
-    0002, 0002, 0002, 0020, 0020, 0020, 0020, 0040,    /* x y z { | } + DEL */
+    0,				/* For standard library */
+    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,	/* NUL ^A - ^G */
+    0040, 0050, 0050, 0050, 0050, 0050, 0040, 0040,	/* ^H - ^O */
+    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,	/* ^P - ^W */
+    0040, 0040, 0040, 0040, 0040, 0040, 0040, 0040,	/* ^X - ^Z ^[ ^\ ^] ^^ ^_ */
+    0110, 0020, 0020, 0020, 0020, 0020, 0020, 0020,	/* SPC ! " # $ % ^ ' */
+    0020, 0020, 0020, 0020, 0020, 0020, 0020, 0020,	/* ( ) * + , - . / */
+    0204, 0204, 0204, 0204, 0204, 0204, 0204, 0204,	/* 0 1 2 3 4 5 6 7 */
+    0204, 0204, 0020, 0020, 0020, 0020, 0020, 0020,	/* 8 9 : ; < = > ? */
+    0020, 0201, 0201, 0201, 0201, 0201, 0201, 0001,	/* @ A B C D E F G */
+    0001, 0001, 0001, 0001, 0001, 0001, 0001, 0001,	/* H I J K L M N O */
+    0001, 0001, 0001, 0001, 0001, 0001, 0001, 0001,	/* P Q R S T U V W */
+    0001, 0001, 0001, 0020, 0020, 0020, 0020, 0020,	/* X Y Z [ \ ] ^ _ */
+    0020, 0202, 0202, 0202, 0202, 0202, 0202, 0002,	/* ` a b c d e f g */
+    0002, 0002, 0002, 0002, 0002, 0002, 0002, 0002,	/* h i j k l m n o */
+    0002, 0002, 0002, 0002, 0002, 0002, 0002, 0002,	/* p q r s t u v w */
+    0002, 0002, 0002, 0020, 0020, 0020, 0020, 0040,	/* x y z { | } + DEL */
     0020, 0020, 0020, 0020, 0020, 0020, 0020, 0020,
     0020, 0020, 0020, 0020, 0020, 0020, 0020, 0020,
     0020, 0020, 0020, 0020, 0020, 0020, 0020, 0020,
@@ -74,18 +74,18 @@ static uchar to_lower_cp932[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'a',    'b',   'c',   'd',   'e',   'f',   'g',
-  'h',     'i',    'j',   'k',   'l',   'm',   'n',   'o',
-  'p',     'q',    'r',   's',   't',   'u',   'v',   'w',
-  'x',     'y',    'z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'a',    'b',   'c',   'd',   'e',   'f',   'g',
-  'h',     'i',    'j',   'k',   'l',   'm',   'n',   'o',
-  'p',     'q',    'r',   's',   't',   'u',   'v',   'w',
-  'x',     'y',    'z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'a',	'b',   'c',   'd',   'e',   'f',   'g',
+  'h',	 'i',	'j',   'k',   'l',   'm',   'n',   'o',
+  'p',	 'q',	'r',   's',   't',   'u',   'v',   'w',
+  'x',	 'y',	'z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'a',	'b',   'c',   'd',   'e',   'f',   'g',
+  'h',	 'i',	'j',   'k',   'l',   'm',   'n',   'o',
+  'p',	 'q',	'r',   's',   't',   'u',   'v',   'w',
+  'x',	 'y',	'z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -110,18 +110,18 @@ static uchar to_upper_cp932[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -146,18 +146,18 @@ static uchar sort_order_cp932[]=
   '\010','\011','\012','\013','\014','\015','\016','\017',
   '\020','\021','\022','\023','\024','\025','\026','\027',
   '\030','\031','\032','\033','\034','\035','\036','\037',
-  ' ',     '!',    '"',   '#',   '$',   '%',   '&',   '\'',
-  '(',     ')',    '*',   '+',   ',',   '-',   '.',   '/',
-  '0',     '1',    '2',   '3',   '4',   '5',   '6',   '7',
-  '8',     '9',    ':',   ';',   '<',   '=',   '>',   '?',
-  '@',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '[',   '\\',  ']',   '^',   '_',
-  '`',     'A',    'B',   'C',   'D',   'E',   'F',   'G',
-  'H',     'I',    'J',   'K',   'L',   'M',   'N',   'O',
-  'P',     'Q',    'R',   'S',   'T',   'U',   'V',   'W',
-  'X',     'Y',    'Z',   '{',   '|',   '}',   '~',   '\177',
+  ' ',	 '!',	'"',   '#',   '$',   '%',   '&',   '\'',
+  '(',	 ')',	'*',   '+',   ',',   '-',   '.',   '/',
+  '0',	 '1',	'2',   '3',   '4',   '5',   '6',   '7',
+  '8',	 '9',	':',   ';',   '<',   '=',   '>',   '?',
+  '@',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '[',   '\\',  ']',   '^',   '_',
+  '`',	 'A',	'B',   'C',   'D',   'E',   'F',   'G',
+  'H',	 'I',	'J',   'K',   'L',   'M',   'N',   'O',
+  'P',	 'Q',	'R',   'S',   'T',   'U',   'V',   'W',
+  'X',	 'Y',	'Z',   '{',   '|',   '}',   '~',   '\177',
   (uchar) '\200',(uchar) '\201',(uchar) '\202',(uchar) '\203',(uchar) '\204',(uchar) '\205',(uchar) '\206',(uchar) '\207',
   (uchar) '\210',(uchar) '\211',(uchar) '\212',(uchar) '\213',(uchar) '\214',(uchar) '\215',(uchar) '\216',(uchar) '\217',
   (uchar) '\220',(uchar) '\221',(uchar) '\222',(uchar) '\223',(uchar) '\224',(uchar) '\225',(uchar) '\226',(uchar) '\227',
@@ -183,7 +183,7 @@ static uchar sort_order_cp932[]=
 
 
 static uint ismbchar_cp932(CHARSET_INFO *cs __attribute__((unused)),
-             const char* p, const char *e)
+			 const char* p, const char *e)
 {
   return (iscp932head((uchar) *p) && (e-p)>1 && iscp932tail((uchar)p[1]) ? 2: 0);
 }
@@ -194,7 +194,7 @@ static uint mbcharlen_cp932(CHARSET_INFO *cs __attribute__((unused)),uint c)
 }
 
 
-#define cp932code(c,d)    ((((uint) (uchar)(c)) << 8) | (uint) (uchar) (d))
+#define cp932code(c,d)	((((uint) (uchar)(c)) << 8) | (uint) (uchar) (d))
 
 
 static MY_UNICASE_INFO c81[256]=
@@ -1704,8 +1704,8 @@ static MY_UNICASE_INFO *my_caseinfo_cp932[256]=
 
 
 static int my_strnncoll_cp932_internal(CHARSET_INFO *cs,
-                      const uchar **a_res, size_t a_length,
-                      const uchar **b_res, size_t b_length)
+				      const uchar **a_res, size_t a_length,
+				      const uchar **b_res, size_t b_length)
 {
   const uchar *a= *a_res, *b= *b_res;
   const uchar *a_end= a + a_length;
@@ -1713,18 +1713,18 @@ static int my_strnncoll_cp932_internal(CHARSET_INFO *cs,
   while (a < a_end && b < b_end)
   {
     if (ismbchar_cp932(cs,(char*) a, (char*) a_end) &&
-    ismbchar_cp932(cs,(char*) b, (char*) b_end))
+	ismbchar_cp932(cs,(char*) b, (char*) b_end))
     {
       uint a_char= cp932code(*a, *(a+1));
       uint b_char= cp932code(*b, *(b+1));
       if (a_char != b_char)
-    return a_char - b_char;
+	return a_char - b_char;
       a += 2;
       b += 2;
     } else
     {
       if (sort_order_cp932[(uchar)*a] != sort_order_cp932[(uchar)*b])
-    return sort_order_cp932[(uchar)*a] - sort_order_cp932[(uchar)*b];
+	return sort_order_cp932[(uchar)*a] - sort_order_cp932[(uchar)*b];
       a++;
       b++;
     }
@@ -1736,8 +1736,8 @@ static int my_strnncoll_cp932_internal(CHARSET_INFO *cs,
 
 
 static int my_strnncoll_cp932(CHARSET_INFO *cs __attribute__((unused)),
-                  const uchar *a, size_t a_length, 
-                  const uchar *b, size_t b_length,
+			      const uchar *a, size_t a_length, 
+			      const uchar *b, size_t b_length,
                               my_bool b_is_prefix)
 {
   int res= my_strnncoll_cp932_internal(cs, &a, a_length, &b, b_length);
@@ -1775,13 +1775,13 @@ static int my_strnncollsp_cp932(CHARSET_INFO *cs __attribute__((unused)),
       /* put shorter key in a */
       a_end= b_end;
       a= b;
-      swap= -1;                /* swap sign of result */
+      swap= -1;				/* swap sign of result */
       res= -res;
     }
     for (; a < a_end ; a++)
     {
       if (*a != (uchar) ' ')
-    return (*a < (uchar) ' ') ? -swap : swap;
+	return (*a < (uchar) ' ') ? -swap : swap;
     }
   }
   return res;
@@ -1801,7 +1801,7 @@ static size_t my_strnxfrm_cp932(CHARSET_INFO *cs __attribute__((unused)),
     {
       *dest++ = *src++;
       if (dest < d_end && src < s_end)
-    *dest++ = *src++;
+	*dest++ = *src++;
     }
     else
       *dest++ = sort_order_cp932[(uchar)*src++];
@@ -34618,7 +34618,7 @@ static uint16 unicode_to_cp932[65536]=
 
 static int
 my_mb_wc_cp932(CHARSET_INFO *cs  __attribute__((unused)),
-           my_wc_t *pwc, const uchar *s, const uchar *e){
+	       my_wc_t *pwc, const uchar *s, const uchar *e){
   int hi;
 
   if (s >= e)
@@ -34662,7 +34662,7 @@ my_mb_wc_cp932(CHARSET_INFO *cs  __attribute__((unused)),
 */
 static int
 my_wc_mb_cp932(CHARSET_INFO *cs __attribute__((unused)),
-           my_wc_t wc, uchar *s, uchar *e)
+	       my_wc_t wc, uchar *s, uchar *e)
 {
   int code;
 
@@ -34776,13 +34776,13 @@ size_t my_well_formed_len_cp932(CHARSET_INFO *cs __attribute__((unused)),
 
 static MY_COLLATION_HANDLER my_collation_ci_handler =
 {
-  NULL,            /* init */
+  NULL,			/* init */
   my_strnncoll_cp932,
   my_strnncollsp_cp932,
   my_strnxfrm_cp932,
   my_strnxfrmlen_simple,
   my_like_range_mb,
-  my_wildcmp_mb,    /* wildcmp  */
+  my_wildcmp_mb,	/* wildcmp  */
   my_strcasecmp_8bit,
   my_instr_mb,
   my_hash_sort_simple,
@@ -34792,7 +34792,7 @@ static MY_COLLATION_HANDLER my_collation_ci_handler =
 
 static MY_CHARSET_HANDLER my_charset_handler=
 {
-  NULL,            /* init */
+  NULL,			/* init */
   ismbchar_cp932,
   mbcharlen_cp932,
   my_numchars_mb,
@@ -34800,8 +34800,8 @@ static MY_CHARSET_HANDLER my_charset_handler=
   my_well_formed_len_cp932,
   my_lengthsp_8bit,
   my_numcells_cp932,
-  my_mb_wc_cp932,    /* mb_wc */
-  my_wc_mb_cp932,    /* wc_mb */
+  my_mb_wc_cp932,	/* mb_wc */
+  my_wc_mb_cp932,	/* wc_mb */
   my_mb_ctype_mb,
   my_caseup_str_mb,
   my_casedn_str_mb,
@@ -34824,30 +34824,30 @@ static MY_CHARSET_HANDLER my_charset_handler=
 
 CHARSET_INFO my_charset_cp932_japanese_ci=
 {
-    95,0,0,        /* number */
-    MY_CS_COMPILED|MY_CS_PRIMARY|MY_CS_STRNXFRM,    /* state      */
-    "cp932",        /* cs name    */
-    "cp932_japanese_ci",    /* name */
-    "",            /* comment    */
-    NULL,        /* tailoring */
+    95,0,0,		/* number */
+    MY_CS_COMPILED|MY_CS_PRIMARY|MY_CS_STRNXFRM,	/* state      */
+    "cp932",		/* cs name    */
+    "cp932_japanese_ci",	/* name */
+    "",			/* comment    */
+    NULL,		/* tailoring */
     ctype_cp932,
     to_lower_cp932,
     to_upper_cp932,
     sort_order_cp932,
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_caseinfo_cp932,  /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
-    1,            /* caseup_multiply  */
-    1,            /* casedn_multiply  */
-    1,            /* mbminlen   */
-    2,            /* mbmaxlen */
-    0,            /* min_sort_char */
-    0xFCFC,        /* max_sort_char */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
+    1,			/* caseup_multiply  */
+    1,			/* casedn_multiply  */
+    1,			/* mbminlen   */
+    2,			/* mbmaxlen */
+    0,			/* min_sort_char */
+    0xFCFC,		/* max_sort_char */
     ' ',                /* pad char      */
     1,                  /* escape_with_backslash_is_dangerous */
     &my_charset_handler,
@@ -34856,30 +34856,30 @@ CHARSET_INFO my_charset_cp932_japanese_ci=
 
 CHARSET_INFO my_charset_cp932_bin=
 {
-    96,0,0,        /* number */
-    MY_CS_COMPILED|MY_CS_BINSORT,    /* state      */
-    "cp932",        /* cs name    */
-    "cp932_bin",        /* name */
-    "",            /* comment    */
-    NULL,        /* tailoring */
+    96,0,0,		/* number */
+    MY_CS_COMPILED|MY_CS_BINSORT,	/* state      */
+    "cp932",		/* cs name    */
+    "cp932_bin",		/* name */
+    "",			/* comment    */
+    NULL,		/* tailoring */
     ctype_cp932,
     to_lower_cp932,
     to_upper_cp932,
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_caseinfo_cp932,  /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
-    1,            /* caseup_multiply  */
-    1,            /* casedn_multiply  */
-    1,            /* mbminlen   */
-    2,            /* mbmaxlen */
-    0,            /* min_sort_char */
-    0xFCFC,        /* max_sort_char */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
+    1,			/* caseup_multiply  */
+    1,			/* casedn_multiply  */
+    1,			/* mbminlen   */
+    2,			/* mbmaxlen */
+    0,			/* min_sort_char */
+    0xFCFC,		/* max_sort_char */
     ' ',                /* pad char      */
     1,                  /* escape_with_backslash_is_dangerous */
     &my_charset_handler,

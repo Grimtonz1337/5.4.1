@@ -29,11 +29,11 @@
 
   SYNOPSIOS
     my_pread()
-    Filedes    File decsriptor
-    Buffer    Buffer to read data into
-    Count    Number of bytes to read
-    offset    Position to read from
-    MyFlags    Flags
+    Filedes	File decsriptor
+    Buffer	Buffer to read data into
+    Count	Number of bytes to read
+    offset	Position to read from
+    MyFlags	Flags
 
   NOTES
     This differs from the normal pread() call in that we don't care
@@ -117,11 +117,11 @@ size_t my_pread(File Filedes, uchar *Buffer, size_t Count, my_off_t offset,
 
   SYNOPSIOS
     my_pwrite()
-    Filedes    File decsriptor
-    Buffer    Buffer to write data from
-    Count    Number of bytes to write
-    offset    Position to write to
-    MyFlags    Flags
+    Filedes	File decsriptor
+    Buffer	Buffer to write data from
+    Count	Number of bytes to write
+    offset	Position to write to
+    MyFlags	Flags
 
   NOTES
     This differs from the normal pwrite() call in that we don't care
@@ -175,7 +175,7 @@ size_t my_pwrite(File Filedes, const uchar *Buffer, size_t Count,
 #ifndef NO_BACKGROUND
 
     if (my_thread_var->abort)
-      MyFlags&= ~ MY_WAIT_IF_FULL;        /* End if aborted by user */
+      MyFlags&= ~ MY_WAIT_IF_FULL;		/* End if aborted by user */
 
     if ((my_errno == ENOSPC || my_errno == EDQUOT) &&
         (MyFlags & MY_WAIT_IF_FULL))
@@ -185,7 +185,7 @@ size_t my_pwrite(File Filedes, const uchar *Buffer, size_t Count,
       continue;
     }
     if ((writtenbytes && writtenbytes != (size_t) -1) || my_errno == EINTR)
-      continue;                    /* Retry */
+      continue;					/* Retry */
 #endif
     if (MyFlags & (MY_NABP | MY_FNABP))
     {
@@ -194,13 +194,13 @@ size_t my_pwrite(File Filedes, const uchar *Buffer, size_t Count,
         my_error(EE_WRITE, MYF(ME_BELL | ME_WAITTANG),
                  my_filename(Filedes),my_errno);
       }
-      DBUG_RETURN(MY_FILE_ERROR);        /* Error on read */
+      DBUG_RETURN(MY_FILE_ERROR);		/* Error on read */
     }
     else
-      break;                    /* Return bytes written */
+      break;					/* Return bytes written */
   }
   DBUG_EXECUTE_IF("check", my_seek(Filedes, -1, SEEK_SET, MYF(0)););
   if (MyFlags & (MY_NABP | MY_FNABP))
-    DBUG_RETURN(0);            /* Want only errors */
+    DBUG_RETURN(0);			/* Want only errors */
   DBUG_RETURN(writtenbytes+written); /* purecov: inspected */
 } /* my_pwrite */

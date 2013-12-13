@@ -25,8 +25,8 @@ class LoginDatabaseConnection : public MySQLConnection
 {
     public:
         //- Constructors for sync and async connections
-        LoginDatabaseConnection(MySQLConnectionInfo& connInfo) : MySQLConnection(connInfo) {}
-        LoginDatabaseConnection(ACE_Activation_Queue* q, MySQLConnectionInfo& connInfo) : MySQLConnection(q, connInfo) {}
+        LoginDatabaseConnection(MySQLConnectionInfo& connInfo) : MySQLConnection(connInfo) { }
+        LoginDatabaseConnection(ACE_Activation_Queue* q, MySQLConnectionInfo& connInfo) : MySQLConnection(q, connInfo) { }
 
         //- Loads database type specific prepared statements
         void DoPrepareStatements();
@@ -43,6 +43,7 @@ enum LoginDatabaseStatements
     */
 
     LOGIN_SEL_REALMLIST,
+    LOGIN_SEL_REALMNAME_BY_ID,
     LOGIN_DEL_EXPIRED_IP_BANS,
     LOGIN_UPD_EXPIRED_ACCOUNT_BANS,
     LOGIN_SEL_IP_BANNED,
@@ -84,6 +85,8 @@ enum LoginDatabaseStatements
     LOGIN_INS_LOG,
     LOGIN_UPD_USERNAME,
     LOGIN_UPD_PASSWORD,
+    LOGIN_UPD_EMAIL,
+    LOGIN_UPD_REG_EMAIL,
     LOGIN_UPD_MUTE_TIME,
     LOGIN_UPD_MUTE_TIME_LOGIN,
     LOGIN_UPD_LAST_IP,
@@ -112,14 +115,9 @@ enum LoginDatabaseStatements
     LOGIN_DEL_ACCOUNT,
     LOGIN_SEL_IP2NATION_COUNTRY,
     LOGIN_SEL_AUTOBROADCAST,
+    LOGIN_GET_EMAIL_BY_ID,
 
     LOGIN_SEL_ACCOUNT_ACCESS_BY_ID,
-    LOGIN_SEL_RBAC_ACCOUNT_GROUPS,
-    LOGIN_INS_RBAC_ACCOUNT_GROUP,
-    LOGIN_DEL_RBAC_ACCOUNT_GROUP,
-    LOGIN_SEL_RBAC_ACCOUNT_ROLES,
-    LOGIN_INS_RBAC_ACCOUNT_ROLE,
-    LOGIN_DEL_RBAC_ACCOUNT_ROLE,
     LOGIN_SEL_RBAC_ACCOUNT_PERMISSIONS,
     LOGIN_INS_RBAC_ACCOUNT_PERMISSION,
     LOGIN_DEL_RBAC_ACCOUNT_PERMISSION,

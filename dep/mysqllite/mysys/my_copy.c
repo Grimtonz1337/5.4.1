@@ -44,8 +44,8 @@ struct utimbuf {
     Don't set MY_FNABP or MY_NABP bits on when calling this function !
 
   RETURN
-    0    ok
-    #    Error
+    0	ok
+    #	Error
 
 */
 
@@ -62,7 +62,7 @@ int my_copy(const char *from, const char *to, myf MyFlags)
 
   from_file=to_file= -1;
   DBUG_ASSERT(!(MyFlags & (MY_FNABP | MY_NABP))); /* for my_read/my_write */
-  if (MyFlags & MY_HOLD_ORIGINAL_MODES)        /* Copy stat if possible */
+  if (MyFlags & MY_HOLD_ORIGINAL_MODES)		/* Copy stat if possible */
     new_file_stat= test(my_stat((char*) to, &new_stat_buff, MYF(0)));
 
   if ((from_file=my_open(from,O_RDONLY | O_SHARE,MyFlags)) >= 0)
@@ -77,15 +77,15 @@ int my_copy(const char *from, const char *to, myf MyFlags)
     create_flag= (MyFlags & MY_DONT_OVERWRITE_FILE) ? O_EXCL : O_TRUNC;
 
     if ((to_file=  my_create(to,(int) stat_buff.st_mode,
-                 O_WRONLY | create_flag | O_BINARY | O_SHARE,
-                 MyFlags)) < 0)
+			     O_WRONLY | create_flag | O_BINARY | O_SHARE,
+			     MyFlags)) < 0)
       goto err;
 
     while ((Count=my_read(from_file, buff, sizeof(buff), MyFlags)) != 0)
     {
-    if (Count == (uint) -1 ||
-        my_write(to_file,buff,Count,MYF(MyFlags | MY_NABP)))
-    goto err;
+	if (Count == (uint) -1 ||
+	    my_write(to_file,buff,Count,MYF(MyFlags | MY_NABP)))
+	goto err;
     }
 
     /* sync the destination file */
@@ -96,12 +96,12 @@ int my_copy(const char *from, const char *to, myf MyFlags)
     }
 
     if (my_close(from_file,MyFlags) | my_close(to_file,MyFlags))
-      DBUG_RETURN(-1);                /* Error on close */
+      DBUG_RETURN(-1);				/* Error on close */
 
     /* Copy modes if possible */
 
     if (MyFlags & MY_HOLD_ORIGINAL_MODES && !new_file_stat)
-    DBUG_RETURN(0);            /* File copyed but not stat */
+	DBUG_RETURN(0);			/* File copyed but not stat */
     /* Copy modes */
     if (chmod(to, stat_buff.st_mode & 07777))
     {

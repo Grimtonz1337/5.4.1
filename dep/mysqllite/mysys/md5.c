@@ -42,7 +42,7 @@
 #include <m_string.h>
 #include "my_md5.h"
 
-#include <string.h>    /* for memcpy() and memset() */
+#include <string.h>	/* for memcpy() and memset() */
 
 
 static void 
@@ -98,10 +98,10 @@ my_MD5Update (my_MD5Context *ctx, unsigned char const *buf, unsigned len)
 
   t = ctx->bits[0];
   if ((ctx->bits[0] = (t + ((uint32)len << 3)) & 0xffffffff) < t)
-    ctx->bits[1]++;    /* Carry from low to high */
+    ctx->bits[1]++;	/* Carry from low to high */
   ctx->bits[1] += len >> 29;
 
-  t = (t >> 3) & 0x3f;    /* Bytes already in shsInfo->data */
+  t = (t >> 3) & 0x3f;	/* Bytes already in shsInfo->data */
 
   /* Handle any leading odd-sized chunks */
 
@@ -176,7 +176,7 @@ my_MD5Final (unsigned char digest[16], my_MD5Context *ctx)
   putu32(ctx->buf[1], digest + 4);
   putu32(ctx->buf[2], digest + 8);
   putu32(ctx->buf[3], digest + 12);
-  memset(ctx, 0, sizeof(ctx));    /* In case it's sensitive */
+  memset(ctx, 0, sizeof(ctx));	/* In case it's sensitive */
 }
 
 #ifndef ASM_MD5
@@ -191,7 +191,7 @@ my_MD5Final (unsigned char digest[16], my_MD5Context *ctx)
 
 /* This is the central step in the MD5 algorithm. */
 #define MD5STEP(f, w, x, y, z, data, s) \
-    ( w += f(x, y, z) + data, w &= 0xffffffff, w = w<<s | w>>(32-s), w += x )
+	( w += f(x, y, z) + data, w &= 0xffffffff, w = w<<s | w>>(32-s), w += x )
 
 /*
  * The core of the MD5 algorithm, this alters an existing MD5 hash to

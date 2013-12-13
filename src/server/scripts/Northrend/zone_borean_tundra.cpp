@@ -64,7 +64,7 @@ public:
 
     struct npc_sinkhole_kill_creditAI : public ScriptedAI
     {
-        npc_sinkhole_kill_creditAI(Creature* creature) : ScriptedAI(creature){}
+        npc_sinkhole_kill_creditAI(Creature* creature) : ScriptedAI(creature){ }
 
         uint32 phaseTimer;
         uint8  phase;
@@ -90,7 +90,7 @@ public:
             }
         }
 
-        void EnterCombat(Unit* /*who*/)OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void UpdateAI(uint32 diff) OVERRIDE
         {
@@ -105,7 +105,7 @@ public:
                         DoCast(me, SPELL_EXPLODE_CART, true);
                         DoCast(me, SPELL_SUMMON_CART, true);
                         if (GameObject* cart = me->FindNearestGameObject(188160, 3))
-                            cart->SetUInt32Value(GAMEOBJECT_FACTION, 14);
+                            cart->SetUInt32Value(GAMEOBJECT_FIELD_FACTION_TEMPLATE, 14);
                         phaseTimer = 3000;
                         phase = 2;
                         break;
@@ -119,7 +119,8 @@ public:
                     case 3:
                         DoCast(me, SPELL_EXPLODE_CART, true);
                         phaseTimer = 2000;
-                        phase = 4;
+                        phase = 5; // @fixme: phase 4 is missing...
+                        break;
                     case 5:
                         DoCast(me, SPELL_SUMMON_WORM, true);
                         if (Unit* worm = me->FindNearestCreature(26250, 3))
@@ -135,14 +136,14 @@ public:
                         if (Unit* worm = me->FindNearestCreature(26250, 3))
                         {
                             me->Kill(worm);
-                            worm->RemoveFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                            worm->RemoveFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                         }
                         phaseTimer = 2000;
                         phase = 7;
                         break;
                     case 7:
                         DoCast(me, SPELL_EXPLODE_CART, true);
-                        if (Player* caster = Unit::GetPlayer(*me, casterGuid))
+                        if (Player* caster = ObjectAccessor::GetPlayer(*me, casterGuid))
                             caster->KilledMonster(me->GetCreatureTemplate(), me->GetGUID());
                         phaseTimer = 5000;
                         phase = 8;
@@ -174,7 +175,7 @@ public:
 
     struct npc_khunok_the_behemothAI : public ScriptedAI
     {
-        npc_khunok_the_behemothAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_khunok_the_behemothAI(Creature* creature) : ScriptedAI(creature) { }
 
         void MoveInLineOfSight(Unit* who) OVERRIDE
 
@@ -354,11 +355,11 @@ public:
 
     struct npc_nerubar_victimAI : public ScriptedAI
     {
-        npc_nerubar_victimAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_nerubar_victimAI(Creature* creature) : ScriptedAI(creature) { }
 
-        void Reset() OVERRIDE {}
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
-        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE {}
+        void Reset() OVERRIDE { }
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
+        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE { }
 
 
         void JustDied(Unit* killer) OVERRIDE
@@ -410,7 +411,7 @@ public:
 
     struct npc_jennyAI : public ScriptedAI
     {
-        npc_jennyAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_jennyAI(Creature* creature) : ScriptedAI(creature) { }
 
         bool setCrateNumber;
 
@@ -471,7 +472,7 @@ public:
 
     struct npc_fezzix_geartwistAI : public ScriptedAI
     {
-        npc_fezzix_geartwistAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_fezzix_geartwistAI(Creature* creature) : ScriptedAI(creature) { }
 
         void MoveInLineOfSight(Unit* who) OVERRIDE
 
@@ -556,8 +557,8 @@ public:
             go_caribouGUID = 0;
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
-        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
+        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE { }
 
 
         void JustDied(Unit* /*killer*/) OVERRIDE
@@ -671,7 +672,7 @@ public:
 
     struct npc_lurgglbrAI : public npc_escortAI
     {
-        npc_lurgglbrAI(Creature* creature) : npc_escortAI(creature){}
+        npc_lurgglbrAI(Creature* creature) : npc_escortAI(creature){ }
 
         uint32 IntroTimer;
         uint32 IntroPhase;
@@ -857,7 +858,7 @@ public:
             {
                 if (me->IsWithinDistInMap(who, INTERACTION_DISTANCE))
                 {
-                    if (Player* pHarpooner = Unit::GetPlayer(*me, HarpoonerGUID))
+                    if (Player* pHarpooner = ObjectAccessor::GetPlayer(*me, HarpoonerGUID))
                     {
                         pHarpooner->KilledMonsterCredit(26175, 0);
                         pHarpooner->RemoveAura(SPELL_DRAKE_HATCHLING_SUBDUED);
@@ -873,7 +874,7 @@ public:
         {
             if (WithRedDragonBlood && HarpoonerGUID && !me->HasAura(SPELL_RED_DRAGONBLOOD))
             {
-                if (Player* pHarpooner = Unit::GetPlayer(*me, HarpoonerGUID))
+                if (Player* pHarpooner = ObjectAccessor::GetPlayer(*me, HarpoonerGUID))
                 {
                     EnterEvadeMode();
                     StartFollow(pHarpooner, 35, NULL);
@@ -958,7 +959,7 @@ public:
 
     struct npc_thassarianAI : public npc_escortAI
     {
-        npc_thassarianAI(Creature* creature) : npc_escortAI(creature) {}
+        npc_thassarianAI(Creature* creature) : npc_escortAI(creature) { }
 
         uint64 arthasGUID;
         uint64 talbotGUID;
@@ -1178,7 +1179,7 @@ public:
                         break;
 
                     case 16:
-                        me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                        me->SetFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
                         phaseTimer = 20000;
                         ++phase;
                         break;
@@ -1262,7 +1263,7 @@ public:
 
     struct npc_image_lich_kingAI : public ScriptedAI
     {
-        npc_image_lich_kingAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_image_lich_kingAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
@@ -1297,7 +1298,7 @@ public:
 
     struct npc_general_arlosAI : public ScriptedAI
     {
-        npc_general_arlosAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_general_arlosAI(Creature* creature) : ScriptedAI(creature) { }
 
         void MovementInform(uint32 uiType, uint32 /*uiId*/) OVERRIDE
         {
@@ -1586,7 +1587,7 @@ public:
 
     struct npc_beryl_sorcererAI : public FollowerAI
     {
-        npc_beryl_sorcererAI(Creature* creature) : FollowerAI(creature) {}
+        npc_beryl_sorcererAI(Creature* creature) : FollowerAI(creature) { }
 
         bool bEnslaved;
 
@@ -1671,7 +1672,7 @@ public:
 
     struct npc_imprisoned_beryl_sorcererAI : public ScriptedAI
     {
-        npc_imprisoned_beryl_sorcererAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_imprisoned_beryl_sorcererAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 rebuff;
 
@@ -1718,7 +1719,7 @@ public:
 
         void GotStinged(uint64 casterGUID)
         {
-            if (Player* caster = Player::GetPlayer(*me, casterGUID))
+            if (Player* caster = ObjectAccessor::GetPlayer(*me, casterGUID))
             {
                 uint32 step = caster->GetAuraCount(SPELL_NEURAL_NEEDLE) + 1;
                 switch (step)
@@ -1798,7 +1799,7 @@ public:
 
     struct npc_mootoo_the_youngerAI : public npc_escortAI
     {
-        npc_mootoo_the_youngerAI(Creature* creature) : npc_escortAI(creature) {}
+        npc_mootoo_the_youngerAI(Creature* creature) : npc_escortAI(creature) { }
 
         void Reset() OVERRIDE
         {
@@ -1879,7 +1880,7 @@ public:
 
     struct npc_bonker_togglevoltAI : public npc_escortAI
     {
-        npc_bonker_togglevoltAI(Creature* creature) : npc_escortAI(creature) {}
+        npc_bonker_togglevoltAI(Creature* creature) : npc_escortAI(creature) { }
         uint32 Bonker_agro;
 
         void Reset() OVERRIDE
@@ -1977,7 +1978,7 @@ public:
 
     struct npc_trapped_mammoth_calfAI : public ScriptedAI
     {
-        npc_trapped_mammoth_calfAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_trapped_mammoth_calfAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiTimer;
         bool bStarted;
@@ -2066,7 +2067,7 @@ public:
 
     struct npc_magmoth_crusherAI : public ScriptedAI
     {
-        npc_magmoth_crusherAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_magmoth_crusherAI(Creature* creature) : ScriptedAI(creature) { }
 
         void JustDied(Unit* killer) OVERRIDE
         {
@@ -2167,7 +2168,7 @@ public:
 
     struct npc_valiance_keep_cannoneerAI : public ScriptedAI
     {
-        npc_valiance_keep_cannoneerAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_valiance_keep_cannoneerAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiTimer;
 
@@ -2225,7 +2226,7 @@ public:
 
     struct npc_warmage_coldarraAI : public ScriptedAI
     {
-        npc_warmage_coldarraAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_warmage_coldarraAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 m_uiTimer;                 //Timer until recast
 
@@ -2234,9 +2235,9 @@ public:
             m_uiTimer = 0;
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
-        void AttackStart(Unit* /*who*/) OVERRIDE {}
+        void AttackStart(Unit* /*who*/) OVERRIDE { }
 
         void UpdateAI(uint32 uiDiff) OVERRIDE
         {
@@ -2344,8 +2345,8 @@ public:
     {
         npc_hidden_cultistAI(Creature* creature) : ScriptedAI(creature)
         {
-           uiEmoteState = creature->GetUInt32Value(UNIT_NPC_EMOTESTATE);
-           uiNpcFlags = creature->GetUInt32Value(UNIT_NPC_FLAGS);
+           uiEmoteState = creature->GetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE);
+           uiNpcFlags = creature->GetUInt32Value(UNIT_FIELD_NPC_FLAGS);
         }
 
         uint32 uiEmoteState;
@@ -2359,10 +2360,10 @@ public:
         void Reset() OVERRIDE
         {
             if (uiEmoteState)
-                me->SetUInt32Value(UNIT_NPC_EMOTESTATE, uiEmoteState);
+                me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, uiEmoteState);
 
             if (uiNpcFlags)
-                me->SetUInt32Value(UNIT_NPC_FLAGS, uiNpcFlags);
+                me->SetUInt32Value(UNIT_FIELD_NPC_FLAGS, uiNpcFlags);
 
             uiEventTimer = 0;
             uiEventPhase = 0;
@@ -2377,8 +2378,8 @@ public:
         void DoAction(int32 /*iParam*/) OVERRIDE
         {
             me->StopMoving();
-            me->SetUInt32Value(UNIT_NPC_FLAGS, 0);
-            if (Player* player = me->GetPlayer(*me, uiPlayerGUID))
+            me->SetUInt32Value(UNIT_FIELD_NPC_FLAGS, 0);
+            if (Player* player = ObjectAccessor::GetPlayer(*me, uiPlayerGUID))
                 me->SetFacingToObject(player);
             uiEventTimer = 3000;
             uiEventPhase = 1;
@@ -2392,7 +2393,7 @@ public:
         void AttackPlayer()
         {
             me->setFaction(14);
-            if (Player* player = me->GetPlayer(*me, uiPlayerGUID))
+            if (Player* player = ObjectAccessor::GetPlayer(*me, uiPlayerGUID))
                 me->AI()->AttackStart(player);
         }
 
@@ -2406,7 +2407,7 @@ public:
                         switch (me->GetEntry())
                         {
                             case NPC_SALTY_JOHN_THORPE:
-                                me->SetUInt32Value(UNIT_NPC_EMOTESTATE, 0);
+                                me->SetUInt32Value(UNIT_FIELD_NPC_EMOTESTATE, 0);
                                 Talk(SAY_HIDDEN_CULTIST_1);
                                 uiEventTimer = 5000;
                                 uiEventPhase = 2;
@@ -2428,7 +2429,7 @@ public:
                         {
                             case NPC_SALTY_JOHN_THORPE:
                                 Talk(SAY_HIDDEN_CULTIST_4);
-                                if (Player* player = me->GetPlayer(*me, uiPlayerGUID))
+                                if (Player* player = ObjectAccessor::GetPlayer(*me, uiPlayerGUID))
                                     me->SetFacingToObject(player);
                                 uiEventTimer = 3000;
                                 uiEventPhase = 3;

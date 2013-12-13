@@ -30,7 +30,7 @@ mysql_mutex_t THR_LOCK_malloc, THR_LOCK_open,
 
 mysql_cond_t  THR_COND_threads;
 uint            THR_thread_count= 0;
-uint         my_thread_end_wait_time= 5;
+uint 		my_thread_end_wait_time= 5;
 #if !defined(HAVE_LOCALTIME_R) || !defined(HAVE_GMTIME_R)
 mysql_mutex_t LOCK_localtime_r;
 #endif
@@ -236,7 +236,7 @@ my_bool my_thread_global_init(void)
 
   if (my_thread_init())
   {
-    my_thread_global_end();            /* Clean up */
+    my_thread_global_end();			/* Clean up */
     return 1;
   }
   return 0;
@@ -397,7 +397,7 @@ void my_thread_end(void)
 
 #ifdef EXTRA_DEBUG_THREADS
   fprintf(stderr,"my_thread_end(): tmp: 0x%lx  pthread_self: 0x%lx  thread_id: %ld\n",
-      (long) tmp, (long) pthread_self(), tmp ? (long) tmp->id : 0L);
+	  (long) tmp, (long) pthread_self(), tmp ? (long) tmp->id : 0L);
 #endif  
 
 #ifdef HAVE_PSI_INTERFACE

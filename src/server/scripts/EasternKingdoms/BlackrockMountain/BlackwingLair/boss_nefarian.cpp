@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -178,7 +178,7 @@ public:
 
                 me->SetVisible(true);
                 me->SetPhaseMask(1, true);
-                me->SetUInt32Value(UNIT_NPC_FLAGS, 1);
+                me->SetUInt32Value(UNIT_FIELD_NPC_FLAGS, 1);
                 me->setFaction(35);
                 me->SetStandState(UNIT_STAND_STATE_SIT_HIGH_CHAIR);
                 me->RemoveAura(SPELL_NEFARIANS_BARRIER);
@@ -197,7 +197,7 @@ public:
             Talk(SAY_GAMESBEGIN_2);
 
             me->setFaction(103);
-            me->SetUInt32Value(UNIT_NPC_FLAGS, 0);
+            me->SetUInt32Value(UNIT_FIELD_NPC_FLAGS, 0);
             DoCast(me, SPELL_NEFARIANS_BARRIER);
             me->SetStandState(UNIT_STAND_STATE_STAND);
             AttackStart(target);
@@ -218,7 +218,7 @@ public:
             }
         }
 
-        void JustSummoned(Creature* /*summon*/) OVERRIDE {}
+        void JustSummoned(Creature* /*summon*/) OVERRIDE { }
 
         void SetData(uint32 type, uint32 data) OVERRIDE
         {

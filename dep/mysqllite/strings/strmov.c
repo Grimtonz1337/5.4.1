@@ -16,7 +16,7 @@
 /*
   strmov(dst, src) moves all the  characters  of  src  (including  the
   closing NUL) to dst, and returns a pointer to the new closing NUL in
-  dst.     The similar UNIX routine strcpy returns the old value of dst,
+  dst.	 The similar UNIX routine strcpy returns the old value of dst,
   which I have never found useful.  strmov(strmov(dst,a),b) moves a//b
   into dst, which seems useful.
 */

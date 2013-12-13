@@ -328,15 +328,12 @@ enum Difficulty
 
     DUNGEON_DIFFICULTY_NORMAL    = 0,
     DUNGEON_DIFFICULTY_HEROIC    = 1,
-    DUNGEON_DIFFICULTY_CHALLENGE = 2,  // 5.x Challenge mode dungeons
+    DUNGEON_DIFFICULTY_EPIC      = 2,
 
     RAID_DIFFICULTY_10MAN_NORMAL = 0,
     RAID_DIFFICULTY_25MAN_NORMAL = 1,
     RAID_DIFFICULTY_10MAN_HEROIC = 2,
-    RAID_DIFFICULTY_25MAN_HEROIC = 3,
-    RAID_DIFFICULTY_10MAN_FLEX   = 4,  // 5.4 Flex Raids 10 man but upto 25 man
-    RAID_DIFFICULTY_25MAN_LFR    = 5   // 5.x LFR Raids
-
+    RAID_DIFFICULTY_25MAN_HEROIC = 3
 };
 
 #define RAID_DIFFICULTY_MASK_25MAN 1    // since 25man difficulties are 1 and 3, we can check them like that
@@ -351,14 +348,11 @@ enum SpawnMask
 
     SPAWNMASK_DUNGEON_NORMAL    = (1 << DUNGEON_DIFFICULTY_NORMAL),
     SPAWNMASK_DUNGEON_HEROIC    = (1 << DUNGEON_DIFFICULTY_HEROIC),
-    SPAWNMASK_DUNGEON_CHALLENGE = (1 << DUNGEON_DIFFICULTY_CHALLENGE),
-    SPAWNMASK_DUNGEON_ALL       = (SPAWNMASK_DUNGEON_NORMAL | SPAWNMASK_DUNGEON_HEROIC | SPAWNMASK_DUNGEON_CHALLENGE),
-    
+    SPAWNMASK_DUNGEON_ALL       = (SPAWNMASK_DUNGEON_NORMAL | SPAWNMASK_DUNGEON_HEROIC),
+
     SPAWNMASK_RAID_10MAN_NORMAL = (1 << RAID_DIFFICULTY_10MAN_NORMAL),
     SPAWNMASK_RAID_25MAN_NORMAL = (1 << RAID_DIFFICULTY_25MAN_NORMAL),
-    SPAWNMASK_RAID_10MAN_FLEX   = (1 << RAID_DIFFICULTY_10MAN_FLEX),
-    SPAWNMASK_RAID_25MAN_LFR    = (1 << RAID_DIFFICULTY_25MAN_LFR),
-    SPAWNMASK_RAID_NORMAL_ALL   = (SPAWNMASK_RAID_10MAN_NORMAL | SPAWNMASK_RAID_25MAN_NORMAL | SPAWNMASK_RAID_10MAN_FLEX | SPAWNMASK_RAID_25MAN_LFR),
+    SPAWNMASK_RAID_NORMAL_ALL   = (SPAWNMASK_RAID_10MAN_NORMAL | SPAWNMASK_RAID_25MAN_NORMAL),
 
     SPAWNMASK_RAID_10MAN_HEROIC = (1 << RAID_DIFFICULTY_10MAN_HEROIC),
     SPAWNMASK_RAID_25MAN_HEROIC = (1 << RAID_DIFFICULTY_25MAN_HEROIC),
@@ -391,20 +385,6 @@ enum MapTypes                                               // Lua_IsInInstance
     MAP_BATTLEGROUND    = 3,                                // pvp
     MAP_ARENA           = 4,                                // arena
     MAP_SCENARIO        = 5                                 // scenario
-};
-
-enum MapFlags                                               // Map flags (need more research)
-{
-    MAP_FLAG_NONE                = 0x00000000,              // none specific
-    MAP_FLAG_INSTANCEABLE        = 0x00000001,              // or possible splittable for continent maps
-    MAP_FLAG_DEVELOPMENT         = 0x00000002,              // testing or development maps only
-    MAP_FLAG_UNK3                = 0x00000004,              //
-    MAP_FLAG_UNK4                = 0x00000008,              //
-    MAP_FLAG_UNK5                = 0x00000010,              //
-    MAP_FLAG_UNK6                = 0x00000020,              //
-    MAP_FLAG_UNK7                = 0x00000040,              //
-    MAP_FLAG_UNK8                = 0x00000080,              //
-    MAP_FLAG_VARIABLE_DIFFICULTY = 0x00000100,              // maps, where has changeable difficulty
 };
 
 enum AbilytyLearnType
@@ -448,6 +428,13 @@ enum MountFlags
     MOUNT_FLAG_CAN_SWIM                 = 0x8,                    // client checks MOVEMENTFLAG_SWIMMING
 };
 
+enum SpellCategoryFlags
+{
+    SPELL_CATEGORY_FLAG_COOLDOWN_SCALES_WITH_WEAPON_SPEED   = 0x01, // unused
+    SPELL_CATEGORY_FLAG_COOLDOWN_STARTS_ON_EVENT            = 0x04,
+    SPELL_CATEGORY_FLAG_COOLDOWN_EXPIRES_AT_MIDNIGHT        = 0x08
+};
+
 enum TotemCategoryType
 {
     TOTEM_CATEGORY_TYPE_KNIFE           = 1,
@@ -463,11 +450,10 @@ enum TotemCategoryType
 enum SummonPropGroup
 {
     SUMMON_PROP_GROUP_UNKNOWN1       = 0,                   // 1160 spells in 3.0.3
-    SUMMON_PROP_GROUP_FRIENDLY       = 1,                   // 861 spells in 3.0.3
+    SUMMON_PROP_GROUP_UNKNOWN2       = 1,                   // 861 spells in 3.0.3
     SUMMON_PROP_GROUP_PETS           = 2,                   // 52 spells in 3.0.3, pets mostly
     SUMMON_PROP_GROUP_CONTROLLABLE   = 3,                   // 13 spells in 3.0.3, mostly controllable
-    SUMMON_PROP_GROUP_VEHICLE        = 4,
-    SUMMON_PROP_GROUP_UNCONTROLLABLE_VEHICLE  = 5
+    SUMMON_PROP_GROUP_UNKNOWN3       = 4                    // 86 spells in 3.0.3, taxi/mounts
 };
 
 // SummonProperties.dbc, col 3
@@ -486,12 +472,7 @@ enum SummonPropType
     SUMMON_PROP_TYPE_DRAKE_VEH       = 10,                  // summon drake (vehicle), 3 spells
     SUMMON_PROP_TYPE_LIGHTWELL       = 11,                  // summon lightwell, 6 spells in 3.0.3
     SUMMON_PROP_TYPE_JEEVES          = 12,                  // summon Jeeves, 1 spell in 3.3.5a
-    SUMMON_PROP_TYPE_LASHTAIL        = 13,                  // Lashtail Hatchling, 1 spell in 4.2.2
-    SUMMON_PROP_TYPE_UNK14           = 14,
-    SUMMON_PROP_TYPE_UNK15           = 15,
-    SUMMON_PROP_TYPE_UNK16           = 16,
-    SUMMON_PROP_TYPE_UNK17           = 17,
-    SUMMON_PROP_TYPE_UNK18           = 18
+    SUMMON_PROP_TYPE_LASHTAIL        = 13                   // Lashtail Hatchling, 1 spell in 4.2.2
 };
 
 // SummonProperties.dbc, col 5
@@ -523,7 +504,6 @@ enum SummonPropFlags
 
 enum VehicleSeatFlags
 {
-    VEHICLE_SEAT_FLAG_NONE                                             = 0x00000000,
     VEHICLE_SEAT_FLAG_HAS_LOWER_ANIM_FOR_ENTER                         = 0x00000001,
     VEHICLE_SEAT_FLAG_HAS_LOWER_ANIM_FOR_RIDE                          = 0x00000002,
     VEHICLE_SEAT_FLAG_UNK3                                             = 0x00000004,
@@ -561,24 +541,14 @@ enum VehicleSeatFlags
 enum VehicleSeatFlagsB
 {
     VEHICLE_SEAT_FLAG_B_NONE                     = 0x00000000,
-    VEHICLE_SEAT_FLAG_B_UNK1                     = 0x00000001,
     VEHICLE_SEAT_FLAG_B_USABLE_FORCED            = 0x00000002,
-    VEHICLE_SEAT_FLAG_B_UNK2                     = 0x00000004,
     VEHICLE_SEAT_FLAG_B_TARGETS_IN_RAIDUI        = 0x00000008,           // Lua_UnitTargetsVehicleInRaidUI
     VEHICLE_SEAT_FLAG_B_EJECTABLE                = 0x00000020,           // ejectable
     VEHICLE_SEAT_FLAG_B_USABLE_FORCED_2          = 0x00000040,
-    VEHICLE_SEAT_FLAG_B_UNK6                     = 0x00000080,
     VEHICLE_SEAT_FLAG_B_USABLE_FORCED_3          = 0x00000100,
-    VEHICLE_SEAT_FLAG_B_EJECTABLE_FORCED         = 0x00200000,           // seats for forced eject? 27 seats at 3.3.5a
     VEHICLE_SEAT_FLAG_B_USABLE_FORCED_4          = 0x02000000,
     VEHICLE_SEAT_FLAG_B_CAN_SWITCH               = 0x04000000,
     VEHICLE_SEAT_FLAG_B_VEHICLE_PLAYERFRAME_UI   = 0x80000000            // Lua_UnitHasVehiclePlayerFrameUI - actually checked for flagsb &~ 0x80000000
-};
-
-enum MapDifficultyFlags
-{
-    MAP_DIFFICULTY_FLAG_NONE        = 0x00000001,           // Not used in 3.3.5
-    MAP_DIFFICULTY_FLAG_CONDITION   = 0x00000002,           // This map difficulty has condition
 };
 
 // CurrencyTypes.dbc

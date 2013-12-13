@@ -158,26 +158,26 @@ enum ItemFieldFlags
     ITEM_FLAG_UNK5          = 0x00000080, // ?
     ITEM_FLAG_BOP_TRADEABLE = 0x00000100, // Allows trading soulbound items
     ITEM_FLAG_READABLE      = 0x00000200, // Opens text page when right clicked
-    ITEM_FLAG_CREATE_ITEM   = 0x00000400, // Creates an Item
-    ITEM_FLAG_QUEST         = 0x00000800, // Quest Item
+    ITEM_FLAG_UNK6          = 0x00000400, // ?
+    ITEM_FLAG_UNK7          = 0x00000800, // ?
     ITEM_FLAG_REFUNDABLE    = 0x00001000, // Item can be returned to vendor for its original cost (extended cost)
-    ITEM_FLAG_SIGNABLE      = 0x00002000, // Guild/Arena Charters
+    ITEM_FLAG_UNK8          = 0x00002000, // ?
     ITEM_FLAG_UNK9          = 0x00004000, // ?
     ITEM_FLAG_UNK10         = 0x00008000, // ?
-    ITEM_FLAG_EVENT_REQ     = 0x00010000, // World Event Required
+    ITEM_FLAG_UNK11         = 0x00010000, // ?
     ITEM_FLAG_UNK12         = 0x00020000, // ?
     ITEM_FLAG_UNK13         = 0x00040000, // ?
     ITEM_FLAG_UNK14         = 0x00080000, // ?
     ITEM_FLAG_UNK15         = 0x00100000, // ?
     ITEM_FLAG_UNK16         = 0x00200000, // ?
-    ITEM_FLAG_THROWN        = 0x00400000, // ?
-    ITEM_FLAG_SHAPESHIFT_OK = 0x00800000, // ?
+    ITEM_FLAG_UNK17         = 0x00400000, // ?
+    ITEM_FLAG_UNK18         = 0x00800000, // ?
     ITEM_FLAG_UNK19         = 0x01000000, // ?
     ITEM_FLAG_UNK20         = 0x02000000, // ?
     ITEM_FLAG_UNK21         = 0x04000000, // ?
-    ITEM_FLAG_ACCOUNT_BOUND = 0x08000000, // ?
+    ITEM_FLAG_UNK22         = 0x08000000, // ?
     ITEM_FLAG_UNK23         = 0x10000000, // ?
-    ITEM_FLAG_MILLABLE      = 0x20000000, // ?
+    ITEM_FLAG_UNK24         = 0x20000000, // ?
     ITEM_FLAG_UNK25         = 0x40000000, // ?
     ITEM_FLAG_UNK26         = 0x80000000, // ?
 
@@ -246,7 +246,6 @@ enum BAG_FAMILY_MASK
     BAG_FAMILY_MASK_CURRENCY_TOKENS           = 0x00002000,
     BAG_FAMILY_MASK_QUEST_ITEMS               = 0x00004000,
     BAG_FAMILY_MASK_FISHING_SUPP              = 0x00008000,
-    BAG_FAMILY_MASK_COOKING_SUPP              = 0x00010000,    
 };
 
 enum SocketColor
@@ -314,11 +313,10 @@ enum ItemClass
     ITEM_CLASS_KEY                              = 13,
     ITEM_CLASS_PERMANENT                        = 14, // OBSOLETE
     ITEM_CLASS_MISCELLANEOUS                    = 15,
-    ITEM_CLASS_GLYPH                            = 16,
-    ITEM_CLASS_BATTLEPET                        = 17
+    ITEM_CLASS_GLYPH                            = 16
 };
 
-#define MAX_ITEM_CLASS                            18
+#define MAX_ITEM_CLASS                            17
 
 enum ItemSubclassConsumable
 {
@@ -346,11 +344,10 @@ enum ItemSubclassContainer
     ITEM_SUBCLASS_MINING_CONTAINER              = 6,
     ITEM_SUBCLASS_LEATHERWORKING_CONTAINER      = 7,
     ITEM_SUBCLASS_INSCRIPTION_CONTAINER         = 8,
-    ITEM_SUBCLASS_TACKLE_CONTAINER              = 9,
-    ITEM_SUBCLASS_COOKING_CONTAINER             = 10    
+    ITEM_SUBCLASS_TACKLE_CONTAINER              = 9
 };
 
-#define MAX_ITEM_SUBCLASS_CONTAINER               11
+#define MAX_ITEM_SUBCLASS_CONTAINER               10
 
 enum ItemSubclassWeapon
 {
@@ -394,7 +391,7 @@ enum ItemSubclassGem
     ITEM_SUBCLASS_GEM_META                      = 6,
     ITEM_SUBCLASS_GEM_SIMPLE                    = 7,
     ITEM_SUBCLASS_GEM_PRISMATIC                 = 8,
-    ITEM_SUBCLASS_GEM_CRYSTAL_OF_FEAR           = 9,
+    ITEM_SUBCLASS_GEM_HYDRAULIC                 = 9,
     ITEM_SUBCLASS_GEM_COGWHEEL                  = 10
 };
 
@@ -446,17 +443,16 @@ enum ItemSubclassTradeGoods
     ITEM_SUBCLASS_CLOTH                         = 5,
     ITEM_SUBCLASS_LEATHER                       = 6,
     ITEM_SUBCLASS_METAL_STONE                   = 7,
-    ITEM_SUBCLASS_COOKING                       = 8,
+    ITEM_SUBCLASS_MEAT                          = 8,
     ITEM_SUBCLASS_HERB                          = 9,
     ITEM_SUBCLASS_ELEMENTAL                     = 10,
     ITEM_SUBCLASS_TRADE_GOODS_OTHER             = 11,
     ITEM_SUBCLASS_ENCHANTING                    = 12,
     ITEM_SUBCLASS_MATERIAL                      = 13,
-    ITEM_SUBCLASS_ITEM_ENCHANTMENT              = 14,
-    ITEM_SUBCLASS_WEAPON_ENCHANTMENT            = 15 // OBSOLETE 
+    ITEM_SUBCLASS_ENCHANTMENT                   = 14,
 };
 
-#define MAX_ITEM_SUBCLASS_TRADE_GOODS             16
+#define MAX_ITEM_SUBCLASS_TRADE_GOODS             15
 
 enum ItemSubclassGeneric
 {
@@ -549,27 +545,11 @@ enum ItemSubclassGlyph
     ITEM_SUBCLASS_GLYPH_SHAMAN                  = 7,
     ITEM_SUBCLASS_GLYPH_MAGE                    = 8,
     ITEM_SUBCLASS_GLYPH_WARLOCK                 = 9,
-    ITEM_SUBCLASS_GLYPH_MONK                    = 10,
+    ITEM_SUBCLASS_GLYPH_MONK					               = 10,
     ITEM_SUBCLASS_GLYPH_DRUID                   = 11
 };
 
 #define MAX_ITEM_SUBCLASS_GLYPH                   12
-
-enum ItemSubclassBattlePet
-{
-    ITEM_SUBCLASS_BATTLE_PET_AQUATIC            = 1,
-    ITEM_SUBCLASS_BATTLE_PET_BEAST              = 2,
-    ITEM_SUBCLASS_BATTLE_PET_CRITTER            = 3,
-    ITEM_SUBCLASS_BATTLE_PET_DRAGONKIN          = 4,
-    ITEM_SUBCLASS_BATTLE_PET_ELEMENTAL          = 5,
-    ITEM_SUBCLASS_BATTLE_PET_FLYING             = 6,
-    ITEM_SUBCLASS_BATTLE_PET_HUMANOID           = 7,
-    ITEM_SUBCLASS_BATTLE_PET_MAGICAL            = 8,
-    ITEM_SUBCLASS_BATTLE_PET_MECHANICAL         = 9,
-    ITEM_SUBCLASS_BATTLE_PET_UNDEAD             = 10
-};
-
-#define MAX_ITEM_SUBCLASS_BATTLEPET               11
 
 const uint32 MaxItemSubclassValues[MAX_ITEM_CLASS] =
 {
@@ -589,8 +569,7 @@ const uint32 MaxItemSubclassValues[MAX_ITEM_CLASS] =
     MAX_ITEM_SUBCLASS_KEY,
     MAX_ITEM_SUBCLASS_PERMANENT,
     MAX_ITEM_SUBCLASS_JUNK,
-    MAX_ITEM_SUBCLASS_GLYPH,
-    MAX_ITEM_SUBCLASS_BATTLEPET
+    MAX_ITEM_SUBCLASS_GLYPH
 };
 
 inline uint8 ItemSubClassToDurabilityMultiplierId(uint32 ItemClass, uint32 ItemSubClass)
@@ -777,7 +756,7 @@ struct ItemTemplate
     }
 
     bool IsPotion() const { return Class == ITEM_CLASS_CONSUMABLE && SubClass == ITEM_SUBCLASS_POTION; }
-    bool IsVellum() const { return Class == ITEM_CLASS_TRADE_GOODS && SubClass == ITEM_SUBCLASS_ITEM_ENCHANTMENT; }
+    bool IsVellum() const { return Class == ITEM_CLASS_TRADE_GOODS && SubClass == ITEM_SUBCLASS_ENCHANTMENT; }
     bool IsConjuredConsumable() const { return Class == ITEM_CLASS_CONSUMABLE && (Flags & ITEM_PROTO_FLAG_CONJURED); }
 
     bool IsRangedWeapon() const

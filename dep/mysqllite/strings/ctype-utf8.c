@@ -1740,9 +1740,9 @@ my_tosort_unicode(MY_UNICASE_INFO **uni_plane, my_wc_t *wc)
 ** Compare string against string with wildcard
 ** This function is used in UTF8 and UCS2
 **
-**    0 if matched
-**    -1 if not matched with wildcard
-**     1 if matched with wildcard
+**	0 if matched
+**	-1 if not matched with wildcard
+**	 1 if matched with wildcard
 */
 
 int
@@ -2489,7 +2489,7 @@ static int my_strnncoll_utf8(CHARSET_INFO *cs,
     b                   Second string to compare
     b_length            Length of 'b'
     diff_if_only_endspace_difference
-                Set to 1 if the strings should be regarded as different
+		        Set to 1 if the strings should be regarded as different
                         if they only difference in end space
 
   IMPLEMENTATION
@@ -2577,7 +2577,7 @@ static int my_strnncollsp_utf8(CHARSET_INFO *cs,
     for ( ; s < se; s++)
     {
       if (*s != ' ')
-    return (*s < ' ') ? -swap : swap;
+	return (*s < ' ') ? -swap : swap;
     }
   }
   return res;
@@ -2685,9 +2685,9 @@ int my_strcasecmp_utf8(CHARSET_INFO *cs, const char *s, const char *t)
 
 static
 int my_wildcmp_utf8(CHARSET_INFO *cs,
-            const char *str,const char *str_end,
-            const char *wildstr,const char *wildend,
-            int escape, int w_one, int w_many)
+		    const char *str,const char *str_end,
+		    const char *wildstr,const char *wildend,
+		    int escape, int w_one, int w_many)
 {
   MY_UNICASE_INFO **uni_plane= cs->caseinfo;
   return my_wildcmp_unicode(cs,str,str_end,wildstr,wildend,
@@ -2984,7 +2984,7 @@ static int my_strnncollsp_utf8_cs(CHARSET_INFO *cs,
 
 static MY_COLLATION_HANDLER my_collation_cs_handler =
 {
-    NULL,        /* init */
+    NULL,		/* init */
     my_strnncoll_utf8_cs,
     my_strnncollsp_utf8_cs,
     my_strnxfrm_unicode,
@@ -2999,36 +2999,36 @@ static MY_COLLATION_HANDLER my_collation_cs_handler =
 
 CHARSET_INFO my_charset_utf8_general_cs=
 {
-    254,0,0,        /* number       */
-    MY_CS_COMPILED|MY_CS_UNICODE,    /* state  */
-    "utf8",        /* cs name      */
-    "utf8_general_cs",    /* name         */
-    "",            /* comment      */
-    NULL,        /* tailoring    */
-    ctype_utf8,        /* ctype        */
-    to_lower_utf8,    /* to_lower     */
-    to_upper_utf8,    /* to_upper     */
-    to_upper_utf8,    /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    254,0,0,		/* number       */
+    MY_CS_COMPILED|MY_CS_UNICODE,	/* state  */
+    "utf8",		/* cs name      */
+    "utf8_general_cs",	/* name         */
+    "",			/* comment      */
+    NULL,		/* tailoring    */
+    ctype_utf8,		/* ctype        */
+    to_lower_utf8,	/* to_lower     */
+    to_upper_utf8,	/* to_upper     */
+    to_upper_utf8,	/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen     */
-    3,            /* mbmaxlen     */
-    0,            /* min_sort_char */
-    255,        /* max_sort_char */
+    1,			/* mbminlen     */
+    3,			/* mbmaxlen     */
+    0,			/* min_sort_char */
+    255,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_utf8_handler,
     &my_collation_cs_handler
 };
-#endif    /* Cybozu Hack */
+#endif	/* Cybozu Hack */
 
 
 /*
@@ -4980,7 +4980,7 @@ my_strnncollsp_utf8mb4(CHARSET_INFO *cs,
     for ( ; s < se; s++)
     {
       if (*s != ' ')
-    return (*s < ' ') ? -swap : swap;
+	return (*s < ' ') ? -swap : swap;
     }
   }
   return res;
@@ -5123,7 +5123,7 @@ static MY_COLLATION_HANDLER my_collation_utf8mb4_general_ci_handler=
 
 static MY_COLLATION_HANDLER my_collation_utf8mb4_bin_handler =
 {
-    NULL,        /* init */
+    NULL,		/* init */
     my_strnncoll_mb_bin,
     my_strnncollsp_mb_bin,
     my_strnxfrm_unicode_full_bin,

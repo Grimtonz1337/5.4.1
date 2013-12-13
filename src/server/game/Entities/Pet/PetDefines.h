@@ -23,11 +23,7 @@ enum PetType
 {
     SUMMON_PET              = 0,
     HUNTER_PET              = 1,
-    GUARDIAN_PET            = 2,
-    MINI_PET                = 3,
-    PROTECTOR_PET           = 4,
-    BATTLE_PET              = 5,
-    MAX_PET_TYPE            = 6
+    MAX_PET_TYPE            = 4
 };
 
 #define MAX_PET_STABLES         4

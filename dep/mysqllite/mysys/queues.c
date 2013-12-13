@@ -32,29 +32,29 @@
 
   SYNOPSIS
     init_queue()
-    queue        Queue to initialise
-    max_elements    Max elements that will be put in queue
-    offset_to_key    Offset to key in element stored in queue
-            Used when sending pointers to compare function
-    max_at_top        Set to 1 if you want biggest element on top.
-    compare        Compare function for elements, takes 3 arguments.
-    first_cmp_arg    First argument to compare function
+    queue		Queue to initialise
+    max_elements	Max elements that will be put in queue
+    offset_to_key	Offset to key in element stored in queue
+			Used when sending pointers to compare function
+    max_at_top		Set to 1 if you want biggest element on top.
+    compare		Compare function for elements, takes 3 arguments.
+    first_cmp_arg	First argument to compare function
 
   NOTES
     Will allocate max_element pointers for queue array
 
   RETURN
-    0    ok
-    1    Could not allocate memory
+    0	ok
+    1	Could not allocate memory
 */
 
 int init_queue(QUEUE *queue, uint max_elements, uint offset_to_key,
-           pbool max_at_top, int (*compare) (void *, uchar *, uchar *),
-           void *first_cmp_arg)
+	       pbool max_at_top, int (*compare) (void *, uchar *, uchar *),
+	       void *first_cmp_arg)
 {
   DBUG_ENTER("init_queue");
   if ((queue->root= (uchar **) my_malloc((max_elements+1)*sizeof(void*),
-                     MYF(MY_WME))) == 0)
+					 MYF(MY_WME))) == 0)
     DBUG_RETURN(1);
   queue->elements=0;
   queue->compare=compare;
@@ -73,13 +73,13 @@ int init_queue(QUEUE *queue, uint max_elements, uint offset_to_key,
 
   SYNOPSIS
     init_queue_ex()
-    queue        Queue to initialise
-    max_elements    Max elements that will be put in queue
-    offset_to_key    Offset to key in element stored in queue
-            Used when sending pointers to compare function
-    max_at_top        Set to 1 if you want biggest element on top.
-    compare        Compare function for elements, takes 3 arguments.
-    first_cmp_arg    First argument to compare function
+    queue		Queue to initialise
+    max_elements	Max elements that will be put in queue
+    offset_to_key	Offset to key in element stored in queue
+			Used when sending pointers to compare function
+    max_at_top		Set to 1 if you want biggest element on top.
+    compare		Compare function for elements, takes 3 arguments.
+    first_cmp_arg	First argument to compare function
     auto_extent         When the queue is full and there is insert operation
                         extend the queue.
 
@@ -87,13 +87,13 @@ int init_queue(QUEUE *queue, uint max_elements, uint offset_to_key,
     Will allocate max_element pointers for queue array
 
   RETURN
-    0    ok
-    1    Could not allocate memory
+    0	ok
+    1	Could not allocate memory
 */
 
 int init_queue_ex(QUEUE *queue, uint max_elements, uint offset_to_key,
-           pbool max_at_top, int (*compare) (void *, uchar *, uchar *),
-           void *first_cmp_arg, uint auto_extent)
+	       pbool max_at_top, int (*compare) (void *, uchar *, uchar *),
+	       void *first_cmp_arg, uint auto_extent)
 {
   int ret;
   DBUG_ENTER("init_queue_ex");
@@ -111,26 +111,26 @@ int init_queue_ex(QUEUE *queue, uint max_elements, uint offset_to_key,
 
   SYNOPSIS
     reinit_queue()
-    queue        Queue to initialise
-    max_elements    Max elements that will be put in queue
-    offset_to_key    Offset to key in element stored in queue
-            Used when sending pointers to compare function
-    max_at_top        Set to 1 if you want biggest element on top.
-    compare        Compare function for elements, takes 3 arguments.
-    first_cmp_arg    First argument to compare function
+    queue		Queue to initialise
+    max_elements	Max elements that will be put in queue
+    offset_to_key	Offset to key in element stored in queue
+			Used when sending pointers to compare function
+    max_at_top		Set to 1 if you want biggest element on top.
+    compare		Compare function for elements, takes 3 arguments.
+    first_cmp_arg	First argument to compare function
 
   NOTES
     This will delete all elements from the queue.  If you don't want this,
     use resize_queue() instead.
 
   RETURN
-    0            ok
-    EE_OUTOFMEMORY    Wrong max_elements
+    0			ok
+    EE_OUTOFMEMORY	Wrong max_elements
 */
 
 int reinit_queue(QUEUE *queue, uint max_elements, uint offset_to_key,
-         pbool max_at_top, int (*compare) (void *, uchar *, uchar *),
-         void *first_cmp_arg)
+		 pbool max_at_top, int (*compare) (void *, uchar *, uchar *),
+		 void *first_cmp_arg)
 {
   DBUG_ENTER("reinit_queue");
   queue->elements=0;
@@ -148,16 +148,16 @@ int reinit_queue(QUEUE *queue, uint max_elements, uint offset_to_key,
 
   SYNOPSIS
     resize_queue()
-    queue            Queue
-    max_elements        New max size for queue
+    queue			Queue
+    max_elements		New max size for queue
 
   NOTES
     If you resize queue to be less than the elements you have in it,
     the extra elements will be deleted
 
   RETURN
-    0    ok
-    1    Error.  In this case the queue is unchanged
+    0	ok
+    1	Error.  In this case the queue is unchanged
 */
 
 int resize_queue(QUEUE *queue, uint max_elements)
@@ -167,8 +167,8 @@ int resize_queue(QUEUE *queue, uint max_elements)
   if (queue->max_elements == max_elements)
     DBUG_RETURN(0);
   if ((new_root= (uchar **) my_realloc((void *)queue->root,
-                      (max_elements+1)*sizeof(void*),
-                      MYF(MY_WME))) == 0)
+				      (max_elements+1)*sizeof(void*),
+				      MYF(MY_WME))) == 0)
     DBUG_RETURN(1);
   set_if_smaller(queue->elements, max_elements);
   queue->max_elements= max_elements;
@@ -182,7 +182,7 @@ int resize_queue(QUEUE *queue, uint max_elements)
 
   SYNOPSIS
    delete_queue()
-   queue        Queue to delete
+   queue		Queue to delete
 
   IMPLEMENTATION
     Just free allocated memory.
@@ -200,7 +200,7 @@ void delete_queue(QUEUE *queue)
 }
 
 
-    /* Code for insert, search and delete of elements */
+	/* Code for insert, search and delete of elements */
 
 void queue_insert(register QUEUE *queue, uchar *element)
 {
@@ -245,8 +245,8 @@ int queue_insert_safe(register QUEUE *queue, uchar *element)
 }
 
 
-    /* Remove item from queue */
-    /* Returns pointer to removed element */
+	/* Remove item from queue */
+	/* Returns pointer to removed element */
 
 uchar *queue_remove(register QUEUE *queue, uint idx)
 {
@@ -258,7 +258,7 @@ uchar *queue_remove(register QUEUE *queue, uint idx)
   return element;
 }
 
-    /* Fix when element on top has been replaced */
+	/* Fix when element on top has been replaced */
 
 #ifndef queue_replaced
 void queue_replaced(QUEUE *queue)
@@ -284,10 +284,10 @@ void _downheap(register QUEUE *queue, uint idx)
   {
     next_index=idx+idx;
     if (next_index < elements &&
-    (queue->compare(queue->first_cmp_arg,
-            queue->root[next_index]+offset_to_key,
-            queue->root[next_index+1]+offset_to_key) *
-     queue->max_at_top) > 0)
+	(queue->compare(queue->first_cmp_arg,
+			queue->root[next_index]+offset_to_key,
+			queue->root[next_index+1]+offset_to_key) *
+	 queue->max_at_top) > 0)
       next_index++;
     if (first && 
         (((queue->compare(queue->first_cmp_arg,
@@ -322,7 +322,7 @@ void _downheap(register QUEUE *queue, uint idx)
     The old _downheap version is kept for comparisons with the benchmark
     suit or new benchmarks anyone wants to run for comparisons.
   */
-    /* Fix heap when index have changed */
+	/* Fix heap when index have changed */
 void _downheap(register QUEUE *queue, uint idx)
 {
   uchar *element;
@@ -336,10 +336,10 @@ void _downheap(register QUEUE *queue, uint idx)
   {
     next_index=idx+idx;
     if (next_index < elements &&
-    (queue->compare(queue->first_cmp_arg,
-            queue->root[next_index]+offset_to_key,
-            queue->root[next_index+1]+offset_to_key) *
-     queue->max_at_top) > 0)
+	(queue->compare(queue->first_cmp_arg,
+			queue->root[next_index]+offset_to_key,
+			queue->root[next_index+1]+offset_to_key) *
+	 queue->max_at_top) > 0)
       next_index++;
     if ((queue->compare(queue->first_cmp_arg,
                         queue->root[next_index]+offset_to_key,

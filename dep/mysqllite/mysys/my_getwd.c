@@ -31,9 +31,9 @@
 
   SYNPOSIS
     my_getwd()
-    buf        Buffer to store result. Can be curr_dir[].
-    size    Size of buffer
-    MyFlags    Flags
+    buf		Buffer to store result. Can be curr_dir[].
+    size	Size of buffer
+    MyFlags	Flags
 
   NOTES
     Directory is allways ended with FN_LIBCHAR
@@ -53,7 +53,7 @@ int my_getwd(char * buf, size_t size, myf MyFlags)
   if (size < 1)
     DBUG_RETURN(-1);
 
-  if (curr_dir[0])                /* Current pos is saved here */
+  if (curr_dir[0])				/* Current pos is saved here */
     (void) strmake(buf,&curr_dir[0],size-1);
   else
   {
@@ -108,25 +108,25 @@ int my_setwd(const char *dir, myf MyFlags)
   else
   {
     if (test_if_hard_path(start))
-    {                        /* Hard pathname */
+    {						/* Hard pathname */
       pos= strmake(&curr_dir[0],start,(size_t) FN_REFLEN-1);
       if (pos[-1] != FN_LIBCHAR)
       {
-    length=(uint) (pos-(char*) curr_dir);
-    curr_dir[length]=FN_LIBCHAR;        /* must end with '/' */
-    curr_dir[length+1]='\0';
+	length=(uint) (pos-(char*) curr_dir);
+	curr_dir[length]=FN_LIBCHAR;		/* must end with '/' */
+	curr_dir[length+1]='\0';
       }
     }
     else
-      curr_dir[0]='\0';                /* Don't save name */
+      curr_dir[0]='\0';				/* Don't save name */
   }
   DBUG_RETURN(res);
 } /* my_setwd */
 
 
 
-    /* Test if hard pathname */
-    /* Returns 1 if dirname is a hard path */
+	/* Test if hard pathname */
+	/* Returns 1 if dirname is a hard path */
 
 int test_if_hard_path(register const char *dir_name)
 {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -72,7 +72,7 @@ class npc_torek : public CreatureScript
 
         struct npc_torekAI : public npc_escortAI
         {
-            npc_torekAI(Creature* creature) : npc_escortAI(creature) {}
+            npc_torekAI(Creature* creature) : npc_escortAI(creature) { }
 
             uint32 Rend_Timer;
             uint32 Thunderclap_Timer;
@@ -209,7 +209,7 @@ class npc_ruul_snowhoof : public CreatureScript
                 switch (waypointId)
                 {
                     case 0:
-                        me->SetUInt32Value(UNIT_FIELD_BYTES_1, 0);
+                        me->SetUInt32Value(UNIT_FIELD_ANIM_TIER, 0);
                         if (GameObject* Cage = me->FindNearestGameObject(GO_CAGE, 20))
                             Cage->SetGoState(GO_STATE_ACTIVE);
                         break;
@@ -229,7 +229,7 @@ class npc_ruul_snowhoof : public CreatureScript
                 }
             }
 
-            void EnterCombat(Unit* /*who*/) OVERRIDE {}
+            void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
             void Reset() OVERRIDE
             {
@@ -344,7 +344,7 @@ class npc_muglash : public CreatureScript
 
                             if (GameObject* go = GetClosestGameObjectWithEntry(me, GO_NAGA_BRAZIER, INTERACTION_DISTANCE*2))
                             {
-                                go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
+                                go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_NOT_SELECTABLE);
                                 SetEscortPaused(true);
                             }
                             break;

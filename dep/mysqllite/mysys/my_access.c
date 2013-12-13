@@ -23,8 +23,8 @@
  
   SYNOPSIS
     file_access()
-    path     Path to file
-    amode    Access method
+    path 	Path to file
+    amode	Access method
  
   DESCRIPTION
     This function wraps the normal access method because the access 
@@ -40,7 +40,7 @@ int my_access(const char *path, int amode)
 { 
   WIN32_FILE_ATTRIBUTE_DATA fileinfo;
   BOOL result;
-    
+	
   result= GetFileAttributesEx(path, GetFileExInfoStandard, &fileinfo);
   if (! result ||
       (fileinfo.dwFileAttributes & FILE_ATTRIBUTE_READONLY) && (amode & W_OK))
@@ -132,7 +132,7 @@ static char reserved_map[256]=
  
   SYNOPSIS
     check_if_legal_tablename
-    name     Table name (without any extensions)
+    name 	Table name (without any extensions)
 
   DESCRIPTION
     We don't check 'CLOCK$' because dollar sign is encoded as @0024,
@@ -163,7 +163,7 @@ int check_if_legal_tablename(const char *name)
  
   SYNOPSIS
     check_if_legal_filename
-    path     Path to file
+    path 	Path to file
 
   RETURN
     0  ok

@@ -17,7 +17,7 @@
 
 #include "DB2Utility.h"
 #include "ObjectMgr.h"
-#include "Log.h"
+
 inline bool ItemExists(uint32 id)
 {
     return sObjectMgr->GetItemTemplate(id) != NULL;
@@ -25,9 +25,7 @@ inline bool ItemExists(uint32 id)
 
 bool DB2Utilities::HasItemEntry(DB2Storage<ItemEntry> const& /*store*/, uint32 id)
 {
-    
     return ItemExists(id);
-
 }
 
 bool DB2Utilities::HasItemSparseEntry(DB2Storage<ItemSparseEntry> const& /*store*/, uint32 id)
@@ -39,7 +37,7 @@ void DB2Utilities::WriteItemDbReply(DB2Storage<ItemEntry> const& /*store*/, uint
 {
     ItemTemplate const* proto = sObjectMgr->GetItemTemplate(id);
     ASSERT(proto);
-    
+
     buffer << uint32(proto->ItemId);
     buffer << uint32(proto->Class);
     buffer << uint32(proto->SubClass);

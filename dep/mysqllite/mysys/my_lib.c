@@ -15,10 +15,10 @@
 
 /* TODO: check for overun of memory for names. */
 
-#include    "mysys_priv.h"
-#include    <m_string.h>
-#include    <my_dir.h>    /* Structs used by my_dir,includes sys/types */
-#include    "mysys_err.h"
+#include	"mysys_priv.h"
+#include	<m_string.h>
+#include	<my_dir.h>	/* Structs used by my_dir,includes sys/types */
+#include	"mysys_err.h"
 #if defined(HAVE_DIRENT_H)
 # include <dirent.h>
 # define NAMLEN(dirent) strlen((dirent)->d_name)
@@ -57,10 +57,10 @@
 #define NAMES_START_SIZE   32768
 
 
-static int    comp_names(struct fileinfo *a,struct fileinfo *b);
+static int	comp_names(struct fileinfo *a,struct fileinfo *b);
 
 
-    /* We need this because program don't know with malloc we used */
+	/* We need this because program don't know with malloc we used */
 
 void my_dirend(MY_DIR *buffer)
 {
@@ -77,7 +77,7 @@ void my_dirend(MY_DIR *buffer)
 } /* my_dirend */
 
 
-    /* Compare in sort of filenames */
+	/* Compare in sort of filenames */
 
 static int comp_names(struct fileinfo *a, struct fileinfo *b)
 {
@@ -87,17 +87,17 @@ static int comp_names(struct fileinfo *a, struct fileinfo *b)
 
 #if !defined(_WIN32)
 
-MY_DIR    *my_dir(const char *path, myf MyFlags)
+MY_DIR	*my_dir(const char *path, myf MyFlags)
 {
   char          *buffer;
   MY_DIR        *result= 0;
   FILEINFO      finfo;
   DYNAMIC_ARRAY *dir_entries_storage;
   MEM_ROOT      *names_storage;
-  DIR        *dirp;
+  DIR		*dirp;
   struct dirent *dp;
-  char        tmp_path[FN_REFLEN+1],*tmp_file;
-  char    dirent_tmp[sizeof(struct dirent)+_POSIX_PATH_MAX+1];
+  char		tmp_path[FN_REFLEN+1],*tmp_file;
+  char	dirent_tmp[sizeof(struct dirent)+_POSIX_PATH_MAX+1];
 
   DBUG_ENTER("my_dir");
   DBUG_PRINT("my",("path: '%s' MyFlags: %d",path,MyFlags));
@@ -108,7 +108,7 @@ MY_DIR    *my_dir(const char *path, myf MyFlags)
 
   dirp = opendir(directory_file_name(tmp_path,(char *) path));
 #if defined(__amiga__)
-  if ((dirp->dd_fd) < 0)            /* Directory doesn't exists */
+  if ((dirp->dd_fd) < 0)			/* Directory doesn't exists */
     goto error;
 #endif
   if (dirp == NULL || 
@@ -199,11 +199,11 @@ char * directory_file_name (char * dst, const char *src)
   char *end;
 
   if (src[0] == 0)
-    src= (char*) ".";                /* Use empty as current */
+    src= (char*) ".";				/* Use empty as current */
   end=strmov(dst, src);
   if (end[-1] != FN_LIBCHAR)
   {
-    end[0]=FN_LIBCHAR;                /* Add last '/' */
+    end[0]=FN_LIBCHAR;				/* Add last '/' */
     end[1]='\0';
   }
   return dst;
@@ -217,7 +217,7 @@ char * directory_file_name (char * dst, const char *src)
 *****************************************************************************
 */
 
-MY_DIR    *my_dir(const char *path, myf MyFlags)
+MY_DIR	*my_dir(const char *path, myf MyFlags)
 {
   char          *buffer;
   MY_DIR        *result= 0;
@@ -229,12 +229,12 @@ MY_DIR    *my_dir(const char *path, myf MyFlags)
 #else
   struct _finddata_t find;
 #endif
-  ushort    mode;
-  char        tmp_path[FN_REFLEN],*tmp_file,attrib;
+  ushort	mode;
+  char		tmp_path[FN_REFLEN],*tmp_file,attrib;
 #ifdef _WIN64
   __int64       handle;
 #else
-  long        handle;
+  long		handle;
 #endif
   DBUG_ENTER("my_dir");
   DBUG_PRINT("my",("path: '%s' stat: %d  MyFlags: %d",path,MyFlags));
@@ -242,13 +242,13 @@ MY_DIR    *my_dir(const char *path, myf MyFlags)
   /* Put LIB-CHAR as last path-character if not there */
   tmp_file=tmp_path;
   if (!*path)
-    *tmp_file++ ='.';                /* From current dir */
+    *tmp_file++ ='.';				/* From current dir */
   tmp_file= strnmov(tmp_file, path, FN_REFLEN-5);
   if (tmp_file[-1] == FN_DEVCHAR)
-    *tmp_file++= '.';                /* From current dev-dir */
+    *tmp_file++= '.';				/* From current dev-dir */
   if (tmp_file[-1] != FN_LIBCHAR)
     *tmp_file++ =FN_LIBCHAR;
-  tmp_file[0]='*';                /* Windows needs this !??? */
+  tmp_file[0]='*';				/* Windows needs this !??? */
   tmp_file[1]='.';
   tmp_file[2]='*';
   tmp_file[3]='\0';
@@ -411,7 +411,7 @@ MY_STAT *my_stat(const char *path, MY_STAT *stat_area, myf my_flags)
 #endif
   DBUG_PRINT("error",("Got errno: %d from stat", errno));
   my_errno= errno;
-  if (m_used)                    /* Free if new area */
+  if (m_used)					/* Free if new area */
     my_free(stat_area);
 
 error:

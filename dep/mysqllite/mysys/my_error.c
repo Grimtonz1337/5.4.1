@@ -62,9 +62,9 @@ static struct my_err_head *my_errmsgs_list= &my_errmsgs_globerrs;
 
    SYNOPSIS
      my_error()
-       nr    Errno
-       MyFlags    Flags
-       ...    variable list
+       nr	Errno
+       MyFlags	Flags
+       ...	variable list
 
 */
 
@@ -103,10 +103,10 @@ void my_error(int nr, myf MyFlags, ...)
 
   SYNOPSIS
     my_printf_error()
-      error    Errno
-      format    Format string
-      MyFlags    Flags
-      ...    variable list
+      error	Errno
+      format	Format string
+      MyFlags	Flags
+      ...	variable list
 */
 
 void my_printf_error(uint error, const char *format, myf MyFlags, ...)
@@ -115,7 +115,7 @@ void my_printf_error(uint error, const char *format, myf MyFlags, ...)
   char ebuff[ERRMSGSIZE];
   DBUG_ENTER("my_printf_error");
   DBUG_PRINT("my", ("nr: %d  MyFlags: %d  errno: %d  Format: %s",
-            error, MyFlags, errno, format));
+		    error, MyFlags, errno, format));
 
   va_start(args,MyFlags);
   (void) my_vsnprintf_ex(&my_charset_utf8_general_ci, ebuff,
@@ -130,10 +130,10 @@ void my_printf_error(uint error, const char *format, myf MyFlags, ...)
 
   SYNOPSIS
     my_printv_error()
-      error    Errno
-      format    Format string
-      MyFlags    Flags
-      ...    variable list
+      error	Errno
+      format	Format string
+      MyFlags	Flags
+      ...	variable list
 */
 
 void my_printv_error(uint error, const char *format, myf MyFlags, va_list ap)
@@ -141,7 +141,7 @@ void my_printv_error(uint error, const char *format, myf MyFlags, va_list ap)
   char ebuff[ERRMSGSIZE];
   DBUG_ENTER("my_printv_error");
   DBUG_PRINT("my", ("nr: %d  MyFlags: %d  errno: %d  format: %s",
-            error, MyFlags, errno, format));
+		    error, MyFlags, errno, format));
 
   (void) my_vsnprintf(ebuff, sizeof(ebuff), format, ap);
   (*error_handler_hook)(error, ebuff, MyFlags);
@@ -153,9 +153,9 @@ void my_printv_error(uint error, const char *format, myf MyFlags, va_list ap)
 
   SYNOPSIS
     my_message()
-      error    Errno
-      str    Error message
-      MyFlags    Flags
+      error	Errno
+      str	Error message
+      MyFlags	Flags
 */
 
 void my_message(uint error, const char *str, register myf MyFlags)

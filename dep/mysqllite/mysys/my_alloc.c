@@ -44,7 +44,7 @@
 */
 
 void init_alloc_root(MEM_ROOT *mem_root, size_t block_size,
-             size_t pre_alloc_size __attribute__((unused)))
+		     size_t pre_alloc_size __attribute__((unused)))
 {
   DBUG_ENTER("init_alloc_root");
   DBUG_PRINT("enter",("root: 0x%lx", (long) mem_root));
@@ -53,15 +53,15 @@ void init_alloc_root(MEM_ROOT *mem_root, size_t block_size,
   mem_root->min_malloc= 32;
   mem_root->block_size= block_size - ALLOC_ROOT_MIN_BLOCK_SIZE;
   mem_root->error_handler= 0;
-  mem_root->block_num= 4;            /* We shift this with >>2 */
+  mem_root->block_num= 4;			/* We shift this with >>2 */
   mem_root->first_block_usage= 0;
 
 #if !(defined(HAVE_purify) && defined(EXTRA_DEBUG))
   if (pre_alloc_size)
   {
     if ((mem_root->free= mem_root->pre_alloc=
-     (USED_MEM*) my_malloc(pre_alloc_size+ ALIGN_SIZE(sizeof(USED_MEM)),
-                   MYF(0))))
+	 (USED_MEM*) my_malloc(pre_alloc_size+ ALIGN_SIZE(sizeof(USED_MEM)),
+			       MYF(0))))
     {
       mem_root->free->size= pre_alloc_size+ALIGN_SIZE(sizeof(USED_MEM));
       mem_root->free->left= pre_alloc_size;
@@ -167,7 +167,7 @@ void *alloc_root(MEM_ROOT *mem_root, size_t length)
   {
     if (mem_root->error_handler)
       (*mem_root->error_handler)();
-    DBUG_RETURN((uchar*) 0);            /* purecov: inspected */
+    DBUG_RETURN((uchar*) 0);			/* purecov: inspected */
   }
   next->next= mem_root->used;
   next->size= length;
@@ -196,11 +196,11 @@ void *alloc_root(MEM_ROOT *mem_root, size_t length)
   if ((*(prev= &mem_root->free)) != NULL)
   {
     if ((*prev)->left < length &&
-    mem_root->first_block_usage++ >= ALLOC_MAX_BLOCK_USAGE_BEFORE_DROP &&
-    (*prev)->left < ALLOC_MAX_BLOCK_TO_DROP)
+	mem_root->first_block_usage++ >= ALLOC_MAX_BLOCK_USAGE_BEFORE_DROP &&
+	(*prev)->left < ALLOC_MAX_BLOCK_TO_DROP)
     {
       next= *prev;
-      *prev= next->next;            /* Remove block from list */
+      *prev= next->next;			/* Remove block from list */
       next->next= mem_root->used;
       mem_root->used= next;
       mem_root->first_block_usage= 0;
@@ -209,7 +209,7 @@ void *alloc_root(MEM_ROOT *mem_root, size_t length)
       prev= &next->next;
   }
   if (! next)
-  {                        /* Time to alloc new block */
+  {						/* Time to alloc new block */
     block_size= mem_root->block_size * (mem_root->block_num >> 2);
     get_size= length+ALIGN_SIZE(sizeof(USED_MEM));
     get_size= max(get_size, block_size);
@@ -217,7 +217,7 @@ void *alloc_root(MEM_ROOT *mem_root, size_t length)
     if (!(next = (USED_MEM*) my_malloc(get_size,MYF(MY_WME | ME_FATALERROR))))
     {
       if (mem_root->error_handler)
-    (*mem_root->error_handler)();
+	(*mem_root->error_handler)();
       DBUG_RETURN((void*) 0);                      /* purecov: inspected */
     }
     mem_root->block_num++;
@@ -230,8 +230,8 @@ void *alloc_root(MEM_ROOT *mem_root, size_t length)
   point= (uchar*) ((char*) next+ (next->size-next->left));
   /*TODO: next part may be unneded due to mem_root->first_block_usage counter*/
   if ((next->left-= length) < mem_root->min_malloc)
-  {                        /* Full block */
-    *prev= next->next;                /* Remove block from list */
+  {						/* Full block */
+    *prev= next->next;				/* Remove block from list */
     next->next= mem_root->used;
     mem_root->used= next;
     mem_root->first_block_usage= 0;
@@ -331,12 +331,12 @@ static inline void mark_blocks_free(MEM_ROOT* root)
 
   SYNOPSIS
     free_root()
-      root        Memory root
-      MyFlags        Flags for what should be freed:
+      root		Memory root
+      MyFlags		Flags for what should be freed:
 
-        MY_MARK_BLOCKS_FREED    Don't free blocks, just mark them free
-        MY_KEEP_PREALLOC    If this is not set, then free also the
-                        preallocated block
+        MY_MARK_BLOCKS_FREED	Don't free blocks, just mark them free
+        MY_KEEP_PREALLOC	If this is not set, then free also the
+        		        preallocated block
 
   NOTES
     One can call this function either with root block initialised with

@@ -496,7 +496,7 @@ start:
       to= strnmov(to, print_arr[i].begin, length);
     }
     DBUG_ASSERT(to <= end);
-    *to='\0';                /* End of errmessage */
+    *to='\0';				/* End of errmessage */
     return to;
   }
   else
@@ -546,11 +546,11 @@ size_t my_vsnprintf_ex(CHARSET_INFO *cs, char *to, size_t n,
     if (*fmt != '%')
     {
       if (to == end)                            /* End of buffer */
-    break;
+	break;
       *to++= *fmt;                            /* Copy ordinary char */
       continue;
     }
-    fmt++;                    /* skip '%' */
+    fmt++;					/* skip '%' */
 
     length= width= 0;
     print_type= 0;
@@ -599,13 +599,13 @@ size_t my_vsnprintf_ex(CHARSET_INFO *cs, char *to, size_t n,
 
     fmt= check_longlong(fmt, &have_longlong);
 
-    if (*fmt == 's')                /* String parameter */
+    if (*fmt == 's')				/* String parameter */
     {
       reg2 char *par= va_arg(ap, char *);
       to= process_str_arg(cs, to, end, width, par, print_type);
       continue;
     }
-    else if (*fmt == 'b')                /* Buffer parameter */
+    else if (*fmt == 'b')				/* Buffer parameter */
     {
       char *par = va_arg(ap, char *);
       to= process_bin_arg(to, end, width, par);
@@ -648,10 +648,10 @@ size_t my_vsnprintf_ex(CHARSET_INFO *cs, char *to, size_t n,
     /* We come here on '%%', unknown code or too long parameter */
     if (to == end)
       break;
-    *to++='%';                /* % used as % or unknown code */
+    *to++='%';				/* % used as % or unknown code */
   }
   DBUG_ASSERT(to <= end);
-  *to='\0';                /* End of errmessage */
+  *to='\0';				/* End of errmessage */
   return (size_t) (to - start);
 }
 

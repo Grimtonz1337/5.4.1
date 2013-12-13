@@ -105,7 +105,7 @@ public:
             uiCurseFatigueTimer = 12*IN_MILLISECONDS;
 
             if (instance)
-                instance->SetData(DATA_KRIKTHIR_THE_GATEWATCHER_EVENT, NOT_STARTED);
+                instance->SetBossState(DATA_KRIKTHIR_THE_GATEWATCHER, NOT_STARTED);
         }
 
         void EnterCombat(Unit* /*who*/) OVERRIDE
@@ -115,7 +115,7 @@ public:
             uiSummonTimer = 15*IN_MILLISECONDS;
 
             if (instance)
-                instance->SetData(DATA_KRIKTHIR_THE_GATEWATCHER_EVENT, IN_PROGRESS);
+                instance->SetBossState(DATA_KRIKTHIR_THE_GATEWATCHER, IN_PROGRESS);
         }
 
         void Summon()
@@ -176,7 +176,7 @@ public:
             Talk(SAY_DEATH);
 
             if (instance)
-                instance->SetData(DATA_KRIKTHIR_THE_GATEWATCHER_EVENT, DONE);
+                instance->SetBossState(DATA_KRIKTHIR_THE_GATEWATCHER, DONE);
         }
 
         void KilledUnit(Unit* victim) OVERRIDE
@@ -206,7 +206,7 @@ public:
 
     struct npc_skittering_infectorAI : public ScriptedAI
     {
-        npc_skittering_infectorAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_skittering_infectorAI(Creature* creature) : ScriptedAI(creature) { }
 
         void JustDied(Unit* /*killer*/) OVERRIDE
         {
@@ -228,7 +228,7 @@ public:
 
     struct npc_anub_ar_skirmisherAI : public ScriptedAI
     {
-        npc_anub_ar_skirmisherAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_anub_ar_skirmisherAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiChargeTimer;
         uint32 uiBackstabTimer;
@@ -279,7 +279,7 @@ public:
 
     struct npc_anub_ar_shadowcasterAI : public ScriptedAI
     {
-        npc_anub_ar_shadowcasterAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_anub_ar_shadowcasterAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiShadowBoltTimer;
         uint32 uiShadowNovaTimer;
@@ -325,7 +325,7 @@ public:
 
     struct npc_anub_ar_warriorAI : public ScriptedAI
     {
-        npc_anub_ar_warriorAI(Creature* creature) : ScriptedAI(creature){}
+        npc_anub_ar_warriorAI(Creature* creature) : ScriptedAI(creature){ }
 
         uint32 uiCleaveTimer;
         uint32 uiStrikeTimer;
@@ -370,7 +370,7 @@ public:
 
     struct npc_watcher_gashraAI : public ScriptedAI
     {
-        npc_watcher_gashraAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_watcher_gashraAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiWebWrapTimer;
         uint32 uiInfectedBiteTimer;
@@ -421,7 +421,7 @@ public:
 
     struct npc_watcher_narjilAI : public ScriptedAI
     {
-        npc_watcher_narjilAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_watcher_narjilAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiWebWrapTimer;
         uint32 uiInfectedBiteTimer;
@@ -475,7 +475,7 @@ public:
 
     struct npc_watcher_silthikAI : public ScriptedAI
     {
-        npc_watcher_silthikAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_watcher_silthikAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiWebWrapTimer;
         uint32 uiInfectedBiteTimer;
@@ -537,15 +537,14 @@ class achievement_watch_him_die : public AchievementCriteriaScript
                 return false;
 
             InstanceScript* instance = target->GetInstanceScript();
-            Creature* Watcher[3];
             if (!instance)
                 return false;
 
             for (uint8 n = 0; n < 3; ++n)
             {
-                Watcher[n] = ObjectAccessor::GetCreature(*target, instance->GetData64(DATA_WATCHER_GASHRA + n));
-                if (Watcher[n] && !Watcher[n]->IsAlive())
-                    return false;
+                if (Creature* watcher = ObjectAccessor::GetCreature(*target, instance->GetData64(DATA_WATCHER_GASHRA + n)))
+                    if (!watcher->IsAlive())
+                        return false;
             }
 
             return true;

@@ -16,17 +16,8 @@
  */
 
 #include "ScriptMgr.h"
-
-#include "BattlegroundAB.h"
-#include "BattlegroundWS.h"
-#include "BattlegroundIC.h"
 #include "BattlegroundSA.h"
-#include "BattlegroundAV.h"
-#include "BattlegroundTP.h"
-#include "BattlegroundBG.h"
-#include "BattlegroundTK.h"
-#include "BattlegroundSM.h"
-#include "BattlegroundDG.h"
+#include "BattlegroundIC.h"
 #include "Vehicle.h"
 #include "Player.h"
 #include "Creature.h"
@@ -36,19 +27,12 @@ class achievement_resilient_victory : public AchievementCriteriaScript
     public:
         achievement_resilient_victory() : AchievementCriteriaScript("achievement_resilient_victory") { }
 
-        bool OnCheck(Player* source, Unit* /*target*/) OVERRIDE
+        bool OnCheck(Player* source, Unit* target) OVERRIDE
         {
-            Battleground* bg = source->GetBattleground();
-            if (!bg)
-                return false;
+            if (Battleground* bg = source->GetBattleground())
+                return bg->CheckAchievementCriteriaMeet(BG_CRITERIA_CHECK_RESILIENT_VICTORY, source, target);
 
-            if (bg->GetTypeID(true) != BATTLEGROUND_AB)
-                return false;
-
-            if (!static_cast<BattlegroundAB*>(bg)->IsTeamScores500Disadvantage(source->GetTeam()))
-                return false;
-
-            return true;
+            return false;
         }
 };
 
@@ -59,14 +43,10 @@ class achievement_bg_control_all_nodes : public AchievementCriteriaScript
 
         bool OnCheck(Player* source, Unit* /*target*/) OVERRIDE
         {
-            Battleground* bg = source->GetBattleground();
-            if (!bg)
-                return false;
+            if (Battleground* bg = source->GetBattleground())
+                return bg->IsAllNodesControlledByTeam(source->GetTeam());
 
-            if (!bg->IsAllNodesControlledByTeam(source->GetTeam()))
-                return false;
-
-            return true;
+            return false;
         }
 };
 
@@ -77,21 +57,9 @@ class achievement_save_the_day : public AchievementCriteriaScript
 
         bool OnCheck(Player* source, Unit* target) OVERRIDE
         {
-            if (!target)
-                return false;
+            if (Battleground* bg = source->GetBattleground())
+                return bg->CheckAchievementCriteriaMeet(BG_CRITERIA_CHECK_SAVE_THE_DAY, source, target);
 
-            if (Player const* player = target->ToPlayer())
-            {
-                Battleground* bg = source->GetBattleground();
-                if (!bg)
-                    return false;
-
-                if (bg->GetTypeID(true) != BATTLEGROUND_WS)
-                    return false;
-
-                if (static_cast<BattlegroundWS*>(bg)->GetFlagState(player->GetTeam()) == BG_WS_FLAG_STATE_ON_BASE)
-                    return true;
-            }
             return false;
         }
 };
@@ -205,17 +173,10 @@ class achievement_everything_counts : public AchievementCriteriaScript
     public:
         achievement_everything_counts() : AchievementCriteriaScript("achievement_everything_counts") { }
 
-        bool OnCheck(Player* source, Unit* /*target*/) OVERRIDE
+        bool OnCheck(Player* source, Unit* target) OVERRIDE
         {
-            Battleground* bg = source->GetBattleground();
-            if (!bg)
-                return false;
-
-            if (bg->GetTypeID(true) != BATTLEGROUND_AV)
-                return false;
-
-            if (static_cast<BattlegroundAV*>(bg)->IsBothMinesControlledByTeam(source->GetTeam()))
-                return true;
+            if (Battleground* bg = source->GetBattleground())
+                return bg->CheckAchievementCriteriaMeet(BG_CRITERIA_CHECK_EVERYTHING_COUNTS, source, target);
 
             return false;
         }
@@ -226,17 +187,10 @@ class achievement_bg_av_perfection : public AchievementCriteriaScript
     public:
         achievement_bg_av_perfection() : AchievementCriteriaScript("achievement_bg_av_perfection") { }
 
-        bool OnCheck(Player* source, Unit* /*target*/) OVERRIDE
+        bool OnCheck(Player* source, Unit* target) OVERRIDE
         {
-            Battleground* bg = source->GetBattleground();
-            if (!bg)
-                return false;
-
-            if (bg->GetTypeID(true) != BATTLEGROUND_AV)
-                return false;
-
-            if (static_cast<BattlegroundAV*>(bg)->IsAllTowersControlledAndCaptainAlive(source->GetTeam()))
-                return true;
+            if (Battleground* bg = source->GetBattleground())
+                return bg->CheckAchievementCriteriaMeet(BG_CRITERIA_CHECK_AV_PERFECTION, source, target);
 
             return false;
         }
@@ -245,24 +199,12 @@ class achievement_bg_av_perfection : public AchievementCriteriaScript
 class achievement_bg_sa_defense_of_ancients : public AchievementCriteriaScript
 {
     public:
-        achievement_bg_sa_defense_of_ancients() : AchievementCriteriaScript("achievement_bg_sa_defense_of_ancients")
+        achievement_bg_sa_defense_of_ancients() : AchievementCriteriaScript("achievement_bg_sa_defense_of_ancients") { }
+
+        bool OnCheck(Player* source, Unit* target) OVERRIDE
         {
-        }
-
-        bool OnCheck(Player* player, Unit* /*target*/) OVERRIDE
-        {
-            if (!player)
-                return false;
-
-            Battleground* battleground = player->GetBattleground();
-            if (!battleground)
-                return false;
-
-            if (player->GetTeamId() == static_cast<BattlegroundSA*>(battleground)->Attackers)
-                return false;
-
-            if (!static_cast<BattlegroundSA*>(battleground)->gateDestroyed)
-                return true;
+            if (Battleground* bg = source->GetBattleground())
+                return bg->CheckAchievementCriteriaMeet(BG_CRITERIA_CHECK_DEFENSE_OF_THE_ANCIENTS, source, target);
 
             return false;
         }
@@ -281,7 +223,7 @@ enum ArgentTournamentAreas
 class achievement_tilted : public AchievementCriteriaScript
 {
     public:
-        achievement_tilted() : AchievementCriteriaScript("achievement_tilted") {}
+        achievement_tilted() : AchievementCriteriaScript("achievement_tilted") { }
 
         bool OnCheck(Player* player, Unit* /*target*/) OVERRIDE
         {
@@ -304,17 +246,10 @@ class achievement_not_even_a_scratch : public AchievementCriteriaScript
     public:
         achievement_not_even_a_scratch() : AchievementCriteriaScript("achievement_not_even_a_scratch") { }
 
-        bool OnCheck(Player* source, Unit* /*target*/) OVERRIDE
+        bool OnCheck(Player* source, Unit* target) OVERRIDE
         {
-            if (!source)
-                return false;
-
-            Battleground* battleground = source->GetBattleground();
-            if (!battleground)
-                return false;
-
-            if (static_cast<BattlegroundSA*>(battleground)->notEvenAScratch(source->GetTeam()))
-                return true;
+            if (Battleground* bg = source->GetBattleground())
+                return bg->CheckAchievementCriteriaMeet(BG_CRITERIA_CHECK_NOT_EVEN_A_SCRATCH, source, target);
 
             return false;
         }
@@ -344,382 +279,17 @@ class achievement_flirt_with_disaster_perf_check : public AchievementCriteriaScr
         }
 };
 
-class achievement_bg_bog_jugger_not : public AchievementCriteriaScript
-{
-   public:
-       achievement_bg_bog_jugger_not() : AchievementCriteriaScript("achievement_bg_bg_jugger_not")
-       {
-       }
-
-       bool OnCheck(Player* player, Unit* /*target*/)
-       {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_BG || !player->GetBattleground())
-               return false;
-
-           BattlegroundBG const* const battleground = static_cast<BattlegroundBG*>(player->GetBattleground());
-           if (battleground->IsJuggerNotEligible(player->GetTeamId()))
-               return true;
-
-           return false;
-       }
-};
-
-class achievement_bg_bog_dont_get_cocky_kid : public AchievementCriteriaScript
-{
-   public:
-       achievement_bg_bog_dont_get_cocky_kid() : AchievementCriteriaScript("achievement_bg_bg_dont_get_cocky_kid")
-       {
-       }
-
-       bool OnCheck(Player* player, Unit* /*target*/)
-       {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_BG || !player->GetBattleground())
-               return false;
-
-           BattlegroundBG const* const battleground = static_cast<BattlegroundBG*>(player->GetBattleground());
-           if (battleground->IsDontGetCockyKidEligible(player->GetTeamId()))
-               return true;
-
-           return false;
-       }
-};
-
-class achievement_bg_bog_full_coverage : public AchievementCriteriaScript
-{
-   public:
-       achievement_bg_bog_full_coverage() : AchievementCriteriaScript("achievement_bg_bg_full_coverage")
-       {
-       }
-
-       bool OnCheck(Player* player, Unit* /*target*/)
-       {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_BG || !player->GetBattleground())
-               return false;
-
-           BattlegroundBG const* const battleground = static_cast<BattlegroundBG*>(player->GetBattleground());
-           if (battleground->IsFullCoverageEligible(player->GetTeamId()))
-               return true;
-
-           return false;
-       }
-};
-
-class achievement_bg_tp_twin_peaks_perfection : public AchievementCriteriaScript
-{
-   public:
-       achievement_bg_tp_twin_peaks_perfection() : AchievementCriteriaScript("achievement_bg_tp_twin_peaks_perfection") { }
-
-       bool OnCheck(Player* player, Unit* /*target*/)
-       {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_TP || !player->GetBattleground())
-               return false;
-
-           BattlegroundTP const* const battleground = static_cast<BattlegroundTP*>(player->GetBattleground());
-           if (battleground->IsTwinPeaksPerfectionEligible(player))
-               return true;
-
-           return false;
-       }
-};
-
-class achievement_bg_tp_double_jeopardy : public AchievementCriteriaScript
-{
-   public:
-       achievement_bg_tp_double_jeopardy() : AchievementCriteriaScript("achievement_bg_tp_double_jeopardy")
-       {
-       }
-
-       bool OnCheck(Player* player, Unit* /*target*/)
-       {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_TP || !player->GetBattleground())
-               return false;
-
-           BattlegroundTP const* const battleground = static_cast<BattlegroundTP*>(player->GetBattleground());
-           if (battleground->IsDoubleJeopardyEligible(player))
-               return true;
-
-           return false;
-       }
-};
-
-//BG TK
-//Four Square
-//Hold all four Orbs of Power at least once in a single Temple of Kotmogu battle.
-class achievement_bg_tk_four_square : public AchievementCriteriaScript
+class achievement_killed_exp_or_honor_target : public AchievementCriteriaScript
 {
     public:
-        achievement_bg_tk_four_square() : AchievementCriteriaScript("achievement_bg_tk_four_square") 
-		{
-		}
+        achievement_killed_exp_or_honor_target() : AchievementCriteriaScript("achievement_killed_exp_or_honor_target") { }
 
-		bool OnCheck(Player* player, Unit* /*target*/)
+        bool OnCheck(Player* player, Unit* target) OVERRIDE
         {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_TK || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundTK const* const battleground = static_cast<BattlegroundTK*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsFourSquareEligible(player))
-           //    return true;
-
-           return false;
-		}
+            return target && player->isHonorOrXPTarget(target);
+        }
 };
 
-//I've Got the Power
-//Win Temple of Kotmogu while controlling all 4 Orbs of Power.
-class achievement_bg_tk_got_the_power : public AchievementCriteriaScript
-{
-    public:
-        achievement_bg_tk_got_the_power() : AchievementCriteriaScript("achievement_bg_tk_got_the_power") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_TK || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundTK const* const battleground = static_cast<BattlegroundTK*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsGotThePowerEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
-
-//Powerball
-//Hold an Orb of Power in the center of the Temple of Kotmogu for 90 seconds.
-class achievement_bg_tk_powerball : public AchievementCriteriaScript
-{
-    public:
-        achievement_bg_tk_powerball() : AchievementCriteriaScript("achievement_bg_tk_powerball") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_TK || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundTK const* const battleground = static_cast<BattlegroundTK*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsPowerballEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
-
-//Temple of Kotmogu All-Star
-//Hold four Orbs of Power and kill four enemies who are holding an Orb of Power in a single Temple of Kotmogu match.
-class achievement_bg_tk_allstar : public AchievementCriteriaScript
-{
-    public:
-        achievement_bg_tk_allstar() : AchievementCriteriaScript("achievement_bg_tk_allstar") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_TK || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundTK const* const battleground = static_cast<BattlegroundTK*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsTkAllstarEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
-
-//BG SM
-//End of the Line
-//Seize control of a mine cart that is controlled by the opposing team within 20 yards of the depot, and then capture it.
-class achievement_bg_sm_end_of_the_line : public AchievementCriteriaScript
-{
-    public:
-        achievement_bg_sm_end_of_the_line() : AchievementCriteriaScript("achievement_bg_sm_end_of_the_line") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_SM || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundSM const* const battleground = static_cast<BattlegroundSM*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsEndOfTheLineEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
-
-//Five for Five
-//Capture five mine carts in a single Silvershard Mines battle without dying.
-class achievement_bg_sm_five_for_five : public AchievementCriteriaScript
-{
-    public:
-        achievement_bg_sm_five_for_five() : AchievementCriteriaScript("achievement_bg_sm_five_for_five") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_SM || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundSM const* const battleground = static_cast<BattlegroundSM*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsFiveForFiveEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
-
-//Mine Cart Courier
-//Capture a mine cart using each of the 5 sets of tracks in a single Silvershard Mines match.
-class achievement_bg_sm_mine_cart_courier : public AchievementCriteriaScript
-{
-    public:
-        achievement_bg_sm_mine_cart_courier() : AchievementCriteriaScript("achievement_bg_sm_mine_cart_courier") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_SM || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundSM const* const battleground = static_cast<BattlegroundSM*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsCartCourierEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
-
-//My Diamonds and Your Rust
-//Win a Silvershard Mines battle without letting the enemy team capture a mine cart.
-class achievement_bg_sm_diamonds_for_rust : public AchievementCriteriaScript
-{
-   public:
-        achievement_bg_sm_diamonds_for_rust() : AchievementCriteriaScript("achievement_bg_sm_diamonds_for_rust") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_SM || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundSM const* const battleground = static_cast<BattlegroundSM*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsDiamondForRustEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
-
-//BG DG
-//Capping Spree
-//Personally capture the enemy mine cart 4 times in a single Deepwind Gorge battleground.
-class achievement_bg_dg_capping_spree : public AchievementCriteriaScript
-{
-    public:
-        achievement_bg_dg_capping_spree() : AchievementCriteriaScript("achievement_bg_dg_capping_spree") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_DG || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundDG const* const battleground = static_cast<BattlegroundDG*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsCappingSpreeEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
-
-//Deepwind Gorge All-Star
-//Assault a mine, Defend a mine, Capture a mine cart and Return a mine cart in a single Deepwind Gorge match.
-class achievement_bg_dg_allstar : public AchievementCriteriaScript
-{
-    public:
-        achievement_bg_dg_allstar() : AchievementCriteriaScript("achievement_bg_dg_allstar") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_DG || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundDG const* const battleground = static_cast<BattlegroundDG*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsDgAllstarEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
-
-//Deepwind Gorge Perfection
-//Win Deepwind Gorge with a score of 1600 to 0.
-class achievement_bg_dg_perfection : public AchievementCriteriaScript
-{
-    public:
-        achievement_bg_dg_perfection() : AchievementCriteriaScript("achievement_bg_dg_perfection") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_DG || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundDG const* const battleground = static_cast<BattlegroundDG*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsDgPerfectionEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
-
-//Puddle Jumper
-//Fall 25 yards without dying in Deepwind Gorge.
-class achievement_bg_dg_puddle_jumper : public AchievementCriteriaScript
-{
-    public:
-        achievement_bg_dg_puddle_jumper() : AchievementCriteriaScript("achievement_bg_dg_puddle_jumper") 
-		{
-		}
-
-		bool OnCheck(Player* player, Unit* /*target*/)
-        {
-           if (player->GetBattlegroundTypeId() != BATTLEGROUND_DG || !player->GetBattleground())
-			   return false;
-		   
-		   BattlegroundDG const* const battleground = static_cast<BattlegroundDG*>(player->GetBattleground());
-           //TODO
-		   //if (battleground->IsPuddleJumperEligible(player))
-           //    return true;
-
-           return false;
-		}
-};
 void AddSC_achievement_scripts()
 {
     new achievement_resilient_victory();
@@ -729,11 +299,6 @@ void AddSC_achievement_scripts()
     new achievement_bg_ic_glaive_grave();
     new achievement_bg_ic_mowed_down();
     new achievement_bg_sa_artillery();
-    new achievement_bg_bog_jugger_not();
-    new achievement_bg_bog_dont_get_cocky_kid();
-    new achievement_bg_bog_full_coverage();
-    new achievement_bg_tp_twin_peaks_perfection();
-    new achievement_bg_tp_double_jeopardy();
     new achievement_sickly_gazelle();
     new achievement_everything_counts();
     new achievement_bg_av_perfection();
@@ -744,17 +309,5 @@ void AddSC_achievement_scripts()
     new achievement_tilted();
     new achievement_not_even_a_scratch();
     new achievement_flirt_with_disaster_perf_check();
-    //TODO SCRIPT NEW BG
-    new achievement_bg_tk_four_square();
-    new achievement_bg_tk_got_the_power();
-    new achievement_bg_tk_powerball();
-    new achievement_bg_tk_allstar();
-    new achievement_bg_sm_end_of_the_line();
-    new achievement_bg_sm_five_for_five();
-    new achievement_bg_sm_mine_cart_courier();
-    new achievement_bg_sm_diamonds_for_rust();
-    new achievement_bg_dg_capping_spree();
-    new achievement_bg_dg_allstar();
-    new achievement_bg_dg_perfection();
-    new achievement_bg_dg_puddle_jumper();
+    new achievement_killed_exp_or_honor_target();
 }

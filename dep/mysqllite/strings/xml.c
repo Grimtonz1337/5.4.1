@@ -19,16 +19,16 @@
 
 
 #define MY_XML_UNKNOWN  'U'
-#define MY_XML_EOF    'E'
-#define MY_XML_STRING    'S'
-#define MY_XML_IDENT    'I'
-#define MY_XML_EQ    '='
-#define MY_XML_LT    '<'
-#define MY_XML_GT    '>'
-#define MY_XML_SLASH    '/'
-#define MY_XML_COMMENT    'C'
-#define MY_XML_TEXT    'T'
-#define MY_XML_QUESTION    '?'
+#define MY_XML_EOF	'E'
+#define MY_XML_STRING	'S'
+#define MY_XML_IDENT	'I'
+#define MY_XML_EQ	'='
+#define MY_XML_LT	'<'
+#define MY_XML_GT	'>'
+#define MY_XML_SLASH	'/'
+#define MY_XML_COMMENT	'C'
+#define MY_XML_TEXT	'T'
+#define MY_XML_QUESTION	'?'
 #define MY_XML_EXCLAM   '!'
 #define MY_XML_CDATA    'D'
 
@@ -42,9 +42,9 @@ typedef struct xml_attr_st
 /*
   XML ctype:
 */
-#define    MY_XML_ID0  0x01 /* Identifier initial character */
-#define    MY_XML_ID1  0x02 /* Identifier medial  character */
-#define    MY_XML_SPC  0x08 /* Spacing character */
+#define	MY_XML_ID0  0x01 /* Identifier initial character */
+#define	MY_XML_ID1  0x02 /* Identifier medial  character */
+#define	MY_XML_SPC  0x08 /* Spacing character */
 
 
 /*
@@ -323,7 +323,7 @@ int my_xml_parse(MY_XML_PARSER *p,const char *str, size_t len)
       else
       {
         sprintf(p->errstr,"%s unexpected (ident or '/' wanted)",
-        lex2str(lex));
+		lex2str(lex));
         return MY_XML_ERROR;
       }
       
@@ -345,7 +345,7 @@ int my_xml_parse(MY_XML_PARSER *p,const char *str, size_t len)
           else
           {
             sprintf(p->errstr,"%s unexpected (ident or string wanted)",
-            lex2str(lex));
+		    lex2str(lex));
             return MY_XML_ERROR;
           }
         }
@@ -437,23 +437,23 @@ void my_xml_parser_free(MY_XML_PARSER *p  __attribute__((unused)))
 
 
 void my_xml_set_value_handler(MY_XML_PARSER *p,
-                  int (*action)(MY_XML_PARSER *p, const char *s,
-                        size_t l))
+			      int (*action)(MY_XML_PARSER *p, const char *s,
+					    size_t l))
 {
   p->value=action;
 }
 
 void my_xml_set_enter_handler(MY_XML_PARSER *p,
-                  int (*action)(MY_XML_PARSER *p, const char *s,
-                        size_t l))
+			      int (*action)(MY_XML_PARSER *p, const char *s,
+					    size_t l))
 {
   p->enter=action;
 }
 
 
 void my_xml_set_leave_handler(MY_XML_PARSER *p,
-                  int (*action)(MY_XML_PARSER *p, const char *s,
-                        size_t l))
+			      int (*action)(MY_XML_PARSER *p, const char *s,
+					    size_t l))
 {
   p->leave_xml=action;
 }

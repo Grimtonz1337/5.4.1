@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -108,7 +108,7 @@ public:
             me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void DamageTaken(Unit* /*done_by*/, uint32 &damage) OVERRIDE
         {
@@ -146,13 +146,13 @@ public:
 
     struct npc_doomfireAI : public ScriptedAI
     {
-        npc_doomfireAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_doomfireAI(Creature* creature) : ScriptedAI(creature) { }
 
-        void Reset() OVERRIDE {}
+        void Reset() OVERRIDE { }
 
-        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE {}
+        void MoveInLineOfSight(Unit* /*who*/) OVERRIDE { }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void DamageTaken(Unit* /*done_by*/, uint32 &damage) OVERRIDE
         {
@@ -175,7 +175,7 @@ public:
 
     struct npc_doomfire_targettingAI : public ScriptedAI
     {
-        npc_doomfire_targettingAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_doomfire_targettingAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint64 TargetGUID;
         uint32 ChangeTargetTimer;
@@ -195,7 +195,7 @@ public:
                 TargetGUID = who->GetGUID();
         }
 
-        void EnterCombat(Unit* /*who*/) OVERRIDE {}
+        void EnterCombat(Unit* /*who*/) OVERRIDE { }
 
         void DamageTaken(Unit* /*done_by*/, uint32 &damage) OVERRIDE
         {
@@ -638,7 +638,7 @@ public:
 
             DoMeleeAttackIfReady();
         }
-        void WaypointReached(uint32 /*waypointId*/) OVERRIDE {}
+        void WaypointReached(uint32 /*waypointId*/) OVERRIDE { }
     };
 };
 

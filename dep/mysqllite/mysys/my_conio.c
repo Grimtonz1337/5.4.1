@@ -39,8 +39,8 @@ static HANDLE my_coninpfh= 0;     /* console input */
     locks. Handle to created mutex returned in ph argument.
 
   RETURN
-    0                  thread owns mutex
-    <>0                error
+    0	              thread owns mutex
+    <>0	            error
 */
 
 static
@@ -73,8 +73,8 @@ int my_pthread_auto_mutex_lock(HANDLE* ph, const char* name, int id, int time)
     releases a mutex.
 
   RETURN
-    0                  thread released mutex
-    <>0                error
+    0	              thread released mutex
+    <>0	            error
 
 */
 static
@@ -116,8 +116,8 @@ int my_pthread_auto_mutex_free(HANDLE* ph)
     the _ungetch() call.
 
   RETURN
-    string pointer    ok
-    NULL              Error
+    string pointer	ok
+    NULL	          Error
 
 */
 

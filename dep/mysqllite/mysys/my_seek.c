@@ -48,8 +48,8 @@ my_off_t my_seek(File fd, my_off_t pos, int whence, myf MyFlags)
   os_off_t newpos= -1;
   DBUG_ENTER("my_seek");
   DBUG_PRINT("my",("fd: %d Pos: %llu  Whence: %d  MyFlags: %d",
-           fd, (ulonglong) pos, whence, MyFlags));
-  DBUG_ASSERT(pos != MY_FILEPOS_ERROR);        /* safety check */
+		   fd, (ulonglong) pos, whence, MyFlags));
+  DBUG_ASSERT(pos != MY_FILEPOS_ERROR);		/* safety check */
 
   /*
       Make sure we are using a valid file descriptor!
@@ -76,8 +76,8 @@ my_off_t my_seek(File fd, my_off_t pos, int whence, myf MyFlags)
 } /* my_seek */
 
 
-    /* Tell current position of file */
-    /* ARGSUSED */
+	/* Tell current position of file */
+	/* ARGSUSED */
 
 my_off_t my_tell(File fd, myf MyFlags)
 {

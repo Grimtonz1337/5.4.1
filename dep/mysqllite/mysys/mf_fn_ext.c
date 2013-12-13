@@ -22,7 +22,7 @@
 
   SYNOPSIS
     fn_ext()
-    name        Name of file
+    name		Name of file
 
   DESCRIPTION
     The extension is defined as everything after the first extension character

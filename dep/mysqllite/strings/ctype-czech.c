@@ -15,41 +15,41 @@
 
 /* File strings/ctype-czech.c for MySQL.
 
-    This file implements the Czech sorting for the MySQL database
-    server (www.mysql.com). Due to some complicated rules the
-    Czech language has for sorting strings, a more complex
-    solution was needed than the one-to-one conversion table. To
-    note a few, here is an example of a Czech sorting sequence:
+	This file implements the Czech sorting for the MySQL database
+	server (www.mysql.com). Due to some complicated rules the
+	Czech language has for sorting strings, a more complex
+	solution was needed than the one-to-one conversion table. To
+	note a few, here is an example of a Czech sorting sequence:
 
-        co < hlaska < hláska < hlava < chlapec < krtek
+		co < hlaska < hláska < hlava < chlapec < krtek
 
-    It because some of the rules are: double char 'ch' is sorted
-    between 'h' and 'i'. Accented character 'á' (a with acute) is
-    sorted after 'a' and before 'b', but only if the word is
-    otherwise the same. However, because 's' is sorted before 'v'
-    in hlava, the accentness of 'á' is overridden. There are many
-    more rules.
+	It because some of the rules are: double char 'ch' is sorted
+	between 'h' and 'i'. Accented character 'á' (a with acute) is
+	sorted after 'a' and before 'b', but only if the word is
+	otherwise the same. However, because 's' is sorted before 'v'
+	in hlava, the accentness of 'á' is overridden. There are many
+	more rules.
 
-    This file defines functions my_strxfrm and my_strcoll for
-    C-like zero terminated strings and my_strnxfrm and my_strnncoll
-    for strings where the length comes as an parameter. Also
-    defined here you will find function my_like_range that returns
-    index range strings for LIKE expression and the
-    MY_STRXFRM_MULTIPLY set to value 4 -- this is the ratio the
-    strings grows during my_strxfrm. The algorithm has four
-    passes, that's why we need four times more space for expanded
-    string.
+	This file defines functions my_strxfrm and my_strcoll for
+	C-like zero terminated strings and my_strnxfrm and my_strnncoll
+	for strings where the length comes as an parameter. Also
+	defined here you will find function my_like_range that returns
+	index range strings for LIKE expression and the
+	MY_STRXFRM_MULTIPLY set to value 4 -- this is the ratio the
+	strings grows during my_strxfrm. The algorithm has four
+	passes, that's why we need four times more space for expanded
+	string.
 
-    This file also contains the ISO-Latin-2 definitions of
-    characters.
+	This file also contains the ISO-Latin-2 definitions of
+	characters.
 
-    Author: (c) 1997--1998 Jan Pazdziora, adelton@fi.muni.cz
-    Jan Pazdziora has a shared copyright for this code
+	Author: (c) 1997--1998 Jan Pazdziora, adelton@fi.muni.cz
+	Jan Pazdziora has a shared copyright for this code
 
-    The original of this file can also be found at
-    http://www.fi.muni.cz/~adelton/l10n/
+	The original of this file can also be found at
+	http://www.fi.muni.cz/~adelton/l10n/
 
-    Bug reports and suggestions are always welcome.
+	Bug reports and suggestions are always welcome.
 */
 
 /*
@@ -79,8 +79,8 @@
 #ifdef HAVE_CHARSET_latin2
 
 /*
-    These are four tables for four passes of the algorithm. Please see
-    below for what are the "special values"
+	These are four tables for four passes of the algorithm. Please see
+	below for what are the "special values"
 */
 
 static uchar *CZ_SORT_TABLE[] = {
@@ -91,147 +91,147 @@ static uchar *CZ_SORT_TABLE[] = {
 };
 
 /*
-    These define the valuse for the double chars that need to be
-    sorted as they were single characters -- in Czech these are
-    'ch', 'Ch' and 'CH'.
+	These define the valuse for the double chars that need to be
+	sorted as they were single characters -- in Czech these are
+	'ch', 'Ch' and 'CH'.
 */
 
 struct wordvalue
-    {
-      const char * word;
-      uchar *outvalue;
-    };
+	{
+	  const char * word;
+	  uchar *outvalue;
+	};
 static struct wordvalue doubles[] = {
-    { "ch", (uchar*) "\014\031\057\057" },
-    { "Ch", (uchar*) "\014\031\060\060" },
-    { "CH", (uchar*) "\014\031\061\061" },
-    { "c",  (uchar*) "\005\012\021\021" },
-    { "C",  (uchar*) "\005\012\022\022" },
-    };
+	{ "ch", (uchar*) "\014\031\057\057" },
+	{ "Ch", (uchar*) "\014\031\060\060" },
+	{ "CH", (uchar*) "\014\031\061\061" },
+	{ "c",  (uchar*) "\005\012\021\021" },
+	{ "C",  (uchar*) "\005\012\022\022" },
+	};
 
 /*
-    Unformal description of the algorithm:
+	Unformal description of the algorithm:
 
-    We walk the string left to right.
+	We walk the string left to right.
 
-    The end of the string is either passed as parameter, or is
-    *p == 0. This is hidden in the IS_END macro.
+	The end of the string is either passed as parameter, or is
+	*p == 0. This is hidden in the IS_END macro.
 
-    In the first two passes, we compare word by word. So we make
-    first and second pass on the first word, first and second pass
-    on the second word, etc. If we come to the end of the string
-    during the first pass, we need to jump to the last word of the
-    second pass.
+	In the first two passes, we compare word by word. So we make
+	first and second pass on the first word, first and second pass
+	on the second word, etc. If we come to the end of the string
+	during the first pass, we need to jump to the last word of the
+	second pass.
 
-    End of pass is marked with value 1 on the output.
+	End of pass is marked with value 1 on the output.
 
-    For each character, we read it's value from the table.
+	For each character, we read it's value from the table.
 
-    If the value is ignore (0), we go straight to the next character.
+	If the value is ignore (0), we go straight to the next character.
 
-    If the value is space/end of word (2) and we are in the first
-    or second pass, we skip all characters having value 0 -- 2 and
-    switch the passwd.
+	If the value is space/end of word (2) and we are in the first
+	or second pass, we skip all characters having value 0 -- 2 and
+	switch the passwd.
 
-    If it's the compose character (255), we check if the double
-    exists behind it, find its value.
+	If it's the compose character (255), we check if the double
+	exists behind it, find its value.
 
-    We append 0 to the end.
+	We append 0 to the end.
 ---
-    Neformální popis algoritmu:
+	Neformální popis algoritmu:
 
-    Procházíme øetìzec zleva doprava.
+	Procházíme øetìzec zleva doprava.
 
-    Konec øetìzce je pøedán buï jako parametr, nebo je to *p == 0.
-    Toto je o¹etøeno makrem IS_END.
+	Konec øetìzce je pøedán buï jako parametr, nebo je to *p == 0.
+	Toto je o¹etøeno makrem IS_END.
 
-    Pokud jsme do¹li na konec øetìzce pøi prùchodu 0, nejdeme na
-    zaèátek, ale na ulo¾enou pozici, proto¾e první a druhý prùchod
-    bì¾í souèasnì.
+	Pokud jsme do¹li na konec øetìzce pøi prùchodu 0, nejdeme na
+	zaèátek, ale na ulo¾enou pozici, proto¾e první a druhý prùchod
+	bì¾í souèasnì.
 
-    Konec vstupu (prùchodu) oznaèíme na výstupu hodnotou 1.
+	Konec vstupu (prùchodu) oznaèíme na výstupu hodnotou 1.
 
-    Pro ka¾dý znak øetìzce naèteme hodnotu z tøídící tabulky.
+	Pro ka¾dý znak øetìzce naèteme hodnotu z tøídící tabulky.
 
-    Jde-li o hodnotu ignorovat (0), skoèíme ihned na dal¹í znak..
+	Jde-li o hodnotu ignorovat (0), skoèíme ihned na dal¹í znak..
 
-    Jde-li o hodnotu konec slova (2) a je to prùchod 0 nebo 1,
-    pøeskoèíme v¹echny dal¹í 0 -- 2 a prohodíme prùchody.
+	Jde-li o hodnotu konec slova (2) a je to prùchod 0 nebo 1,
+	pøeskoèíme v¹echny dal¹í 0 -- 2 a prohodíme prùchody.
 
-    Jde-li o kompozitní znak (255), otestujeme, zda následuje
-    správný do dvojice, dohledáme správnou hodnotu.
+	Jde-li o kompozitní znak (255), otestujeme, zda následuje
+	správný do dvojice, dohledáme správnou hodnotu.
 
-    Na konci pøipojíme znak 0
+	Na konci pøipojíme znak 0
  */
 
-#define ADD_TO_RESULT(dest, len, totlen, value)            \
+#define ADD_TO_RESULT(dest, len, totlen, value)			\
 if ((totlen) < (len)) { dest[totlen] = value; } (totlen++);
-#define IS_END(p, src, len)    (((char *)p - (char *)src) >= (len))
+#define IS_END(p, src, len)	(((char *)p - (char *)src) >= (len))
 
-#define NEXT_CMP_VALUE(src, p, store, pass, value, len)        \
-while (1)                        \
-{                            \
-  if (IS_END(p, src, len))                \
-  {                            \
-    /* when we are at the end of string */        \
-    /* return either 0 for end of string */        \
-   /* or 1 for end of pass */                \
-   value= 0;                        \
-   if (pass != 3)                    \
-   {                            \
-     p= (pass++ == 0) ? store : src;            \
-     value = 1;                        \
-   }                            \
-   break;                        \
-  }                            \
-  /* not at end of string */                \
-  value = CZ_SORT_TABLE[pass][*p];            \
-  if (value == 0)                    \
-  { p++; continue; } /* ignore value */            \
-  if (value == 2) /* space */                \
-  {                            \
-    const uchar *tmp;                    \
-    const uchar *runner = ++p;                \
+#define NEXT_CMP_VALUE(src, p, store, pass, value, len)		\
+while (1)						\
+{							\
+  if (IS_END(p, src, len))				\
+  {							\
+    /* when we are at the end of string */		\
+    /* return either 0 for end of string */		\
+   /* or 1 for end of pass */				\
+   value= 0;						\
+   if (pass != 3)					\
+   {							\
+     p= (pass++ == 0) ? store : src;			\
+     value = 1;						\
+   }							\
+   break;						\
+  }							\
+  /* not at end of string */				\
+  value = CZ_SORT_TABLE[pass][*p];			\
+  if (value == 0)					\
+  { p++; continue; } /* ignore value */			\
+  if (value == 2) /* space */				\
+  {							\
+    const uchar *tmp;					\
+    const uchar *runner = ++p;				\
     while (!(IS_END(runner, src, len)) && (CZ_SORT_TABLE[pass][*runner] == 2)) \
-     runner++;    /* skip all spaces */            \
+     runner++;	/* skip all spaces */			\
     if (IS_END(runner, src, len) && SKIP_TRAILING_SPACES) \
-      p = runner;                    \
-    if ((pass <= 2) && !(IS_END(runner, src, len)))    \
-      p = runner;                    \
-    if (IS_END(p, src, len))                \
-      continue;                        \
-    /* we switch passes */                \
-    if (pass > 1)                    \
-      break;                        \
-    tmp = p;                        \
-    pass= 1-pass;                    \
-    p = store; store = tmp;                \
-    break;                        \
-  }                            \
-  if (value == 255)                    \
-  {                            \
-    int i;                        \
-    for (i = 0; i < (int) sizeof(doubles); i++)        \
-    {                            \
-      const char * pattern = doubles[i].word;        \
-      const char * q = (const char *) p;        \
-      int j = 0;                    \
-      while (pattern[j])                \
-      {                            \
-    if (IS_END(q, src, len) || (*q != pattern[j]))    \
-     break;                        \
-    j++; q++;                    \
-      }                            \
-      if (!(pattern[j]))                \
-      {                            \
-    value = (int)(doubles[i].outvalue[pass]);    \
-    p= (const uchar *) q - 1;            \
-    break;                        \
-      }                            \
-    }                            \
-  }                            \
-  p++;                            \
-  break;                        \
+      p = runner;					\
+    if ((pass <= 2) && !(IS_END(runner, src, len)))	\
+      p = runner;					\
+    if (IS_END(p, src, len))				\
+      continue;						\
+    /* we switch passes */				\
+    if (pass > 1)					\
+      break;						\
+    tmp = p;						\
+    pass= 1-pass;					\
+    p = store; store = tmp;				\
+    break;						\
+  }							\
+  if (value == 255)					\
+  {							\
+    int i;						\
+    for (i = 0; i < (int) sizeof(doubles); i++)		\
+    {							\
+      const char * pattern = doubles[i].word;		\
+      const char * q = (const char *) p;		\
+      int j = 0;					\
+      while (pattern[j])				\
+      {							\
+	if (IS_END(q, src, len) || (*q != pattern[j]))	\
+	 break;						\
+	j++; q++;					\
+      }							\
+      if (!(pattern[j]))				\
+      {							\
+	value = (int)(doubles[i].outvalue[pass]);	\
+	p= (const uchar *) q - 1;			\
+	break;						\
+      }							\
+    }							\
+  }							\
+  p++;							\
+  break;						\
 }
 
 /*
@@ -240,8 +240,8 @@ while (1)                        \
 */
 
 static int my_strnncoll_czech(CHARSET_INFO *cs __attribute__((unused)),
-                  const uchar *s1, size_t len1, 
-                  const uchar *s2, size_t len2,
+			      const uchar *s1, size_t len1, 
+			      const uchar *s2, size_t len2,
                               my_bool s2_is_prefix)
 {
   int v1, v2;
@@ -251,8 +251,8 @@ static int my_strnncoll_czech(CHARSET_INFO *cs __attribute__((unused)),
   if (s2_is_prefix && len1 > len2)
     len1=len2;
 
-  p1 = s1;    p2 = s2;
-  store1 = s1;    store2 = s2;
+  p1 = s1;	p2 = s2;
+  store1 = s1;	store2 = s2;
 
   do
   {
@@ -298,7 +298,7 @@ static size_t my_strnxfrm_czech(CHARSET_INFO *cs __attribute__((unused)),
   const uchar *p, * store;
   int pass = 0;
   size_t totlen = 0;
-  p = src;    store = src;
+  p = src;	store = src;
 
   do
   {
@@ -315,39 +315,39 @@ static size_t my_strnxfrm_czech(CHARSET_INFO *cs __attribute__((unused)),
 
 
 /*
-    Neformální popis algoritmu:
+	Neformální popis algoritmu:
 
-    procházíme øetìzec zleva doprava
-    konec øetìzce poznáme podle *p == 0
-    pokud jsme do¹li na konec øetìzce pøi prùchodu 0, nejdeme na
-        zaèátek, ale na ulo¾enou pozici, proto¾e první a druhý
-        prùchod bì¾í souèasnì
-    konec vstupu (prùchodu) oznaèíme na výstupu hodnotou 1
+	procházíme øetìzec zleva doprava
+	konec øetìzce poznáme podle *p == 0
+	pokud jsme do¹li na konec øetìzce pøi prùchodu 0, nejdeme na
+		zaèátek, ale na ulo¾enou pozici, proto¾e první a druhý
+		prùchod bì¾í souèasnì
+	konec vstupu (prùchodu) oznaèíme na výstupu hodnotou 1
 
-    naèteme hodnotu z tøídící tabulky
-    jde-li o hodnotu ignorovat (0), skoèíme na dal¹í prùchod
-    jde-li o hodnotu konec slova (2) a je to prùchod 0 nebo 1,
-        pøeskoèíme v¹echny dal¹í 0 -- 2 a prohodíme
-        prùchody
-    jde-li o kompozitní znak (255), otestujeme, zda následuje
-        správný do dvojice, dohledáme správnou hodnotu
+	naèteme hodnotu z tøídící tabulky
+	jde-li o hodnotu ignorovat (0), skoèíme na dal¹í prùchod
+	jde-li o hodnotu konec slova (2) a je to prùchod 0 nebo 1,
+		pøeskoèíme v¹echny dal¹í 0 -- 2 a prohodíme
+		prùchody
+	jde-li o kompozitní znak (255), otestujeme, zda následuje
+		správný do dvojice, dohledáme správnou hodnotu
 
-    na konci pøipojíme znak 0
+	na konci pøipojíme znak 0
  */
 
 
 /*
 ** Calculate min_str and max_str that ranges a LIKE string.
 ** Arguments:
-** ptr        Pointer to LIKE string.
-** ptr_length    Length of LIKE string.
-** escape    Escape character in LIKE.  (Normally '\').
-**        All escape characters should be removed from min_str and max_str
+** ptr		Pointer to LIKE string.
+** ptr_length	Length of LIKE string.
+** escape	Escape character in LIKE.  (Normally '\').
+**		All escape characters should be removed from min_str and max_str
 ** res_length   Length of min_str and max_str.
 ** min_str      Smallest case sensitive string that ranges LIKE.
-**        Should be space padded to res_length.
-** max_str    Largest case sensitive string that ranges LIKE.
-**        Normally padded with the biggest character sort value.
+**		Should be space padded to res_length.
+** max_str	Largest case sensitive string that ranges LIKE.
+**		Normally padded with the biggest character sort value.
 **
 ** The function should return 0 if ok and 1 if the LIKE string can't be
 ** optimized !
@@ -361,11 +361,11 @@ static size_t my_strnxfrm_czech(CHARSET_INFO *cs __attribute__((unused)),
 #define EXAMPLE
 
 static my_bool my_like_range_czech(CHARSET_INFO *cs __attribute__((unused)),
-                   const char *ptr,size_t ptr_length,
-                   pbool escape, pbool w_one, pbool w_many,
-                   size_t res_length, char *min_str,
-                   char *max_str,
-                   size_t *min_length,size_t *max_length)
+				   const char *ptr,size_t ptr_length,
+				   pbool escape, pbool w_one, pbool w_many,
+				   size_t res_length, char *min_str,
+				   char *max_str,
+				   size_t *min_length,size_t *max_length)
 {
 #ifdef EXAMPLE
   uchar value;
@@ -375,21 +375,21 @@ static my_bool my_like_range_czech(CHARSET_INFO *cs __attribute__((unused)),
 
   for (; ptr != end && min_str != min_end ; ptr++)
   {
-    if (*ptr == w_one)        /* '_' in SQL */
+    if (*ptr == w_one)		/* '_' in SQL */
     { break; }
-    if (*ptr == w_many)        /* '%' in SQL */
+    if (*ptr == w_many)		/* '%' in SQL */
     { break; }
 
     if (*ptr == escape && ptr+1 != end)
-    { ptr++; }            /* Skip escape */
+    { ptr++; }			/* Skip escape */
 
     value = CZ_SORT_TABLE[0][(int) (uchar) *ptr];
 
-    if (value == 0)            /* Ignore in the first pass */
+    if (value == 0)			/* Ignore in the first pass */
     { continue; }
-    if (value <= 2)            /* End of pass or end of string */
+    if (value <= 2)			/* End of pass or end of string */
     { break; }
-    if (value == 255)        /* Double char too compicated */
+    if (value == 255)		/* Double char too compicated */
     { break; }
 
     *min_str++= *max_str++ = *ptr;
@@ -407,7 +407,7 @@ static my_bool my_like_range_czech(CHARSET_INFO *cs __attribute__((unused)),
 
   while (min_str != min_end)
   {
-    *min_str++ = min_sort_char;    /* Because of key compression */
+    *min_str++ = min_sort_char;	/* Because of key compression */
     *max_str++ = max_sort_char;
   }
   return 0;
@@ -588,7 +588,7 @@ static MY_UNI_IDX idx_uni_8859_2[]={
 
 static MY_COLLATION_HANDLER my_collation_latin2_czech_ci_handler =
 {
-  NULL,            /* init */
+  NULL,			/* init */
   my_strnncoll_czech,
   my_strnncollsp_czech,
   my_strnxfrm_czech,
@@ -613,20 +613,20 @@ CHARSET_INFO my_charset_latin2_czech_ci =
     to_lower_czech,
     to_upper_czech,
     sort_order_czech,
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    tab_8859_2_uni,    /* tab_to_uni   */
-    idx_uni_8859_2,    /* tab_from_uni */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    tab_8859_2_uni,	/* tab_to_uni   */
+    idx_uni_8859_2,	/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    4,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    4,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    1,            /* mbminlen   */
-    1,            /* mbmaxlen  */
-    0,            /* min_sort_char */
-    0,            /* max_sort_char */
+    1,			/* mbminlen   */
+    1,			/* mbmaxlen  */
+    0,			/* min_sort_char */
+    0,			/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_8bit_handler,

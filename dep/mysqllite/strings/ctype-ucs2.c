@@ -2679,7 +2679,7 @@ static uchar to_upper_ucs2[] = {
 
 
 static int my_ucs2_uni(CHARSET_INFO *cs __attribute__((unused)),
-               my_wc_t * pwc, const uchar *s, const uchar *e)
+		       my_wc_t * pwc, const uchar *s, const uchar *e)
 {
   if (s+2 > e) /* Need 2 characters */
     return MY_CS_TOOSMALL2;
@@ -2689,7 +2689,7 @@ static int my_ucs2_uni(CHARSET_INFO *cs __attribute__((unused)),
 }
 
 static int my_uni_ucs2(CHARSET_INFO *cs __attribute__((unused)) ,
-               my_wc_t wc, uchar *r, uchar *e)
+		       my_wc_t wc, uchar *r, uchar *e)
 {
   if ( r+2 > e ) 
     return MY_CS_TOOSMALL2;
@@ -2727,7 +2727,7 @@ static size_t my_caseup_ucs2(CHARSET_INFO *cs, char *src, size_t srclen,
 
 
 static void my_hash_sort_ucs2(CHARSET_INFO *cs, const uchar *s, size_t slen,
-                  ulong *n1, ulong *n2)
+			      ulong *n1, ulong *n2)
 {
   my_wc_t wc;
   int res;
@@ -2774,7 +2774,7 @@ static size_t my_casedn_ucs2(CHARSET_INFO *cs, char *src, size_t srclen,
 
 
 static int my_strnncoll_ucs2(CHARSET_INFO *cs, 
-                 const uchar *s, size_t slen, 
+			     const uchar *s, size_t slen, 
                              const uchar *t, size_t tlen,
                              my_bool t_is_prefix)
 {
@@ -2842,7 +2842,7 @@ static int my_strnncollsp_ucs2(CHARSET_INFO *cs __attribute__((unused)),
                                const uchar *s, size_t slen,
                                const uchar *t, size_t tlen,
                                my_bool diff_if_only_endspace_difference
-                   __attribute__((unused)))
+			       __attribute__((unused)))
 {
   const uchar *se, *te;
   size_t minlen;
@@ -2938,9 +2938,9 @@ size_t my_well_formed_len_ucs2(CHARSET_INFO *cs __attribute__((unused)),
 
 static
 int my_wildcmp_ucs2_ci(CHARSET_INFO *cs,
-            const char *str,const char *str_end,
-            const char *wildstr,const char *wildend,
-            int escape, int w_one, int w_many)
+		    const char *str,const char *str_end,
+		    const char *wildstr,const char *wildend,
+		    int escape, int w_one, int w_many)
 {
   MY_UNICASE_INFO **uni_plane= cs->caseinfo;
   return my_wildcmp_unicode(cs,str,str_end,wildstr,wildend,
@@ -2950,9 +2950,9 @@ int my_wildcmp_ucs2_ci(CHARSET_INFO *cs,
 
 static
 int my_wildcmp_ucs2_bin(CHARSET_INFO *cs,
-            const char *str,const char *str_end,
-            const char *wildstr,const char *wildend,
-            int escape, int w_one, int w_many)
+		    const char *str,const char *str_end,
+		    const char *wildstr,const char *wildend,
+		    int escape, int w_one, int w_many)
 {
   return my_wildcmp_unicode(cs,str,str_end,wildstr,wildend,
                             escape,w_one,w_many,NULL); 
@@ -3040,7 +3040,7 @@ static int my_strnncollsp_ucs2_bin(CHARSET_INFO *cs __attribute__((unused)),
 
 static
 void my_hash_sort_ucs2_bin(CHARSET_INFO *cs __attribute__((unused)),
-               const uchar *key, size_t len,ulong *nr1, ulong *nr2)
+			   const uchar *key, size_t len,ulong *nr1, ulong *nr2)
 {
   const uchar *pos = key;
   
@@ -3052,7 +3052,7 @@ void my_hash_sort_ucs2_bin(CHARSET_INFO *cs __attribute__((unused)),
   for (; pos < (uchar*) key ; pos++)
   {
     nr1[0]^=(ulong) ((((uint) nr1[0] & 63)+nr2[0]) * 
-         ((uint)*pos)) + (nr1[0] << 8);
+	     ((uint)*pos)) + (nr1[0] << 8);
     nr2[0]+=3;
   }
 }
@@ -3060,7 +3060,7 @@ void my_hash_sort_ucs2_bin(CHARSET_INFO *cs __attribute__((unused)),
 
 static MY_COLLATION_HANDLER my_collation_ucs2_general_ci_handler =
 {
-    NULL,        /* init */
+    NULL,		/* init */
     my_strnncoll_ucs2,
     my_strnncollsp_ucs2,
     my_strnxfrm_unicode,
@@ -3076,7 +3076,7 @@ static MY_COLLATION_HANDLER my_collation_ucs2_general_ci_handler =
 
 static MY_COLLATION_HANDLER my_collation_ucs2_bin_handler =
 {
-    NULL,        /* init */
+    NULL,		/* init */
     my_strnncoll_ucs2_bin,
     my_strnncollsp_ucs2_bin,
     my_strnxfrm_unicode,
@@ -3092,16 +3092,16 @@ static MY_COLLATION_HANDLER my_collation_ucs2_bin_handler =
 
 MY_CHARSET_HANDLER my_charset_ucs2_handler=
 {
-    NULL,        /* init */
-    my_ismbchar_ucs2,    /* ismbchar     */
-    my_mbcharlen_ucs2,    /* mbcharlen    */
+    NULL,		/* init */
+    my_ismbchar_ucs2,	/* ismbchar     */
+    my_mbcharlen_ucs2,	/* mbcharlen    */
     my_numchars_ucs2,
     my_charpos_ucs2,
     my_well_formed_len_ucs2,
     my_lengthsp_mb2,
     my_numcells_mb,
-    my_ucs2_uni,    /* mb_wc        */
-    my_uni_ucs2,    /* wc_mb        */
+    my_ucs2_uni,	/* mb_wc        */
+    my_uni_ucs2,	/* wc_mb        */
     my_mb_ctype_mb,
     my_caseup_str_mb2_or_mb4,
     my_casedn_str_mb2_or_mb4,
@@ -3124,30 +3124,30 @@ MY_CHARSET_HANDLER my_charset_ucs2_handler=
 
 CHARSET_INFO my_charset_ucs2_general_ci=
 {
-    35,0,0,        /* number       */
+    35,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_PRIMARY|MY_CS_STRNXFRM|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_general_ci",    /* name         */
-    "",            /* comment      */
-    NULL,        /* tailoring    */
-    ctype_ucs2,        /* ctype        */
-    to_lower_ucs2,    /* to_lower     */
-    to_upper_ucs2,    /* to_upper     */
-    to_upper_ucs2,    /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_general_ci",	/* name         */
+    "",			/* comment      */
+    NULL,		/* tailoring    */
+    ctype_ucs2,		/* ctype        */
+    to_lower_ucs2,	/* to_lower     */
+    to_upper_ucs2,	/* to_upper     */
+    to_upper_ucs2,	/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    0,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    0,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,
@@ -3156,30 +3156,30 @@ CHARSET_INFO my_charset_ucs2_general_ci=
 
 CHARSET_INFO my_charset_ucs2_bin=
 {
-    90,0,0,        /* number       */
+    90,0,0,		/* number       */
     MY_CS_COMPILED|MY_CS_BINSORT|MY_CS_UNICODE|MY_CS_NONASCII,
-    "ucs2",        /* cs name    */
-    "ucs2_bin",        /* name         */
-    "",            /* comment      */
-    NULL,        /* tailoring    */
-    ctype_ucs2,        /* ctype        */
-    to_lower_ucs2,    /* to_lower     */
-    to_upper_ucs2,    /* to_upper     */
-    NULL,        /* sort_order   */
-    NULL,        /* contractions */
-    NULL,        /* sort_order_big*/
-    NULL,        /* tab_to_uni   */
-    NULL,        /* tab_from_uni */
+    "ucs2",		/* cs name    */
+    "ucs2_bin",		/* name         */
+    "",			/* comment      */
+    NULL,		/* tailoring    */
+    ctype_ucs2,		/* ctype        */
+    to_lower_ucs2,	/* to_lower     */
+    to_upper_ucs2,	/* to_upper     */
+    NULL,		/* sort_order   */
+    NULL,		/* contractions */
+    NULL,		/* sort_order_big*/
+    NULL,		/* tab_to_uni   */
+    NULL,		/* tab_from_uni */
     my_unicase_default, /* caseinfo     */
-    NULL,        /* state_map    */
-    NULL,        /* ident_map    */
-    1,            /* strxfrm_multiply */
+    NULL,		/* state_map    */
+    NULL,		/* ident_map    */
+    1,			/* strxfrm_multiply */
     1,                  /* caseup_multiply  */
     1,                  /* casedn_multiply  */
-    2,            /* mbminlen     */
-    2,            /* mbmaxlen     */
-    0,            /* min_sort_char */
-    0xFFFF,        /* max_sort_char */
+    2,			/* mbminlen     */
+    2,			/* mbmaxlen     */
+    0,			/* min_sort_char */
+    0xFFFF,		/* max_sort_char */
     ' ',                /* pad char      */
     0,                  /* escape_with_backslash_is_dangerous */
     &my_charset_ucs2_handler,

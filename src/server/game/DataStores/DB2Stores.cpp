@@ -21,12 +21,14 @@
 #include "Common.h"
 #include "Log.h"
 #include "World.h"
+#include "DBCStores.h"
 
 DB2Storage<ItemEntry> sItemStore(Itemfmt, &DB2Utilities::HasItemEntry, &DB2Utilities::WriteItemDbReply);
 DB2Storage<ItemCurrencyCostEntry> sItemCurrencyCostStore(ItemCurrencyCostfmt);
 DB2Storage<ItemExtendedCostEntry> sItemExtendedCostStore(ItemExtendedCostEntryfmt);
 DB2Storage<ItemSparseEntry> sItemSparseStore(ItemSparsefmt, &DB2Utilities::HasItemSparseEntry, &DB2Utilities::WriteItemSparseDbReply);
 DB2Storage<KeyChainEntry> sKeyChainStore(KeyChainfmt);
+DB2Storage<SpellReagentsEntry> sSpellReagentsStore(SpellReagentsfmt);
 
 typedef std::list<std::string> DB2StoreProblemList;
 
@@ -37,7 +39,7 @@ uint32 DB2FilesCount = 0;
 
 static bool LoadDB2_assert_print(uint32 fsize, uint32 rsize, std::string const& filename)
 {
-    TC_LOG_ERROR(LOG_FILTER_GENERAL, "Size of '%s' setted by format string (%u) not equal size of C++ structure (%u).", filename.c_str(), fsize, rsize);
+    TC_LOG_ERROR("misc", "Size of '%s' setted by format string (%u) not equal size of C++ structure (%u).", filename.c_str(), fsize, rsize);
 
     // ASSERT must fail after function call
     return false;
@@ -47,8 +49,7 @@ template<class T>
 inline void LoadDB2(uint32& availableDb2Locales, DB2StoreProblemList& errlist, DB2Storage<T>& storage, std::string const& db2_path, std::string const& filename)
 {
     // compatibility format and C++ structure sizes
-    if (!(DB2FileLoader::GetFormatRecordSize(storage.GetFormat()) == sizeof(T) || LoadDB2_assert_print(DB2FileLoader::GetFormatRecordSize(storage.GetFormat()), sizeof(T), filename)))
-        return;
+    ASSERT(DB2FileLoader::GetFormatRecordSize(storage.GetFormat()) == sizeof(T) || LoadDB2_assert_print(DB2FileLoader::GetFormatRecordSize(storage.GetFormat()), sizeof(T), filename));
 
     ++DB2FilesCount;
 
@@ -92,7 +93,7 @@ inline void LoadDB2(uint32& availableDb2Locales, DB2StoreProblemList& errlist, D
 void LoadDB2Stores(std::string const& dataPath)
 {
     std::string db2Path = dataPath + "dbc/";
-    
+
     DB2StoreProblemList bad_db2_files;
     uint32 availableDb2Locales = 0xFF;
 
@@ -101,11 +102,12 @@ void LoadDB2Stores(std::string const& dataPath)
     LoadDB2(availableDb2Locales, bad_db2_files, sItemSparseStore, db2Path, "Item-sparse.db2");
     LoadDB2(availableDb2Locales, bad_db2_files, sItemExtendedCostStore, db2Path, "ItemExtendedCost.db2");
     LoadDB2(availableDb2Locales, bad_db2_files, sKeyChainStore, db2Path, "KeyChain.db2");
+    LoadDB2(availableDb2Locales, bad_db2_files, sSpellReagentsStore, db2Path,"SpellReagents.db2");
 
     // error checks
     if (bad_db2_files.size() >= DB2FilesCount)
     {
-        TC_LOG_ERROR(LOG_FILTER_GENERAL, "\nIncorrect DataDir value in worldserver.conf or ALL required *.db2 files (%d) not found by path: %sdb2", DB2FilesCount, dataPath.c_str());
+        TC_LOG_ERROR("misc", "\nIncorrect DataDir value in worldserver.conf or ALL required *.db2 files (%d) not found by path: %sdb2", DB2FilesCount, dataPath.c_str());
         exit(1);
     }
     else if (!bad_db2_files.empty())
@@ -114,19 +116,19 @@ void LoadDB2Stores(std::string const& dataPath)
         for (std::list<std::string>::iterator i = bad_db2_files.begin(); i != bad_db2_files.end(); ++i)
             str += *i + "\n";
 
-        TC_LOG_ERROR(LOG_FILTER_GENERAL, "\nSome required *.db2 files (%u from %d) not found or not compatible:\n%s", (uint32)bad_db2_files.size(), DB2FilesCount, str.c_str());
+        TC_LOG_ERROR("misc", "\nSome required *.db2 files (%u from %d) not found or not compatible:\n%s", (uint32)bad_db2_files.size(), DB2FilesCount, str.c_str());
         exit(1);
     }
 
     // Check loaded DB2 files proper version
-    if (!sItemStore.LookupEntry(89888) ||                   // last item added in 5.4.0 (17399)
-        !sItemExtendedCostStore.LookupEntry(3902))          // last item extended cost added in 5.4.0 (17399)
+    if (!sItemStore.LookupEntry(107499)             ||       // last item added in 5.4.1 (17538)
+        !sItemExtendedCostStore.LookupEntry(5268)  )        // last item extended cost added in 5.4.1 (17538)
     {
-        TC_LOG_ERROR(LOG_FILTER_GENERAL, "Please extract correct db2 files from client 5.4.0 17399.");
+        TC_LOG_ERROR("misc", "You have _outdated_ DB2 files, Please extract correct db2 files from client 5.4.1 17538.");
         exit(1);
     }
 
-    TC_LOG_ERROR(LOG_FILTER_GENERAL, ">> Initialized %d DB2 data stores.", DB2FilesCount);
+    TC_LOG_INFO("misc", ">> Initialized %d DB2 data stores.", DB2FilesCount);
 }
 
 DB2StorageBase const* GetDB2Storage(uint32 type)

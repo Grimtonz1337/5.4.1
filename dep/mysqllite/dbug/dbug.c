@@ -238,7 +238,7 @@ struct settings {
 static BOOLEAN init_done= FALSE; /* Set to TRUE when initialization done */
 static struct settings init_settings;
 static const char *db_process= 0;/* Pointer to process name; argv[0] */
-my_bool _dbug_on_= TRUE;     /* FALSE if no debugging at all */
+my_bool _dbug_on_= TRUE;	 /* FALSE if no debugging at all */
 
 typedef struct _db_code_state_ {
   const char *process;          /* Pointer to process name; usually argv[0] */
@@ -288,7 +288,7 @@ static void DBUGOpenFile(CODE_STATE *,const char *, const char *, int);
 static void DBUGCloseFile(CODE_STATE *cs, FILE *fp);
         /* Push current debug settings */
 static void PushState(CODE_STATE *cs);
-    /* Free memory associated with debug state. */
+	/* Free memory associated with debug state. */
 static void FreeState (CODE_STATE *cs, struct settings *state, int free_state);
         /* Test for tracing enabled */
 static int DoTrace(CODE_STATE *cs);
@@ -1556,18 +1556,18 @@ static void PushState(CODE_STATE *cs)
 /*
  *  FUNCTION
  *
- *    FreeState    Free memory associated with a struct state.
+ *	FreeState    Free memory associated with a struct state.
  *
  *  SYNOPSIS
  *
- *    static void FreeState (state)
- *    struct state *state;
+ *	static void FreeState (state)
+ *	struct state *state;
  *      int free_state;
  *
  *  DESCRIPTION
  *
- *    Deallocates the memory allocated for various information in a
- *    state. If free_state is set, also free 'state'
+ *	Deallocates the memory allocated for various information in a
+ *	state. If free_state is set, also free 'state'
  *
  */
 static void FreeState(CODE_STATE *cs, struct settings *state, int free_state)
@@ -1599,18 +1599,18 @@ static void FreeState(CODE_STATE *cs, struct settings *state, int free_state)
 /*
  *  FUNCTION
  *
- *    _db_end_    End debugging, freeing state stack memory.
+ *	_db_end_    End debugging, freeing state stack memory.
  *
  *  SYNOPSIS
  *
- *    static VOID _db_end_ ()
+ *	static VOID _db_end_ ()
  *
  *  DESCRIPTION
  *
- *    Ends debugging, de-allocating the memory allocated to the
- *    state stack.
+ *	Ends debugging, de-allocating the memory allocated to the
+ *	state stack.
  *
- *    To be called at the very end of the program.
+ *	To be called at the very end of the program.
  *
  */
 void _db_end_()

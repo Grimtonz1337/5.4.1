@@ -39,16 +39,16 @@ static int native_compare(size_t *length, unsigned char **a, unsigned char **b)
   return memcmp(*a, *b, *length);
 }
 
-#else    /* __sun */
+#else	/* __sun */
 
 static int ptr_compare(size_t *compare_length, uchar **a, uchar **b);
 static int ptr_compare_0(size_t *compare_length, uchar **a, uchar **b);
 static int ptr_compare_1(size_t *compare_length, uchar **a, uchar **b);
 static int ptr_compare_2(size_t *compare_length, uchar **a, uchar **b);
 static int ptr_compare_3(size_t *compare_length, uchar **a, uchar **b);
-#endif    /* __sun */
+#endif	/* __sun */
 
-    /* Get a pointer to a optimal byte-compare function for a given size */
+	/* Get a pointer to a optimal byte-compare function for a given size */
 
 #ifdef __sun
 qsort2_cmp get_ptr_compare (size_t size __attribute__((unused)))
@@ -66,15 +66,15 @@ qsort2_cmp get_ptr_compare (size_t size)
     case 2: return (qsort2_cmp) ptr_compare_2;
     case 3: return (qsort2_cmp) ptr_compare_3;
     }
-  return 0;                    /* Impossible */
+  return 0;					/* Impossible */
 }
 #endif /* __sun */
 
 
-    /*
-      Compare to keys to see witch is smaller.
-      Loop unrolled to make it quick !!
-    */
+	/*
+	  Compare to keys to see witch is smaller.
+	  Loop unrolled to make it quick !!
+	*/
 
 #define cmp(N) if (first[N] != last[N]) return (int) first[N] - (int) last[N]
 

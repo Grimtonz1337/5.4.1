@@ -1,5 +1,18 @@
 /*
  * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "AuthCodes.h"
@@ -9,7 +22,8 @@ namespace AuthHelper
 {
     static RealmBuildInfo const PostBcAcceptedClientBuilds[] =
     {
-        {17399, 5, 4, 0, ' '},        // Last version MoP
+        {17538, 5, 4, 1, ' '},        // Last version MoP
+        {17399, 5, 4, 0, ' '},
         {17128, 5, 3, 0, ' '},
         {16769, 5, 2, 0, ' '},
         {16357, 5, 1, 0, 'a'},

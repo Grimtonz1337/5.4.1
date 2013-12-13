@@ -19,15 +19,15 @@
 #include "ScriptedCreature.h"
 #include "SpellScript.h"
 #include "SpellAuraEffects.h"
-#include "CreatureTextMgr.h"
 #include "forge_of_souls.h"
 
 enum Yells
 {
     SAY_AGGRO           = 0,
     SAY_SLAY            = 1,
-    SAY_SOUL_STORM      = 2,
-    SAY_CORRUPT_SOUL    = 3,
+    SAY_DEATH           = 2,
+    SAY_SOUL_STORM      = 3,
+    SAY_CORRUPT_SOUL    = 4,
 };
 
 enum Spells
@@ -51,12 +51,6 @@ enum Events
     EVENT_CORRUPT_SOUL  = 3,
     EVENT_SOULSTORM     = 4,
     EVENT_FEAR          = 5,
-    EVENT_IN_RANGE      = 6,
-};
-
-enum Misc
-{
-    SOUND_DEATH         = 16598,
 };
 
 enum CombatPhases
@@ -77,8 +71,6 @@ class boss_bronjahm : public CreatureScript
                 DoCast(me, SPELL_SOULSTORM_CHANNEL, true);
             }
 
-            uint64 fragmentGUID;
-
             void InitializeAI() OVERRIDE
             {
                 if (!instance || static_cast<InstanceMap*>(me->GetMap())->GetScriptId() != sObjectMgr->GetScriptId(FoSScriptName))
@@ -92,7 +84,7 @@ class boss_bronjahm : public CreatureScript
                 events.Reset();
                 events.SetPhase(PHASE_1);
                 events.ScheduleEvent(EVENT_SHADOW_BOLT, 2000);
-                events.ScheduleEvent(EVENT_MAGIC_BANE, urand(8000, 20000), 0, PHASE_1);
+                events.ScheduleEvent(EVENT_MAGIC_BANE, urand(8000, 20000));
                 events.ScheduleEvent(EVENT_CORRUPT_SOUL, urand(25000, 35000), 0, PHASE_1);
 
                 instance->SetBossState(DATA_BRONJAHM, NOT_STARTED);
@@ -113,7 +105,7 @@ class boss_bronjahm : public CreatureScript
 
             void JustDied(Unit* /*killer*/) OVERRIDE
             {
-                sCreatureTextMgr->SendSound(me, SOUND_DEATH, CHAT_MSG_MONSTER_YELL, 0, TEXT_RANGE_NORMAL, TEAM_OTHER, false);
+                Talk(SAY_DEATH);
 
                 instance->SetBossState(DATA_BRONJAHM, DONE);
             }
@@ -137,20 +129,11 @@ class boss_bronjahm : public CreatureScript
 
             void JustSummoned(Creature* summon) OVERRIDE
             {
-                switch (summon->GetEntry())
-                {
-                    case NPC_CORRUPTED_SOUL_FRAGMENT:
-                        fragmentGUID = summon->GetGUID();
-                        summons.Summon(summon);
-                        summon->SetReactState(REACT_PASSIVE);
-                        summon->GetMotionMaster()->Clear();
-                        summon->GetMotionMaster()->MoveChase(me, 0.0f, 0.0f);
-                        summon->CastSpell(summon, SPELL_PURPLE_BANISH_VISUAL, true);
-                        events.ScheduleEvent(EVENT_IN_RANGE, 1000, 0);
-                        break;
-                    default:
-                        break;
-                }
+                summons.Summon(summon);
+                summon->SetReactState(REACT_PASSIVE);
+                summon->GetMotionMaster()->Clear();
+                summon->GetMotionMaster()->MoveFollow(me, me->GetObjectSize(), 0.0f);
+                summon->CastSpell(summon, SPELL_PURPLE_BANISH_VISUAL, true);
             }
 
             void UpdateAI(uint32 diff) OVERRIDE
@@ -169,7 +152,7 @@ class boss_bronjahm : public CreatureScript
                     {
                         case EVENT_MAGIC_BANE:
                             DoCastVictim(SPELL_MAGIC_S_BANE);
-                            events.ScheduleEvent(EVENT_MAGIC_BANE, urand(8000, 20000), 0, PHASE_1);
+                            events.ScheduleEvent(EVENT_MAGIC_BANE, urand(8000, 20000));
                             break;
                         case EVENT_SHADOW_BOLT:
                             if (!me->IsWithinMeleeRange(me->GetVictim()))
@@ -193,21 +176,6 @@ class boss_bronjahm : public CreatureScript
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true))
                                 me->CastCustomSpell(SPELL_FEAR, SPELLVALUE_MAX_TARGETS, 1, target, false);
                             events.ScheduleEvent(EVENT_FEAR, urand(8000, 12000), 0, PHASE_2);
-                            break;
-                        case EVENT_IN_RANGE:
-                            if (Creature* fragment = ObjectAccessor::GetCreature(*me, fragmentGUID))
-                            {
-                                if (fragment->GetDistance(me) < 1.0f)
-                                {
-                                    fragment->DespawnOrUnsummon();
-                                    me->CastSpell(me, SPELL_CONSUME_SOUL, true);
-                                }
-
-                                else
-                                {
-                                    events.ScheduleEvent(EVENT_IN_RANGE, 500, 0);
-                                }
-                            }
                             break;
                         default:
                             break;
@@ -236,12 +204,24 @@ class npc_corrupted_soul_fragment : public CreatureScript
                 instance = me->GetInstanceScript();
             }
 
-            void DamageTaken(Unit* /*attacker*/, uint32& /*damage*/) OVERRIDE
+            void MovementInform(uint32 type, uint32 id) OVERRIDE
             {
-                if (Creature* Bronjahm = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_BRONJAHM)))
+                if (type != CHASE_MOTION_TYPE)
+                    return;
+
+                if (instance)
                 {
-                    me->SetReactState(REACT_PASSIVE);
-                    me->GetMotionMaster()->MovePoint(0, Bronjahm->GetPositionX(), Bronjahm->GetPositionY(), Bronjahm->GetPositionZ(), 0.0f);
+                    if (TempSummon* summ = me->ToTempSummon())
+                    {
+                        uint64 BronjahmGUID = instance->GetData64(DATA_BRONJAHM);
+                        if (GUID_LOPART(BronjahmGUID) != id)
+                            return;
+
+                        if (Creature* bronjahm = ObjectAccessor::GetCreature(*me, BronjahmGUID))
+                            me->CastSpell(bronjahm, SPELL_CONSUME_SOUL, true);
+
+                        summ->UnSummon();
+                    }
                 }
             }
 

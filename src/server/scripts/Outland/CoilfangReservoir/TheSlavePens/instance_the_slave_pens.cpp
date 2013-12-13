@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - CoalitionWoW <http://coalitionwow.no-ip.org/>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -37,7 +37,7 @@ public:
 
     struct instance_the_slave_pens_InstanceMapScript : public InstanceScript
     {
-        instance_the_slave_pens_InstanceMapScript(Map* map) : InstanceScript(map) {}
+        instance_the_slave_pens_InstanceMapScript(Map* map) : InstanceScript(map) { }
     };
 };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -211,7 +211,7 @@ public:
                     {
                         instance->UpdateEncounterState(ENCOUNTER_CREDIT_KILL_CREATURE, NPC_GRIMSTONE, me);
                         instance->SetData(TYPE_RING_OF_LAW, DONE);
-                        TC_LOG_DEBUG(LOG_FILTER_TSCR, "npc_grimstone: event reached end and set complete.");
+                        TC_LOG_DEBUG("scripts", "npc_grimstone: event reached end and set complete.");
                     }
                     break;
             }
@@ -359,7 +359,7 @@ public:
 
     struct npc_phalanxAI : public ScriptedAI
     {
-        npc_phalanxAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_phalanxAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 ThunderClap_Timer;
         uint32 FireballVolley_Timer;
@@ -595,7 +595,7 @@ public:
         {
             player->CLOSE_GOSSIP_MENU();
             CAST_AI(npc_escort::npc_escortAI, (creature->AI()))->Start(false, true, player->GetGUID());
-            creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            creature->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             instance->SetData(DATA_QUEST_JAIL_BREAK, ENCOUNTER_STATE_IN_PROGRESS);
         }
         return true;
@@ -613,7 +613,7 @@ public:
 
     struct npc_dughal_stormwingAI : public npc_escortAI
     {
-        npc_dughal_stormwingAI(Creature* creature) : npc_escortAI(creature) {}
+        npc_dughal_stormwingAI(Creature* creature) : npc_escortAI(creature) { }
 
         void WaypointReached(uint32 waypointId) OVERRIDE
         {
@@ -634,8 +634,8 @@ public:
             }
         }
 
-        void EnterCombat(Unit* who) OVERRIDE {}
-        void Reset() OVERRIDE {}
+        void EnterCombat(Unit* who) OVERRIDE { }
+        void Reset() OVERRIDE { }
 
         void JustDied(Unit* killer) OVERRIDE
         {
@@ -804,7 +804,7 @@ public:
             }
         }
 
-        void Reset() OVERRIDE {}
+        void Reset() OVERRIDE { }
 
         void JustDied(Unit* slayer) OVERRIDE
         {
@@ -1019,7 +1019,7 @@ public:
                     break;
             }
         }
-        void Reset() OVERRIDE {}
+        void Reset() OVERRIDE { }
 
         void JustDied(Unit* slayer) OVERRIDE
         {
@@ -1107,7 +1107,7 @@ public:
         {
             player->CLOSE_GOSSIP_MENU();
             CAST_AI(npc_escort::npc_escortAI, (creature->AI()))->Start(false, true, player->GetGUID());
-            creature->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            creature->RemoveFlag(UNIT_FIELD_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
             instance->SetData(DATA_TOBIAS, ENCOUNTER_STATE_IN_PROGRESS);
         }
         return true;
@@ -1125,10 +1125,10 @@ public:
 
     struct npc_tobias_seecherAI : public npc_escortAI
     {
-        npc_tobias_seecherAI(Creature* creature) : npc_escortAI(creature) {}
+        npc_tobias_seecherAI(Creature* creature) : npc_escortAI(creature) { }
 
-        void EnterCombat(Unit* who) OVERRIDE {}
-        void Reset() OVERRIDE {}
+        void EnterCombat(Unit* who) OVERRIDE { }
+        void Reset() OVERRIDE { }
 
         void JustDied(Unit* killer) OVERRIDE
         {

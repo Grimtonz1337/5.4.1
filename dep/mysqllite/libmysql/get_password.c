@@ -37,20 +37,20 @@
 #else /* ! HAVE_GETPASS */
 #if !defined(__WIN__)
 #include <sys/ioctl.h>
-#ifdef HAVE_TERMIOS_H                /* For tty-password */
-#include    <termios.h>
-#define TERMIO    struct termios
+#ifdef HAVE_TERMIOS_H				/* For tty-password */
+#include	<termios.h>
+#define TERMIO	struct termios
 #else
-#ifdef HAVE_TERMIO_H                /* For tty-password */
-#include    <termio.h>
-#define TERMIO    struct termio
+#ifdef HAVE_TERMIO_H				/* For tty-password */
+#include	<termio.h>
+#define TERMIO	struct termio
 #else
-#include    <sgtty.h>
-#define TERMIO    struct sgttyb
+#include	<sgtty.h>
+#define TERMIO	struct sgttyb
 #endif
 #endif
 #ifdef alpha_linux_port
-#include <asm/ioctls.h>                /* QQ; Fix this in configure */
+#include <asm/ioctls.h>				/* QQ; Fix this in configure */
 #include <asm/termiobits.h>
 #endif
 #else
@@ -58,7 +58,7 @@
 #endif /* __WIN__ */
 #endif /* HAVE_GETPASS */
 
-#ifdef HAVE_GETPASSPHRASE            /* For Solaris */
+#ifdef HAVE_GETPASSPHRASE			/* For Solaris */
 #define getpass(A) getpassphrase(A)
 #endif
 
@@ -79,9 +79,9 @@ char *get_tty_password(const char *opt_message)
     {
       if (pos != to)
       {
-    _cputs("\b \b");
-    pos--;
-    continue;
+	_cputs("\b \b");
+	pos--;
+	continue;
       }
     }
     if (tmp == '\n' || tmp == '\r' || tmp == 3)
@@ -92,7 +92,7 @@ char *get_tty_password(const char *opt_message)
     *(pos++) = tmp;
   }
   while (pos != to && isspace(pos[-1]) == ' ')
-    pos--;                    /* Allow dummy space at end */
+    pos--;					/* Allow dummy space at end */
   *pos=0;
   _cputs("\n");
   DBUG_RETURN(my_strdup(to,MYF(MY_FAE)));
@@ -120,13 +120,13 @@ static void get_password(char *to,uint length,int fd, my_bool echo)
     {
       if (pos != to)
       {
-    if (echo)
-    {
-      fputs("\b \b",stdout);
-      fflush(stdout);
-    }
-    pos--;
-    continue;
+	if (echo)
+	{
+	  fputs("\b \b",stdout);
+	  fflush(stdout);
+	}
+	pos--;
+	continue;
       }
     }
     if (tmp == '\n' || tmp == '\r' || tmp == 3)
@@ -141,7 +141,7 @@ static void get_password(char *to,uint length,int fd, my_bool echo)
     *(pos++) = tmp;
   }
   while (pos != to && isspace(pos[-1]) == ' ')
-    pos--;                    /* Allow dummy space at end */
+    pos--;					/* Allow dummy space at end */
   *pos=0;
   return;
 }

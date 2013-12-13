@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -288,7 +288,7 @@ public:
             me->RemoveDynObject(SPELL_RING_OF_BLUE_FLAMES);
             for (uint8 i = 0; i < 4; ++i)
                 if (GameObject* pOrb = GetOrb(i))
-                    pOrb->SetUInt32Value(GAMEOBJECT_FACTION, 0);
+                    pOrb->SetUInt32Value(GAMEOBJECT_FIELD_FACTION_TEMPLATE, 0);
         }
 
         void EmpowerOrb(bool all)
@@ -305,7 +305,7 @@ public:
                     if (GameObject* pOrb = GetOrb(i))
                     {
                         pOrb->CastSpell(me, SPELL_RING_OF_BLUE_FLAMES);
-                        pOrb->SetUInt32Value(GAMEOBJECT_FACTION, 35);
+                        pOrb->SetUInt32Value(GAMEOBJECT_FIELD_FACTION_TEMPLATE, 35);
                         pOrb->setActive(true);
                         pOrb->Refresh();
                     }
@@ -317,7 +317,7 @@ public:
                 if (GameObject* pOrb = GetOrb(urand(0, 3)))
                 {
                     pOrb->CastSpell(me, SPELL_RING_OF_BLUE_FLAMES);
-                    pOrb->SetUInt32Value(GAMEOBJECT_FACTION, 35);
+                    pOrb->SetUInt32Value(GAMEOBJECT_FIELD_FACTION_TEMPLATE, 35);
                     pOrb->setActive(true);
                     pOrb->Refresh();
 
@@ -346,7 +346,7 @@ public:
             {
                 if (GameObject* pOrb = GetOrb(i))
                 {
-                    if (pOrb->GetUInt32Value(GAMEOBJECT_FACTION) == 35)
+                    if (pOrb->GetUInt32Value(GAMEOBJECT_FIELD_FACTION_TEMPLATE) == 35)
                     {
                         pOrb->CastSpell(me, SPELL_RING_OF_BLUE_FLAMES);
                         pOrb->setActive(true);
@@ -365,12 +365,12 @@ public:
 
     bool OnGossipHello(Player* player, GameObject* go) OVERRIDE
     {
-        if (go->GetUInt32Value(GAMEOBJECT_FACTION) == 35)
+        if (go->GetUInt32Value(GAMEOBJECT_FIELD_FACTION_TEMPLATE) == 35)
         {
             InstanceScript* instance = go->GetInstanceScript();
             player->SummonCreature(CREATURE_POWER_OF_THE_BLUE_DRAGONFLIGHT, player->GetPositionX(), player->GetPositionY(), player->GetPositionZ(), 0.0f, TEMPSUMMON_TIMED_DESPAWN, 121000);
             player->CastSpell(player, SPELL_VENGEANCE_OF_THE_BLUE_FLIGHT, false);
-            go->SetUInt32Value(GAMEOBJECT_FACTION, 0);
+            go->SetUInt32Value(GAMEOBJECT_FIELD_FACTION_TEMPLATE, 0);
 
             if (Creature* pKalec = Unit::GetCreature(*player, instance->GetData64(DATA_KALECGOS_KJ)))
                 CAST_AI(boss_kalecgos_kj::boss_kalecgos_kjAI, pKalec->AI())->SetRingOfBlueFlames();
@@ -564,7 +564,7 @@ public:
                 if (Creature* pKalec = Unit::GetCreature(*me, instance->GetData64(DATA_KALECGOS_KJ)))
                     pKalec->RemoveDynObject(SPELL_RING_OF_BLUE_FLAMES);
             }
-            me->SetFloatValue(UNIT_FIELD_COMBATREACH, 12);
+            me->SetFloatValue(UNIT_FIELD_COMBAT_REACH, 12);
             ChangeTimers(false, 0);
             summons.DespawnAll();
         }
@@ -748,7 +748,7 @@ public:
                                 if (pRandomPlayer)
                                     DoCast(pRandomPlayer, SPELL_LEGION_LIGHTNING, false);
                                 else
-                                    TC_LOG_ERROR(LOG_FILTER_TSCR, "try to cast SPELL_LEGION_LIGHTNING on invalid target");
+                                    TC_LOG_ERROR("scripts", "try to cast SPELL_LEGION_LIGHTNING on invalid target");
 
                                 Timer[TIMER_LEGION_LIGHTNING] = (Phase == PHASE_SACRIFICE) ? 18000 : 30000; // 18 seconds in PHASE_SACRIFICE
                                 Timer[TIMER_SOUL_FLAY] = 2500;
@@ -1055,7 +1055,7 @@ public:
 
     struct npc_volatile_felfire_fiendAI : public ScriptedAI
     {
-        npc_volatile_felfire_fiendAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_volatile_felfire_fiendAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 uiExplodeTimer;
 
@@ -1256,7 +1256,7 @@ public:
 
     struct npc_sinster_reflectionAI : public ScriptedAI
     {
-        npc_sinster_reflectionAI(Creature* creature) : ScriptedAI(creature) {}
+        npc_sinster_reflectionAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint8 victimClass;
         uint32 uiTimer[3];
@@ -1406,7 +1406,7 @@ public:
                     DoMeleeAttackIfReady();
                     break;
             }
-            TC_LOG_DEBUG(LOG_FILTER_TSCR, "Sinister-Timer");
+            TC_LOG_DEBUG("scripts", "Sinister-Timer");
             for (uint8 i = 0; i < 3; ++i)
                 uiTimer[i] -= diff;
         }

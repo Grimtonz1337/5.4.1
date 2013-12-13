@@ -14,7 +14,7 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA */
 
 /*  File   : strcend.c
-    Author : Michael Widenius:    ifdef MC68000
+    Author : Michael Widenius:	ifdef MC68000
     Updated: 20 April 1984
     Defines: strcend()
 

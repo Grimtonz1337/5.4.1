@@ -50,16 +50,16 @@ void* my_once_alloc(size_t Size, myf MyFlags)
     prev= &next->next;
   }
   if (! next)
-  {                        /* Time to alloc new block */
+  {						/* Time to alloc new block */
     get_size= Size+ALIGN_SIZE(sizeof(USED_MEM));
     if (max_left*4 < my_once_extra && get_size < my_once_extra)
-      get_size=my_once_extra;            /* Normal alloc */
+      get_size=my_once_extra;			/* Normal alloc */
 
     if ((next = (USED_MEM*) malloc(get_size)) == 0)
     {
       my_errno=errno;
       if (MyFlags & (MY_FAE+MY_WME))
-    my_error(EE_OUTOFMEMORY, MYF(ME_BELL+ME_WAITTANG),get_size);
+	my_error(EE_OUTOFMEMORY, MYF(ME_BELL+ME_WAITTANG),get_size);
       return((uchar*) 0);
     }
     DBUG_PRINT("test",("my_once_malloc %lu byte malloced", (ulong) get_size));

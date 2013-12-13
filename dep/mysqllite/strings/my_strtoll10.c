@@ -17,7 +17,7 @@
 #include <my_sys.h>            /* Needed for MY_ERRNO_ERANGE */
 #include <m_string.h>
 
-#define MAX_NEGATIVE_NUMBER    ((ulonglong) LL(0x8000000000000000))
+#define MAX_NEGATIVE_NUMBER	((ulonglong) LL(0x8000000000000000))
 #define INIT_CNT  9
 #define LFACTOR   ULL(1000000000)
 #define LFACTOR1  ULL(10000000000)
@@ -57,14 +57,14 @@ static unsigned long lfactor[9]=
     after the number
 
     The error parameter contains information how things went:
-    -1        Number was an ok negative number
-    0         ok
-    ERANGE    If the the value of the converted number exceeded the
-            maximum negative/unsigned long long integer.
-        In this case the return value is ~0 if value was
-        positive and LONGLONG_MIN if value was negative.
-    EDOM    If the string didn't contain any digits. In this case
-            the return value is 0.
+    -1		Number was an ok negative number
+    0	 	ok
+    ERANGE	If the the value of the converted number exceeded the
+	        maximum negative/unsigned long long integer.
+		In this case the return value is ~0 if value was
+		positive and LONGLONG_MIN if value was negative.
+    EDOM	If the string didn't contain any digits. In this case
+    		the return value is 0.
 
     If endptr is not NULL the function will store the end pointer to
     the stop character here.
@@ -93,20 +93,20 @@ longlong my_strtoll10(const char *nptr, char **endptr, int *error)
   }
   else
   {
-    endptr= &dummy;                /* Easier end test */
+    endptr= &dummy;				/* Easier end test */
     while (*s == ' ' || *s == '\t')
       s++;
     if (!*s)
       goto no_conv;
     /* This number must be big to guard against a lot of pre-zeros */
-    end= s+65535;                /* Can't be longer than this */
+    end= s+65535;				/* Can't be longer than this */
   }
 
-  /* Check for a sign.    */
+  /* Check for a sign.	*/
   negative= 0;
   if (*s == '-')
   {
-    *error= -1;                    /* Mark as negative number */
+    *error= -1;					/* Mark as negative number */
     negative= 1;
     if (++s == end)
       goto no_conv;
@@ -120,7 +120,7 @@ longlong my_strtoll10(const char *nptr, char **endptr, int *error)
     if (*s == '+')
     {
       if (++s == end)
-    goto no_conv;
+	goto no_conv;
     }
     cutoff=  ULONGLONG_MAX / LFACTOR2;
     cutoff2= ULONGLONG_MAX % LFACTOR2 / 100;
@@ -134,7 +134,7 @@ longlong my_strtoll10(const char *nptr, char **endptr, int *error)
     do
     {
       if (++s == end)
-    goto end_i;                /* Return 0 */
+	goto end_i;				/* Return 0 */
     }
     while (*s == '0');
     n_end= s+ INIT_CNT;
@@ -162,7 +162,7 @@ longlong my_strtoll10(const char *nptr, char **endptr, int *error)
 
   /* Handle next 9 digits and store them in j */
   j= 0;
-  start= s;                /* Used to know how much to shift i */
+  start= s;				/* Used to know how much to shift i */
   n_end= true_end= s + INIT_CNT;
   if (n_end > end)
     n_end= end;
@@ -199,7 +199,7 @@ longlong my_strtoll10(const char *nptr, char **endptr, int *error)
   li=i*LFACTOR2+ (ulonglong) j*100 + k;
   return (longlong) li;
 
-overflow:                    /* *endptr is set here */
+overflow:					/* *endptr is set here */
   *error= MY_ERRNO_ERANGE;
   return negative ? LONGLONG_MIN : (longlong) ULONGLONG_MAX;
 

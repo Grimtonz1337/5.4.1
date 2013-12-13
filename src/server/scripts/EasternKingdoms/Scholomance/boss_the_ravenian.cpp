@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the
@@ -48,7 +48,7 @@ class boss_the_ravenian : public CreatureScript
 
         struct boss_theravenianAI : public BossAI
         {
-            boss_theravenianAI(Creature* creature) : BossAI(creature, DATA_THERAVENIAN) {}
+            boss_theravenianAI(Creature* creature) : BossAI(creature, DATA_THERAVENIAN) { }
 
             void EnterCombat(Unit* /*who*/) OVERRIDE
             {

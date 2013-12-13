@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 - OpenEmulator <http://www.openemulator.com/>>
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2006-2009 ScriptDev2 <https://scriptdev2.svn.sourceforge.net/>
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -87,7 +87,7 @@ public:
             {
                 if (instance->GetData(DATA_BUG_TRIO_DEATH) < 2)
                                                                 // Unlootable if death
-                    me->RemoveFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                    me->RemoveFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
 
                 instance->SetData(DATA_BUG_TRIO_DEATH, 1);
             }
@@ -179,7 +179,7 @@ public:
                 instance->SetData(DATA_VEM_DEATH, 0);
                 if (instance->GetData(DATA_BUG_TRIO_DEATH) < 2)
                                                                 // Unlootable if death
-                    me->RemoveFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                    me->RemoveFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                 instance->SetData(DATA_BUG_TRIO_DEATH, 1);
             }
         }
@@ -271,7 +271,7 @@ public:
             {
                 if (instance->GetData(DATA_BUG_TRIO_DEATH) < 2)
                                                                 // Unlootable if death
-                    me->RemoveFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                    me->RemoveFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                 instance->SetData(DATA_BUG_TRIO_DEATH, 1);
             }
 

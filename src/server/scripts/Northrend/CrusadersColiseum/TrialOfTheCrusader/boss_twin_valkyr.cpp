@@ -233,13 +233,13 @@ struct boss_twin_baseAI : public BossAI
             {
                 if (!pSister->IsAlive())
                 {
-                    me->SetFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
-                    pSister->SetFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                    me->SetFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                    pSister->SetFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                     _JustDied();
                 }
                 else
                 {
-                    me->RemoveFlag(OBJECT_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
+                    me->RemoveFlag(OBJECT_FIELD_DYNAMIC_FLAGS, UNIT_DYNFLAG_LOOTABLE);
                     instance->SetBossState(BOSS_VALKIRIES, SPECIAL);
                 }
             }
@@ -462,7 +462,7 @@ class boss_eydis : public CreatureScript
 
         struct boss_eydisAI : public boss_twin_baseAI
         {
-            boss_eydisAI(Creature* creature) : boss_twin_baseAI(creature) {}
+            boss_eydisAI(Creature* creature) : boss_twin_baseAI(creature) { }
 
             void Reset() OVERRIDE
             {
@@ -592,7 +592,7 @@ class npc_unleashed_dark : public CreatureScript
 
         struct npc_unleashed_darkAI : public npc_unleashed_ballAI
         {
-            npc_unleashed_darkAI(Creature* creature) : npc_unleashed_ballAI(creature) {}
+            npc_unleashed_darkAI(Creature* creature) : npc_unleashed_ballAI(creature) { }
 
             void UpdateAI(uint32 diff) OVERRIDE
             {
@@ -624,7 +624,7 @@ class npc_unleashed_light : public CreatureScript
 
         struct npc_unleashed_lightAI : public npc_unleashed_ballAI
         {
-            npc_unleashed_lightAI(Creature* creature) : npc_unleashed_ballAI(creature) {}
+            npc_unleashed_lightAI(Creature* creature) : npc_unleashed_ballAI(creature) { }
 
             void UpdateAI(uint32 diff) OVERRIDE
             {

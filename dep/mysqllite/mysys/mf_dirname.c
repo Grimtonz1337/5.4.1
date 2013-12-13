@@ -16,7 +16,7 @@
 #include "mysys_priv.h"
 #include <m_string.h>
 
-    /* Functions definied in this file */
+	/* Functions definied in this file */
 
 size_t dirname_length(const char *name)
 {
@@ -30,7 +30,7 @@ size_t dirname_length(const char *name)
     pos=(char*) name-1;
 
   gpos= pos++;
-  for ( ; *pos ; pos++)                /* Find last FN_LIBCHAR */
+  for ( ; *pos ; pos++)				/* Find last FN_LIBCHAR */
   {
 #ifdef BASKSLASH_MBTAIL
     uint l;
@@ -52,9 +52,9 @@ size_t dirname_length(const char *name)
 
   SYNOPSIS
     dirname_part()
-    to        Store directory name here
-    name    Original name
-    to_length    Store length of 'to' here
+    to		Store directory name here
+    name	Original name
+    to_length	Store length of 'to' here
 
   RETURN
    #  Length of directory part in 'name'
@@ -77,11 +77,11 @@ size_t dirname_part(char *to, const char *name, size_t *to_res_length)
 
   SYNPOSIS
     convert_dirname()
-    to                Store result here. Must be at least of size
-                    min(FN_REFLEN, strlen(from) + 1) to make room
-                    for adding FN_LIBCHAR at the end.
-    from            Original filename. May be == to
-    from_end            Pointer at end of filename (normally end \0)
+    to				Store result here. Must be at least of size
+    				min(FN_REFLEN, strlen(from) + 1) to make room
+    				for adding FN_LIBCHAR at the end.
+    from			Original filename. May be == to
+    from_end			Pointer at end of filename (normally end \0)
 
   IMPLEMENTATION
     If Windows converts '/' to '\'
@@ -98,7 +98,7 @@ size_t dirname_part(char *to, const char *name, size_t *to_res_length)
 */
 
 #ifndef FN_DEVCHAR
-#define FN_DEVCHAR '\0'                /* For easier code */
+#define FN_DEVCHAR '\0'				/* For easier code */
 #endif
 
 char *convert_dirname(char *to, const char *from, const char *from_end)
@@ -118,7 +118,7 @@ char *convert_dirname(char *to, const char *from, const char *from_end)
     for (; from != from_end && *from ; from++)
     {
       if (*from == '/')
-    *to++= FN_LIBCHAR;
+	*to++= FN_LIBCHAR;
       else
       {
 #ifdef BACKSLASH_MBTAIL

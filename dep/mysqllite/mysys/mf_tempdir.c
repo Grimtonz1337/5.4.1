@@ -35,7 +35,7 @@ my_bool init_tmpdir(MY_TMPDIR *tmpdir, const char *pathlist)
   if (!pathlist || !pathlist[0])
   {
     /* Get default temporary directory */
-    pathlist=getenv("TMPDIR");    /* Use this if possible */
+    pathlist=getenv("TMPDIR");	/* Use this if possible */
 #if defined(__WIN__)
     if (!pathlist)
       pathlist=getenv("TEMP");

@@ -36,11 +36,11 @@ class instance_blood_furnace : public InstanceMapScript
 {
     public:
         instance_blood_furnace()
-            : InstanceMapScript("instance_blood_furnace", 542) {}
+            : InstanceMapScript("instance_blood_furnace", 542) { }
 
         struct instance_blood_furnace_InstanceMapScript : public InstanceScript
         {
-            instance_blood_furnace_InstanceMapScript(Map* map) : InstanceScript(map) {}
+            instance_blood_furnace_InstanceMapScript(Map* map) : InstanceScript(map) { }
 
             uint64 The_MakerGUID;
             uint64 BroggokGUID;
@@ -77,7 +77,7 @@ class instance_blood_furnace : public InstanceMapScript
             uint32 m_auiEncounter[MAX_ENCOUNTER];
             std::string str_data;
 
-            void Initialize()
+            void Initialize() OVERRIDE
             {
                 memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
 
@@ -114,7 +114,7 @@ class instance_blood_furnace : public InstanceMapScript
                 BroggokLeverGUID = 0;
             }
 
-            void OnCreatureCreate(Creature* creature)
+            void OnCreatureCreate(Creature* creature) OVERRIDE
             {
                 switch (creature->GetEntry())
                 {
@@ -133,13 +133,13 @@ class instance_blood_furnace : public InstanceMapScript
                 }
             }
 
-            void OnUnitDeath(Unit* unit)
+            void OnUnitDeath(Unit* unit) OVERRIDE
             {
                 if (unit && unit->GetTypeId() == TYPEID_UNIT && unit->GetEntry() == 17398)
                     PrisonerDied(unit->GetGUID());
             }
 
-            void OnGameObjectCreate(GameObject* go)
+            void OnGameObjectCreate(GameObject* go) OVERRIDE
             {
                  if (go->GetEntry() == 181766)                //Final exit door
                      Door1GUID = go->GetGUID();
@@ -247,7 +247,7 @@ class instance_blood_furnace : public InstanceMapScript
                 return str_data.c_str();
             }
 
-            void Load(const char* in)
+            void Load(const char* in) OVERRIDE
             {
                 if (!in)
                 {
@@ -304,9 +304,9 @@ class instance_blood_furnace : public InstanceMapScript
                 HandleGameObject(PrisonCell8GUID, false);
             }
 
-            void ResetPrisoners(std::set<uint64> prisoners)
+            void ResetPrisoners(const std::set<uint64>& prisoners)
             {
-                for (std::set<uint64>::iterator i = prisoners.begin(); i != prisoners.end(); ++i)
+                for (std::set<uint64>::const_iterator i = prisoners.begin(); i != prisoners.end(); ++i)
                     if (Creature* prisoner = instance->GetCreature(*i))
                         ResetPrisoner(prisoner);
             }
@@ -398,9 +398,9 @@ class instance_blood_furnace : public InstanceMapScript
                 }
             }
 
-            void ActivatePrisoners(std::set<uint64> prisoners)
+            void ActivatePrisoners(const std::set<uint64>& prisoners)
             {
-                for (std::set<uint64>::iterator i = prisoners.begin(); i != prisoners.end(); ++i)
+                for (std::set<uint64>::const_iterator i = prisoners.begin(); i != prisoners.end(); ++i)
                     if (Creature* prisoner = instance->GetCreature(*i))
                     {
                         prisoner->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_NON_ATTACKABLE);

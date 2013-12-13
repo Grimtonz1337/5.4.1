@@ -22,8 +22,8 @@
 
   SYNOPSIS
     my_sync()
-    fd            File descritor to sync
-    my_flags        Flags (now only MY_WME is supported)
+    fd			File descritor to sync
+    my_flags		Flags (now only MY_WME is supported)
 
   NOTE
     If file system supports its, only file data is synced, not inode data.
@@ -66,7 +66,7 @@ int my_sync(File fd, myf my_flags)
     res= my_win_fsync(fd);
 #else
 #error Cannot find a way to sync a file, durability in danger
-    res= 0;                    /* No sync (strange OS) */
+    res= 0;					/* No sync (strange OS) */
 #endif
   } while (res == -1 && errno == EINTR);
 

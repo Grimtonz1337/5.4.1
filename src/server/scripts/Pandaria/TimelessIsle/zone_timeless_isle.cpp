@@ -1,14 +1,19 @@
-/* Copyright (C) 2010-2013 OpenEmu <http://www.openemulator.com/>
-*
-* This file is free software; as a special exception the author gives
-* unlimited permission to copy and/or distribute it, with or without
-* modifications, as long as this notice is preserved.
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
-* implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-*
-*/
+/*
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
@@ -21,12 +26,6 @@
 #include "ScriptedGossip.h"
 #include "GossipDef.h"
 #include "timeless_isle.h"
-
-#define NIUZAO 					"Though blood floods the ground, the mountain is unmoved. - Niuzao"
-#define YULON 					"The truth shines brightest in clouded times. - Yu'lon"
-#define CHI_JI 					"Hope's fire grows when the flames come together. - Chi-Ji"
-#define XUEN 					"Strength and power are as different as sun and moon. - Xuen"
-#define CORRUPTED				"The shrine was corrupted by Ordos!"
 
 class player_on_enter_ti : public PlayerScript
 {
@@ -49,6 +48,23 @@ class player_on_enter_ti : public PlayerScript
 		}
 };
 
+enum TimeLostShrine
+{
+	// Says
+	SAY_BLESSING_NIUZAO					= 0,
+	SAY_BLESSING_YULON					= 1,
+	SAY_BLESSING_CHI_JI					= 2,
+	SAY_BLESSING_XUEN					= 3,
+	SAY_CORRUPTION_ORDOS				= 4,
+
+	// Spells
+	SPELL_FORTITUDE_OF_NIUZAO			= 147281,
+	SPELL_WISDOM_OF_YULON				= 147282,
+	SPELL_CHI_JIS_HOPE					= 147283,
+	SPELL_XUENS_STRENGTH				= 147284,
+	SPELL_ORDOS_BURNING_SACRIFICE		= 147285,
+};
+
 class go_time_lost_shrine_ti : public GameObjectScript
 {
     public:
@@ -63,8 +79,6 @@ class go_time_lost_shrine_ti : public GameObjectScript
             bool OnGossipHello(Player* player, GameObject* go) OVERRIDE
         	{
             	player->CLOSE_GOSSIP_MENU();
-            	go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND);
-            	WorldPacket packet(SMSG_MESSAGECHAT, 200);
 
             	if (used == false)
             	{
@@ -85,66 +99,60 @@ class go_time_lost_shrine_ti : public GameObjectScript
             	if (player->HasAura(SPELL_XUENS_STRENGTH))
             		player->RemoveAurasDueToSpell(SPELL_XUENS_STRENGTH);
 
+            	Creature* trigger = go->FindNearestCreature(NPC_TIME_LOST_SHRINE_TRIGGER, 5.0f); // An npc needs to be spawned in the same coordinates for the shrine
+
             	if (Choice == 1)
             	{
             		go->CastSpell(player, SPELL_FORTITUDE_OF_NIUZAO);
-            		go->BuildMonsterChat(&packet, CHAT_MSG_RAID_WARNING, NIUZAO, LANG_UNIVERSAL, 0, player->GetGUID());
+            		trigger->AI()->Talk(SAY_BLESSING_NIUZAO, player->GetGUID());
             	}
 
             	if (Choice == 2)
             	{
             		go->CastSpell(player, SPELL_WISDOM_OF_YULON);
-            		go->BuildMonsterChat(&packet, CHAT_MSG_RAID_WARNING, YULON, LANG_UNIVERSAL, 0, player->GetGUID());
+            		trigger->AI()->Talk(SAY_BLESSING_YULON, player->GetGUID());
             	}
 
             	if (Choice == 3)
             	{
             		go->CastSpell(player, SPELL_CHI_JIS_HOPE);
-            		go->BuildMonsterChat(&packet, CHAT_MSG_RAID_WARNING, CHI_JI, LANG_UNIVERSAL, 0, player->GetGUID());
+            		trigger->AI()->Talk(SAY_BLESSING_CHI_JI, player->GetGUID());
             	}
 
             	if (Choice == 4)
             	{
             		go->CastSpell(player, SPELL_XUENS_STRENGTH);
-            		go->BuildMonsterChat(&packet, CHAT_MSG_RAID_WARNING, XUEN, LANG_UNIVERSAL, 0, player->GetGUID());
+            		trigger->AI()->Talk(SAY_BLESSING_XUEN, player->GetGUID());
             	}
 
             	if (Choice == 5)
             	{
             		go->CastSpell(player, SPELL_ORDOS_BURNING_SACRIFICE);
-            		go->BuildMonsterChat(&packet, CHAT_MSG_RAID_WARNING, CORRUPTED, LANG_UNIVERSAL, 0, player->GetGUID());
+            		trigger->AI()->Talk(SAY_CORRUPTION_ORDOS, player->GetGUID());
             	}
 
-            	_events.ScheduleEvent(EVENT_BACK_TO_USE, 300000);
+            	BackToUse = 300000;
 
             	return true;
         	}
 
             void UpdateAI(uint32 diff) OVERRIDE
             {
-                if (_events.Empty())
-                    return;
-
-                _events.Update(diff);
-
                 if (used == false)
                 	return;
 
-                while (uint32 eventId = _events.ExecuteEvent())
+                if (BackToUse <= diff)
                 {
-                    switch (eventId)
-                    {
-                        case EVENT_BACK_TO_USE:
-                            go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND);
-                            used = false; // this will stop/prevent it from updating it
-                            break;
-                        default:
-                        	break;
-                    }
+                   	go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND);
+                    used = false; // this will stop/prevent it from updating it
                 }
+
+                else
+                	BackToUse -= diff;
             }
 
         private:
+        	uint32 BackToUse;
         	uint8 Choice;
         	bool used;
         };

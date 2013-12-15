@@ -1,14 +1,19 @@
-/* Copyright (C) 2010-2013 OpenEmu <http://www.openemulator.com/>
-*
-* This file is free software; as a special exception the author gives
-* unlimited permission to copy and/or distribute it, with or without
-* modifications, as long as this notice is preserved.
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
-* implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-*
-*/
+/*
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 enum Datas
 {
@@ -66,6 +71,7 @@ enum Rares
 enum Creatures
 {
 	NPC_EMPEROR_SHAOHAO_TI				= 73303,
+	NPC_TIME_LOST_SHRINE_TRIGGER		= 73461, // I think this is the correct ID :P
 };
 
 enum SharedSpells
@@ -90,22 +96,9 @@ enum SharedSpells
 
 // Scripts information
 
-enum TimeLostShrine
-{
-	// Events
-	EVENT_BACK_TO_USE					= 0,
-
-	// Spells
-	SPELL_FORTITUDE_OF_NIUZAO			= 147281,
-	SPELL_WISDOM_OF_YULON				= 147282,
-	SPELL_CHI_JIS_HOPE					= 147283,
-	SPELL_XUENS_STRENGTH				= 147284,
-	SPELL_ORDOS_BURNING_SACRIFICE		= 147285,
-};
-
 enum EmperorShaohao
 {
-	SAY_DEFEATED_CHI_JI					= 0,
+	SAY_DEFEATED_CHI_JI					= 0, // Emperor Shaohao yells: You have walked the trial of hope, and learned of the path of the red crane. May it guide your footsteps through time.
 };
 
 enum Cinderfall

@@ -1,14 +1,19 @@
-/* Copyright (C) 2010-2013 OpenEmu <http://www.openemulator.com/>
-*
-* This file is free software; as a special exception the author gives
-* unlimited permission to copy and/or distribute it, with or without
-* modifications, as long as this notice is preserved.
-*
-* This program is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY, to the extent permitted by law; without even the
-* implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-*
-*/
+/*
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ObjectMgr.h"
 #include "ScriptMgr.h"
@@ -245,10 +250,12 @@ public:
         npc_emerald_ganderAI(Creature* creature) : ScriptedAI(creature) {	}
 
         uint32 GustofWindTimer;
+        uint32 HealingSongTimer;
 
         void Reset() OVERRIDE
         {
         	GustofWindTimer = urand(6000, 9000);
+        	HealingSongTimer = 15000;
 
         	me->SetReactState(REACT_AGGRESSIVE);
         }
@@ -260,7 +267,7 @@ public:
         	DoCast(me, SPELL_WINDFEATHER);
         }
 
-        void UpdateAI(uint32 diff) OVERRIDE // TODO: find when does Healing Song being cast and script it
+        void UpdateAI(uint32 diff) OVERRIDE
         {
         	if (!UpdateVictim())
         		return;
@@ -280,6 +287,22 @@ public:
 
         	else
         		GustofWindTimer -= diff;
+
+        	if (HealingSongTimer <= diff) // Fuck it.
+        	{
+        		if (me->GetHealthPct() >= 81)
+        			return;
+
+        		if (me->GetHealthPct() <= 80)
+        		{
+        			DoCast(me, SPELL_HEALING_SONG);
+
+        			HealingSongTimer = urand(15000, 22000);
+        		}
+        	}
+
+        	else
+        		HealingSongTimer -= diff;
 
         	DoMeleeAttackIfReady();
         }
@@ -557,9 +580,6 @@ public:
         	{
         		if (me->IsWithinMeleeRange(me->GetVictim()))
         			DoCastVictim(SPELL_POUNCE_STUN, true);
-
-        		else if (!me->IsWithinMeleeRange(me->GetVictim()))
-        			continue; // continue with the events
         	}
 
         	else
@@ -871,9 +891,6 @@ public:
 
         		if (me->IsWithinMeleeRange(me->GetVictim()))
         			DoCastVictim(SPELL_OX_CHARGE);
-
-        		else if (!me->IsWithinMeleeRange(me->GetVictim()))
-        			continue;
         	}
 
         	else
@@ -922,13 +939,13 @@ public:
         	InCombat = true;
         }
 
-        void JustSummoned(Unit* summon) OVERRIDE
+        void JustSummoned(Creature* summon) OVERRIDE
         {
         	if (summon->GetEntry() == 73528)
         	{
         		summon->SetReactState(REACT_PASSIVE);
         		summon->AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
-        		summon->AI()->DoCast(me, SPELL_KILNFIRE);
+        		summon->CastSpell(me, SPELL_KILNFIRE, false);
         	}
         }
 
@@ -968,13 +985,13 @@ public:
         		if (!me->GetVictim()) // make sure we have a tank/victim
         			return;
 
-        		if (me->GetDistance(me->GetVictim() < 20.0f)
+        		if (me->GetDistance(me->GetVictim()) < 20.0f)
         			return;
 
-        		if (me->GetDistance(me->GetVictim() > 60.0f))
+        		if (me->GetDistance(me->GetVictim()) > 60.0f)
         			return;
 
-        		else if (me->GetDistance(me->GetVictim() >= 20.0f))
+        		else if (me->GetDistance(me->GetVictim()) >= 20.0f)
         			DoCastVictim(SPELL_FIERY_CHARGE, false);
 
         		FieryChargeTimer = urand(3000, 6000);

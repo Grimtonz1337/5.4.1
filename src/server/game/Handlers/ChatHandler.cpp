@@ -530,7 +530,7 @@ void WorldSession::HandleAddonMessagechatOpcode(WorldPacket& recvData)
     Player* sender = GetPlayer();
     ChatMsg type;
 
-    switch (recvData.GetOpcode())
+    /*switch (recvData.GetOpcode())
     {
         case CMSG_MESSAGECHAT_ADDON_BATTLEGROUND:
             type = CHAT_MSG_BATTLEGROUND;
@@ -554,7 +554,7 @@ void WorldSession::HandleAddonMessagechatOpcode(WorldPacket& recvData)
             TC_LOG_ERROR("network", "HandleAddonMessagechatOpcode: Unknown addon chat opcode (%u)", recvData.GetOpcode());
             recvData.hexlike();
             return;
-    }
+    }*/ // TODO, get the OPcodes
 
     std::string message;
     std::string prefix;

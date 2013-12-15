@@ -455,7 +455,7 @@ void WorldSession::HandleForceSpeedChangeAck(WorldPacket &recvData)
         "PitchRate"
     };
 
-    switch (opcode)
+    /*switch (opcode)
     {
         case CMSG_MOVE_FORCE_WALK_SPEED_CHANGE_ACK:        move_type = MOVE_WALK;        break;
         case CMSG_MOVE_FORCE_RUN_SPEED_CHANGE_ACK:         move_type = MOVE_RUN;         break;
@@ -469,7 +469,7 @@ void WorldSession::HandleForceSpeedChangeAck(WorldPacket &recvData)
         default:
             TC_LOG_ERROR("network", "WorldSession::HandleForceSpeedChangeAck: Unknown move type opcode: %u", opcode);
             return;
-    }
+    }*/ // TODO get the OPcodes
 
     // skip all forced speed changes except last and unexpected
     // in run/mounted case used one ACK and it must be skipped. m_forced_speed_changes[MOVE_RUN] store both.

@@ -345,6 +345,32 @@ class spell_timeless_isle_crane_wings : public SpellScriptLoader
         }
 };
 
+class spell_timeless_isle_cauterize : public SpellScriptLoader
+{
+    public:
+        spell_timeless_isle_cauterize() : SpellScriptLoader("spell_timeless_isle_cauterize") { }
+
+        class spell_timeless_isle_cauterize_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_timeless_isle_cauterize_AuraScript);
+
+            void OnPeriodic(AuraEffect const* /*aurEff*/)
+            {
+                GetCaster()->SetMaxHealth(GetCaster()->GetHealthPct() - 1.0f);
+            }
+
+            void Register() OVERRIDE
+            {
+                OnEffectPeriodic += AuraEffectPeriodicFn(spell_timeless_isle_cauterize_AuraScript::OnPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
+            }
+        };
+
+        AuraScript* GetAuraScript() const OVERRIDE
+        {
+            return new spell_timeless_isle_cauterize_AuraScript();
+        }
+};
+
 void AddSC_zone_timeless_isle()
 {
 	new player_on_enter_ti();
@@ -353,4 +379,5 @@ void AddSC_zone_timeless_isle()
     new go_time_lost_shrine_ti();
     new go_gleaming_crane_statue_ti();
     new spell_timeless_isle_crane_wings();
+    new spell_timeless_isle_cauterize();
 }

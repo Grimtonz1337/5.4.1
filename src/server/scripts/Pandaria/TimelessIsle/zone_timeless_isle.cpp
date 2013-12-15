@@ -152,7 +152,7 @@ class go_time_lost_shrine_ti : public GameObjectScript
 
         struct go_time_lost_shrine_tiAI : public GameObjectAI
         {
-            go_time_lost_shrine_tiAI(GameObject* go) : GameObjectAI(go) {	}
+            go_time_lost_shrine_tiAI(GameObject* go) : GameObjectAI(go) { }
 
             EventMap _events;
 
@@ -250,7 +250,7 @@ class go_gleaming_crane_statue_ti : public GameObjectScript
 
         struct go_gleaming_crane_statue_tiAI : public GameObjectAI
         {
-            go_gleaming_crane_statue_tiAI(GameObject* go) : GameObjectAI(go) {	}
+            go_gleaming_crane_statue_tiAI(GameObject* go) : GameObjectAI(go) { }
 
             uint64 playerGUID;
             uint32 WingsTimer;

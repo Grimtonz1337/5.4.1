@@ -950,7 +950,7 @@ public:
 
                 else
                 {
-                    if (Creature* Kilns = Unit::GetCreature(*me, EternalKilnGUID))
+                    if (Creature* Kilns = Unit::GetCreature(*me, EternalKilnGUID[i]))
                     {
                         if (Kilns->GetOwnerGUID() == me->GetGUID()) // make sure we're using the owner's guid and not some other lol xD
                             Kilns->DespawnOrUnsummon(); // Gets all kilns alive, and despawns them :P
@@ -1092,7 +1092,7 @@ public:
 
                 else
                 {
-                    if (Creature* Golems = Unit::GetCreature(*me, FlareCoreGolemGUID))
+                    if (Creature* Golems = Unit::GetCreature(*me, FlareCoreGolemGUID[i]))
                     {
                         if (Golems->GetOwnerGUID() == me->GetGUID())
                             Golems->DespawnOrUnsummon();
@@ -1110,7 +1110,7 @@ public:
 
                 else
                 {
-                    if (Creature* Kilns = Unit::GetCreature(*me, EternalKilnGUID))
+                    if (Creature* Kilns = Unit::GetCreature(*me, EternalKilnGUID[i]))
                     {
                         if (Kilns->GetOwnerGUID() == me->GetGUID())
                             Kilns->DespawnOrUnsummon();
@@ -1416,6 +1416,98 @@ public:
     }
 };
 
+class npc_cranegnasher : public CreatureScript
+{
+public:
+    npc_cranegnasher() : CreatureScript("npc_cranegnasher") { }
+
+    struct npc_cranegnasherAI : public ScriptedAI
+    {
+        npc_cranegnasherAI(Creature* creature) : ScriptedAI(creature) { }
+
+        uint32 BiteMorselTimer;
+        uint32 ClawTimer;
+        uint32 PounceTimer;
+        uint32 RakeTimer;
+
+        void Reset() OVERRIDE
+        {
+            DoCast(me, SPELL_STEALTH);
+
+            BiteMorselTimer = urand(6000, 10000);
+            ClawTimer = urand(7000, 11500);
+            PounceTimer = urand(3000, 7000);
+            RakeTimer = urand(4000, 9000);
+
+            InCombat = false;
+
+            me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/) OVERRIDE
+        {
+            InCombat = true;
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+            if (!UpdateVictim())
+                return;
+
+            if (!InCombat)
+                return;
+
+            if (me->isDead())
+                return;
+
+            if (BiteMorselTimer <= diff)
+            {
+                DoCastVictim(SPELL_BITE_MORSEL);
+
+                BiteMorselTimer = 12000;
+            }
+
+            if (ClawTimer <= diff)
+            {
+                DoCastVictim(SPELL_CLAW);
+
+                ClawTimer = urand(8000, 15000);
+            }
+
+            if (PounceTimer <= diff)
+            {
+                if (me->GetDistance(me->GetVictim()) < 10.0f)
+                    return;
+
+                if (me->GetDistance(me->GetVictim()) > 40.0f)
+                    return;
+
+                else if (me->GetDistance(me->GetVictim()) >= 10.0f)
+                    DoCastVictim(SPELL_POUNCE);
+
+                PounceTimer = urand(2000, 3500);
+            }
+
+            if (RakeTimer <= diff)
+            {
+                DoCastVictim(SPELL_RAKE);
+
+                RakeTimer = urand(7000, 14000);
+            }
+
+            DoMeleeAttackIfReady();
+        }
+
+    private:
+        bool InCombat;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_cranegnasherAI(creature);
+    }
+};
+
 void AddSC_timeless_isle()
 {
 	new npc_cinderfall();
@@ -1433,4 +1525,5 @@ void AddSC_timeless_isle()
     new npc_archiereus_of_flame();
     new npc_champion_of_the_black_flame();
     new npc_chelon();
+    new npc_cranegnasher();
 }

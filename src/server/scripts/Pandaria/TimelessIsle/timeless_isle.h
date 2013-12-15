@@ -99,6 +99,11 @@ enum SharedSpells
 	SPELL_FIRE_STORM					= 147998,
 	SPELL_BLAZING_CLEAVE				= 147702,
 	SPELL_BURNING_FURY					= 147703,
+	SPELL_BITE_MORSEL					= 147400,
+	SPELL_CLAW 							= 147395,
+	SPELL_POUNCE 						= 147394,
+	SPELL_RAKE 							= 147396,
+	SPELL_STEALTH						= 128933,
 };
 
 // Scripts information

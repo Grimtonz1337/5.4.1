@@ -36,14 +36,15 @@ public:
 
     struct npc_cinderfallAI : public ScriptedAI
     {
-        npc_cinderfallAI(Creature* creature) : ScriptedAI(creature) {	}
+        npc_cinderfallAI(Creature* creature) : ScriptedAI(creature) { }
 
-        uint32 MoltenInfernoTimer; // the only spell
-        uint8 MoltenInfernoChoice; // 4 spells, choose one
+        uint32 MoltenInfernoTimer;
+        uint8 MoltenInfernoChoice;
 
         void Reset() OVERRIDE
         {
         	MoltenInfernoTimer = 2000;
+
         	InCombat = false;
 
         	me->SetReactState(REACT_AGGRESSIVE);
@@ -117,7 +118,7 @@ public:
 
     struct npc_huolonAI : public ScriptedAI
     {
-        npc_huolonAI(Creature* creature) : ScriptedAI(creature) {	}
+        npc_huolonAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 LightningBreathTimer;
         uint32 StormBlossomTimer;
@@ -126,6 +127,7 @@ public:
         {
         	LightningBreathTimer = 6000;
         	StormBlossomTimer = 8000;
+
         	InCombat = false;
 
         	me->SetReactState(REACT_AGGRESSIVE);
@@ -190,13 +192,14 @@ public:
 
     struct npc_imperial_pythonAI : public ScriptedAI
     {
-        npc_imperial_pythonAI(Creature* creature) : ScriptedAI(creature) {	}
+        npc_imperial_pythonAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 HugeFangTimer;
 
         void Reset() OVERRIDE
         {
         	HugeFangTimer = 2000;
+
         	InCombat = false;
 
         	me->SetReactState(REACT_AGGRESSIVE);
@@ -247,7 +250,7 @@ public:
 
     struct npc_emerald_ganderAI : public ScriptedAI
     {
-        npc_emerald_ganderAI(Creature* creature) : ScriptedAI(creature) {	}
+        npc_emerald_ganderAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 GustofWindTimer;
         uint32 HealingSongTimer;
@@ -256,6 +259,8 @@ public:
         {
         	GustofWindTimer = urand(6000, 9000);
         	HealingSongTimer = 15000;
+
+            InCombat = false;
 
         	me->SetReactState(REACT_AGGRESSIVE);
         }
@@ -324,7 +329,7 @@ public:
 
     struct npc_golganarrAI : public ScriptedAI
     {
-        npc_golganarrAI(Creature* creature) : ScriptedAI(creature) {	}
+        npc_golganarrAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 BoulderTimer;
         uint32 StompTimer;
@@ -427,7 +432,7 @@ public:
 
     struct npc_watcher_osuAI : public ScriptedAI
     {
-        npc_watcher_osuAI(Creature* creature) : ScriptedAI(creature) {	}
+        npc_watcher_osuAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 FallingFlamesTimer;
         uint32 PyroblastTimer;
@@ -498,15 +503,11 @@ public:
 
     struct npc_tsavokaAI : public ScriptedAI
     {
-        npc_tsavokaAI(Creature* creature) : ScriptedAI(creature) {	}
+        npc_tsavokaAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 GreaterSwipeTimer;
         uint32 DefensiveLeapTimer;
-        uint32 LeapDone;
         uint32 StunTimer;
-        uint8 LeapOrNot;
-
-        bool Leaped;
 
         void Reset() OVERRIDE
         {
@@ -589,6 +590,11 @@ public:
         }
 
     private:
+        uint32 LeapDone;
+
+        uint8 LeapOrNot;
+
+        bool Leaped;
     	bool InCombat;
     };
 
@@ -605,7 +611,7 @@ public:
 
     struct npc_spirit_of_jadefireAI : public ScriptedAI
     {
-        npc_spirit_of_jadefireAI(Creature* creature) : ScriptedAI(creature) {	}
+        npc_spirit_of_jadefireAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 JadefireBoltTimer;
         uint32 JadeflameStrikeTimer;
@@ -676,7 +682,7 @@ public:
 
     struct npc_monstrous_spineclawAI : public ScriptedAI
     {
-        npc_monstrous_spineclawAI(Creature* creature) : ScriptedAI(creature) {	}
+        npc_monstrous_spineclawAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 ClawFlurryTimer;
 
@@ -735,17 +741,13 @@ public:
 
     struct npc_great_turtle_furyshellAI : public ScriptedAI
     {
-        npc_great_turtle_furyshellAI(Creature* creature) : ScriptedAI(creature) {	}
-
-        uint32 GeyserTimer;
-        uint32 ShellSpinTimer;
-        uint32 SnappingBiteTimer;
+        npc_great_turtle_furyshellAI(Creature* creature) : ScriptedAI(creature) { }
 
         void Reset() OVERRIDE
         {
         	GeyserTimer = urand(4000, 6000);
         	ShellSpinTimer = urand(5000, 7000);
-        	SnappingBiteTimer = 12000;
+        	SnappingBiteTimer = urand(2500, 12500);
 
         	InCombat = false;
 
@@ -802,6 +804,10 @@ public:
         }
 
     private:
+        uint32 GeyserTimer;
+        uint32 ShellSpinTimer;
+        uint32 SnappingBiteTimer;
+
     	bool InCombat;
     };
 
@@ -818,7 +824,7 @@ public:
 
     struct npc_ironfur_steelhornAI : public ScriptedAI
     {
-        npc_ironfur_steelhornAI(Creature* creature) : ScriptedAI(creature) {	}
+        npc_ironfur_steelhornAI(Creature* creature) : ScriptedAI(creature) { }
 
         uint32 HeadbuttTimer;
         uint32 IronFurTimer;
@@ -918,8 +924,6 @@ public:
     struct npc_flintlord_gairanAI : public ScriptedAI
     {
         npc_flintlord_gairanAI(Creature* creature) : ScriptedAI(creature) {	}
-
-        uint32 FieryChargeTimer; // It can be casted from 1 to infinite seconds. Once you go out of melee range, he immediately casts it :P
 
         void Reset() OVERRIDE
         {
@@ -1033,6 +1037,7 @@ public:
         uint32 EternalKilnAlive;
         uint32 BlazingBlowTimer;
         uint32 ConjureEternalKilnTimer;
+        uint32 FieryChargeTimer; // It can be casted from 1 to infinite seconds. Once you go out of melee range, he immediately casts it :P
 
     	bool InCombat;
     };
@@ -1235,6 +1240,182 @@ public:
     }
 };
 
+class npc_champion_of_the_black_flame : public CreatureScript
+{
+public:
+    npc_champion_of_the_black_flame() : CreatureScript("npc_champion_of_the_black_flame") { }
+
+    struct npc_champion_of_the_black_flameAI : public ScriptedAI
+    {
+        npc_champion_of_the_black_flameAI(Creature* creature) : ScriptedAI(creature) { }
+
+        uint32 BlazingCleaveTimer;
+        uint32 BurningFuryTimer;
+
+        void Reset() OVERRIDE
+        {
+            BlazingCleaveTimer = urand(8000, 11000);
+            BurningFuryTimer = urand(14000, 17000);
+            FieryChargeTimer = 4000;
+
+            InCombat = false;
+
+            me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/) OVERRIDE
+        {
+            InCombat = true;
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+            if (!UpdateVictim())
+                return;
+
+            if (!InCombat)
+                return;
+
+            if (me->isDead())
+                return;
+
+            if (BlazingCleaveTimer <= diff)
+            {
+                DoCastAOE(SPELL_BLAZING_CLEAVE, false);
+
+                BlazingCleaveTimer = urand(14000, 22000);
+            }
+
+            else
+                BlazingCleaveTimer -= diff;
+
+            if (BurningFuryTimer <= diff)
+            {
+                DoCast(me, SPELL_BURNING_FURY);
+
+                BurningFuryTimer = urand(16000, 24000);
+            }
+
+            else
+                BurningFuryTimer -= diff;
+
+            if (FieryChargeTimer <= diff)
+            {
+                if (!me->GetVictim())
+                    return;
+
+                if (me->GetDistance(me->GetVictim()) < 20.0f)
+                    return;
+
+                if (me->GetDistance(me->GetVictim()) > 60.0f)
+                    return;
+
+                else if (me->GetDistance(me->GetVictim()) >= 20.0f)
+                    DoCastVictim(SPELL_FIERY_CHARGE, false);
+
+                FieryChargeTimer = urand(3000, 6000);
+            }
+
+            DoMeleeAttackIfReady();
+        }
+
+    private:
+        uint32 FieryChargeTimer;
+
+        bool InCombat;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_champion_of_the_black_flameAI(creature);
+    }
+};
+
+class npc_chelon : public CreatureScript
+{
+public:
+    npc_chelon() : CreatureScript("npc_chelon") { }
+
+    struct npc_chelonAI : public ScriptedAI
+    {
+        npc_chelonAI(Creature* creature) : ScriptedAI(creature) { }
+
+        // Chelon and Great Turtle Furyshell have the SAME exact script...
+
+        void Reset() OVERRIDE
+        {
+            GeyserTimer = urand(4000, 6000);
+            ShellSpinTimer = urand(5000, 7000);
+            SnappingBiteTimer = urand(2500, 12500);
+
+            InCombat = false;
+
+            me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/) OVERRIDE
+        {
+            InCombat = true;
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+            if (!UpdateVictim())
+                return;
+
+            if (!InCombat)
+                return;
+
+            if (me->isDead())
+                return;
+
+            if (GeyserTimer <= diff)
+            {
+                DoCastVictim(SPELL_GEYSER, false);
+
+                GeyserTimer = urand(10000, 14000);
+            }
+
+            else
+                GeyserTimer -= diff;
+
+            if (ShellSpinTimer <= diff)
+            {
+                DoCastAOE(SPELL_SHELL_SPIN, false);
+
+                ShellSpinTimer = urand(11000, 15000);
+            }
+
+            else
+                ShellSpinTimer -= diff;
+
+            if (SnappingBiteTimer <= diff)
+            {
+                DoCastVictim(SPELL_SNAPPING_BITE, false);
+
+                SnappingBiteTimer = urand(10000, 18000);
+            }
+
+            else
+                SnappingBiteTimer -= diff;
+
+            DoMeleeAttackIfReady();
+        }
+
+    private:
+        uint32 GeyserTimer;
+        uint32 ShellSpinTimer;
+        uint32 SnappingBiteTimer;
+
+        bool InCombat;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_chelonAI(creature);
+    }
+};
+
 void AddSC_timeless_isle()
 {
 	new npc_cinderfall();
@@ -1250,4 +1431,6 @@ void AddSC_timeless_isle()
 	new npc_ironfur_steelhorn();
 	new npc_flintlord_gairan();
     new npc_archiereus_of_flame();
+    new npc_champion_of_the_black_flame();
+    new npc_chelon();
 }

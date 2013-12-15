@@ -81,26 +81,24 @@ enum Creatures
 
 enum SharedSpells
 {
-	// This means, that if 2 or more creatures use the same spell, it can be found here
+	// This means, that if 2 or more creatures use the same spells, they can be found here
 	SPELL_DEFENSIVE_LEAP				= 147650,
 	SPELL_POUNCE_LEAP					= 147649,
 	SPELL_POUNCE_STUN					= 147651,
-
 	SPELL_GEYSER						= 147572,
 	SPELL_SHELL_SPIN					= 147571,
 	SPELL_SNAPPING_BITE					= 147569,
-
 	SPELL_IRON_FUR						= 147368,
 	SPELL_OX_CHARGE						= 147386,
 	SPELL_OX_CHARGE_CAST				= 147385, // trigger for above spell :P
-
 	SPELL_BLAZING_BLOW					= 148003,
 	SPELL_FIERY_CHARGE					= 147704,
 	SPELL_CONJURE_ETERNAL_KILN			= 148004,
-
 	SPELL_CONJURE_FLARECORE_GOLEM		= 148001,
 	SPELL_CAUTERIZE						= 147997,
 	SPELL_FIRE_STORM					= 147998,
+	SPELL_BLAZING_CLEAVE				= 147702,
+	SPELL_BURNING_FURY					= 147703,
 };
 
 // Scripts information

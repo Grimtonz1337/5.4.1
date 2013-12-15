@@ -371,6 +371,32 @@ class spell_timeless_isle_cauterize : public SpellScriptLoader
         }
 };
 
+class spell_timeless_isle_burning_fury : public SpellScriptLoader
+{
+    public:
+        spell_timeless_isle_burning_fury() : SpellScriptLoader("spell_timeless_isle_burning_fury") { }
+
+        class spell_timeless_isle_burning_fury_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_timeless_isle_burning_fury_AuraScript);
+
+            void OnPeriodic(AuraEffect const* /*aurEff*/)
+            {
+                GetCaster()->DealDamage(GetCaster(), 50000, NULL, SELF_DAMAGE, SPELL_SCHOOL_MASK_FIRE);
+            }
+
+            void Register() OVERRIDE
+            {
+                OnEffectPeriodic += AuraEffectPeriodicFn(spell_timeless_isle_burning_fury_AuraScript::OnPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
+            }
+        };
+
+        AuraScript* GetAuraScript() const OVERRIDE
+        {
+            return new spell_timeless_isle_burning_fury_AuraScript();
+        }
+};
+
 void AddSC_zone_timeless_isle()
 {
 	new player_on_enter_ti();
@@ -380,4 +406,5 @@ void AddSC_zone_timeless_isle()
     new go_gleaming_crane_statue_ti();
     new spell_timeless_isle_crane_wings();
     new spell_timeless_isle_cauterize();
+    new spell_timeless_isle_burning_fury();
 }

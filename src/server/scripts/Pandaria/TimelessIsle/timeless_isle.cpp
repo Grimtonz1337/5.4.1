@@ -919,8 +919,6 @@ public:
     {
         npc_flintlord_gairanAI(Creature* creature) : ScriptedAI(creature) {	}
 
-        uint32 BlazingBlowTimer;
-        uint32 ConjureEternalKilnTimer;
         uint32 FieryChargeTimer; // It can be casted from 1 to infinite seconds. Once you go out of melee range, he immediately casts it :P
 
         void Reset() OVERRIDE
@@ -939,14 +937,43 @@ public:
         	InCombat = true;
         }
 
+        void JustDied(Unit* /*killer*/) OVERRIDE
+        {
+            for (uint32 i = 0; i <= EternalKilnAlive; ++i)
+            {
+                if (EternalKilnAlive == 0)
+                    return;
+
+                else
+                {
+                    if (Creature* Kilns = Unit::GetCreature(*me, EternalKilnGUID))
+                    {
+                        if (Kilns->GetOwnerGUID() == me->GetGUID()) // make sure we're using the owner's guid and not some other lol xD
+                            Kilns->DespawnOrUnsummon(); // Gets all kilns alive, and despawns them :P
+
+                        else
+                            return;
+                    }
+                }
+            }
+        }
+
         void JustSummoned(Creature* summon) OVERRIDE
         {
-        	if (summon->GetEntry() == 73528)
-        	{
-        		summon->SetReactState(REACT_PASSIVE);
-        		summon->AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
-        		summon->CastSpell(me, SPELL_KILNFIRE, false);
-        	}
+            if (summon->GetEntry() == 73528)
+            {
+                EternalKilnGUID = summon->GetGUID();
+                EternalKilnAlive = EternalKilnAlive + 1;
+            }
+        }
+
+        void SummonedCreatureDies(Creature* summoned, Unit* /*who*/) OVERRIDE
+        {
+            if (summoned->GetEntry() == 73528)
+            {
+                EternalKilnGUID = 0;
+                EternalKilnAlive = EternalKilnAlive - 1;
+            }
         }
 
         void UpdateAI(uint32 diff) OVERRIDE
@@ -1001,12 +1028,210 @@ public:
         }
 
     private:
+        uint64 EternalKilnGUID;
+
+        uint32 EternalKilnAlive;
+        uint32 BlazingBlowTimer;
+        uint32 ConjureEternalKilnTimer;
+
     	bool InCombat;
     };
 
     CreatureAI* GetAI(Creature* creature) const OVERRIDE
     {
     	return new npc_flintlord_gairanAI(creature);
+    }
+};
+
+class npc_archiereus_of_flame : public CreatureScript
+{
+public:
+    npc_archiereus_of_flame() : CreatureScript("npc_archiereus_of_flame") { }
+
+    struct npc_archiereus_of_flameAI : public ScriptedAI
+    {
+        npc_archiereus_of_flameAI(Creature* creature) : ScriptedAI(creature) { }
+
+        // I don't understand this at all. Why would there be 2 NPC IDs for this guy, same spells, same hp... same drop? Wtf?
+
+        uint32 CauterizeTimer;
+        uint32 ConjureFlarecoreGolemTimer;
+        uint32 FireStormTimer;
+
+        void Reset() OVERRIDE
+        {
+            BlazingBlowTimer = urand(5000, 7500);
+            CauterizeTimer = urand(15000, 30000);
+            ConjureEternalKilnTimer = 20000;
+            ConjureFlarecoreGolemTimer = urand(12000, 32000);
+            FireStormTimer = urand(11000, 15100);
+
+            InCombat = false;
+
+            me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/) OVERRIDE
+        {
+            Talk(SAY_ARCHIEREUS_AGGRO);
+
+            InCombat = true;
+        }
+
+        void JustDied(Unit* /*killer*/) OVERRIDE
+        {
+            for (uint32 i = 0; i <= FlareCoreGolemAlive; ++i)
+            {
+                if (FlareCoreGolemAlive == 0)
+                    return; // If it's 0, why would it remove 0? XD
+
+                else
+                {
+                    if (Creature* Golems = Unit::GetCreature(*me, FlareCoreGolemGUID))
+                    {
+                        if (Golems->GetOwnerGUID() == me->GetGUID())
+                            Golems->DespawnOrUnsummon();
+
+                        else
+                            return;
+                    }
+                }
+            }
+
+            for (uint32 i = 0; i <= EternalKilnAlive; ++i)
+            {
+                if (EternalKilnAlive == 0)
+                    return;
+
+                else
+                {
+                    if (Creature* Kilns = Unit::GetCreature(*me, EternalKilnGUID))
+                    {
+                        if (Kilns->GetOwnerGUID() == me->GetGUID())
+                            Kilns->DespawnOrUnsummon();
+
+                        else
+                            return;
+                    }
+                }
+            }
+        }
+
+        void JustSummoned(Creature* summon) OVERRIDE
+        {
+            switch (summon->GetEntry())
+            {
+                case 73527:
+                    FlareCoreGolemGUID = summon->GetGUID();
+                    FlareCoreGolemAlive = FlareCoreGolemAlive + 1;
+                    break;
+
+                case 73528:
+                    EternalKilnGUID = summon->GetGUID();
+                    EternalKilnAlive = EternalKilnAlive + 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        void SummonedCreatureDies(Creature* summoned, Unit* /*who*/) OVERRIDE
+        {
+            switch (summoned->GetEntry())
+            {
+                case 73527:
+                    FlareCoreGolemGUID = 0;
+                    FlareCoreGolemAlive = FlareCoreGolemAlive - 1;
+                    break;
+
+                case 73528:
+                    EternalKilnGUID = 0;
+                    EternalKilnAlive = EternalKilnAlive - 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+            if (!UpdateVictim())
+                return;
+
+            if (!InCombat)
+                return;
+
+            if (me->isDead())
+                return;
+
+            if (BlazingBlowTimer <= diff)
+            {
+                DoCastAOE(SPELL_BLAZING_BLOW, false);
+
+                BlazingBlowTimer = urand(5500, 7500);
+            }
+
+            else
+                BlazingBlowTimer -= diff;
+
+            if (CauterizeTimer <= diff)
+            {
+                DoCast(me, SPELL_CAUTERIZE);
+
+                CauterizeTimer = urand(20000, 30000);
+            }
+
+            else
+                CauterizeTimer -= diff;
+
+            if (ConjureEternalKilnTimer <= diff)
+            {
+                DoCast(me, SPELL_CONJURE_ETERNAL_KILN);
+
+                ConjureEternalKilnTimer = urand(18000, 32000);
+            }
+
+            else
+                ConjureEternalKilnTimer -= diff;
+
+            if (ConjureFlarecoreGolemTimer <= diff)
+            {
+                DoCast(me, SPELL_CONJURE_FLARECORE_GOLEM);
+
+                ConjureFlarecoreGolemTimer = 30000;
+            }
+
+            else
+                ConjureFlarecoreGolemTimer -= diff;
+
+            if (FireStormTimer <= diff)
+            {
+                DoCastAOE(SPELL_FIRE_STORM, false);
+
+                FireStormTimer = urand(12000, 27000);
+            }
+
+            else
+                FireStormTimer -= diff;
+
+            DoMeleeAttackIfReady();
+        }
+    
+    private:
+        uint64 EternalKilnGUID;
+        uint64 FlareCoreGolemGUID;
+
+        uint32 EternalKilnAlive;
+        uint32 FlareCoreGolemAlive;
+        uint32 BlazingBlowTimer;
+        uint32 ConjureEternalKilnTimer;
+
+        bool InCombat;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_archiereus_of_flameAI(creature);
     }
 };
 
@@ -1024,4 +1249,5 @@ void AddSC_timeless_isle()
 	new npc_great_turtle_furyshell();
 	new npc_ironfur_steelhorn();
 	new npc_flintlord_gairan();
+    new npc_archiereus_of_flame();
 }

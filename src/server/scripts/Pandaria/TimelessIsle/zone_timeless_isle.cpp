@@ -48,6 +48,86 @@ class player_on_enter_ti : public PlayerScript
 		}
 };
 
+class npc_eternal_kiln : public CreatureScript
+{
+public:
+    npc_eternal_kiln() : CreatureScript("npc_eternal_kiln") { }
+
+    struct npc_eternal_kilnAI : public ScriptedAI
+    {
+        npc_eternal_kilnAI(Creature* creature) : ScriptedAI(creature) { }
+
+        void JustDied(Unit* /*killer*/) OVERRIDE
+        {
+            me->DespawnOrUnsummon();
+        }
+
+        void IsSummonedBy(Unit* summoner) OVERRIDE
+        {
+            switch (summoner->GetEntry())
+            {
+                case RARE_ARCHIEREUS_OF_FLAME:
+                case RARE_ARCHIEREUS_OF_FLAME_CLOAK:
+                case RARE_FLINTLORD_GAIRAN:
+                case NPC_ETERNAL_KILNMASTER:
+                case NPC_HIGH_PRIEST_OF_ORDOS:
+                    DoCast(summoner, SPELL_KILNFIRE);
+                    me->SetReactState(REACT_PASSIVE);
+                    me->AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_eternal_kilnAI(creature);
+    }
+};
+
+class npc_flarecore_golem : public CreatureScript
+{
+public:
+    npc_flarecore_golem() : CreatureScript("npc_flarecore_golem") { }
+
+    struct npc_flarecore_golemAI : public ScriptedAI
+    {
+        npc_flarecore_golemAI(Creature* creature) : ScriptedAI(creature) { }
+
+        void JustDied(Unit* /*killer*/) OVERRIDE
+        {
+            me->DespawnOrUnsummon();
+        }
+
+        void IsSummonedBy(Unit* summoner) OVERRIDE
+        {
+            switch (summoner->GetEntry())
+            {
+                case RARE_ARCHIEREUS_OF_FLAME:
+                case RARE_ARCHIEREUS_OF_FLAME_CLOAK:
+                case RARE_URDUR_THE_CAUTERIZER:
+                case NPC_BLAZEBOUND_CHANTER:
+                case NPC_HIGH_PRIEST_OF_ORDOS:
+                    me->SetWalk(true);
+                    me->GetMotionMaster()->MoveChase(summoner->GetVictim(), 0.0f, 0.0f);
+                    me->SetInCombatWith(summoner->GetVictim());
+                    me->AddThreat(summoner->GetVictim(), 100.0f);
+                    me->SetReactState(REACT_PASSIVE);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+        return new npc_flarecore_golemAI(creature);
+    }
+};
+
 enum TimeLostShrine
 {
 	// Says
@@ -268,6 +348,8 @@ class spell_timeless_isle_crane_wings : public SpellScriptLoader
 void AddSC_zone_timeless_isle()
 {
 	new player_on_enter_ti();
+    new npc_eternal_kiln();
+    new npc_flarecore_golem();
     new go_time_lost_shrine_ti();
     new go_gleaming_crane_statue_ti();
     new spell_timeless_isle_crane_wings();

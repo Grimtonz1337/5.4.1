@@ -71,6 +71,11 @@ enum Rares
 enum Creatures
 {
 	NPC_EMPEROR_SHAOHAO_TI				= 73303,
+	NPC_ETERNAL_KILNMASTER				= 72896,
+	NPC_HIGH_PRIEST_OF_ORDOS			= 72898,
+	NPC_BLAZEBOUND_CHANTER				= 72897,
+
+	// Generic (Invisible)
 	NPC_TIME_LOST_SHRINE_TRIGGER		= 73461, // I think this is the correct ID :P
 };
 
@@ -92,6 +97,10 @@ enum SharedSpells
 	SPELL_BLAZING_BLOW					= 148003,
 	SPELL_FIERY_CHARGE					= 147704,
 	SPELL_CONJURE_ETERNAL_KILN			= 148004,
+
+	SPELL_CONJURE_FLARECORE_GOLEM		= 148001,
+	SPELL_CAUTERIZE						= 147997,
+	SPELL_FIRE_STORM					= 147998,
 };
 
 // Scripts information
@@ -171,4 +180,9 @@ enum IronFurrSteelhorn
 enum Kilnfire
 {
 	SPELL_KILNFIRE						= 148005,
+};
+
+enum ArchiereusOfFlame
+{
+	SAY_ARCHIEREUS_AGGRO				= 0, // Archiereus of Flame yells: Your challenge has been answered, outsider. Ordon, claim this area in the name of the Burning God!
 };

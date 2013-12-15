@@ -18,3 +18,9 @@ INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `text`, `type`, `language
 
 DELETE FROM `creature_text` WHERE `entry` = 73303;
 INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `text`, `type`, `language`, `probability`, `emote`, `duration`, `sound`, `comment`) VALUES (73303, 0, 0, 'You have walked the trial of hope, and learned of the path of the red crane. May it guide your footsteps through time.', 14, 0, 100, 0, 0, 0, 'Chi-Ji Defeated');
+
+DELETE FROM `creature_text` WHERE `entry` = 73666;
+INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `text`, `type`, `language`, `probability`, `emote`, `duration`, `sound`, `comment`) VALUES (73666, 0, 0, 'Your challenge has been answered, outsider. Ordon, claim this area in the name of the Burning God!', 14, 0, 100, 0, 0, 0, 'Archiereus of Flame Aggro');
+
+DELETE FROM `creature_text` WHERE `entry` = 73174;
+INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `text`, `type`, `language`, `probability`, `emote`, `duration`, `sound`, `comment`) VALUES (73174, 0, 0, 'Your challenge has been answered, outsider. Ordon, claim this area in the name of the Burning God!', 14, 0, 100, 0, 0, 0, 'Archiereus of Flame Aggro');

@@ -333,6 +333,7 @@ public:
 
         uint32 BoulderTimer;
         uint32 StompTimer;
+        uint32 StompFrenzyTimer;
         uint32 FrenzyTimer;
 
         void Reset() OVERRIDE
@@ -354,7 +355,7 @@ public:
         void SpellHit(Unit* caster, SpellInfo const* spell) OVERRIDE
         {
             if (spell->Id == SPELL_FRENZY)
-            	DoSpellAttackIfReady(SPELL_STOMP_FRENZY);
+            	StompFrenzyTimer = 500;
         }
 
         void JustRespawned() OVERRIDE
@@ -401,6 +402,20 @@ public:
 
         	else
         		StompTimer -= diff;
+
+        	if (StompFrenzyTimer <= diff)
+        	{
+        		if (me->HasAura(SPELL_FRENZY))
+        			DoCastAOE(SPELL_STOMP_FRENZY, false);
+
+        		else if (!me->HasAura(SPELL_FRENZY))
+        			return;
+
+        		StompFrenzyTimer = urand(2000, 2200);
+        	}
+
+        	else
+        		StompFrenzyTimer -= diff;
 
         	if (FrenzyTimer <= diff)
         	{
@@ -927,6 +942,27 @@ public:
 
         void Reset() OVERRIDE
         {
+        	for (uint32 i = 0; i <= EternalKilnAlive; ++i)
+            {
+                if (EternalKilnAlive == 0)
+                    return;
+
+                else
+                {
+                    if (Creature* Kilns = Unit::GetCreature(*me, EternalKilnGUID[i]))
+                    {
+                        if (Kilns->GetOwnerGUID() == me->GetGUID())
+                        {
+                        	EternalKilnGUID[i] = 0;
+                            Kilns->DespawnOrUnsummon();
+                        }
+
+                        else
+                            return;
+                    }
+                }
+            }
+
         	BlazingBlowTimer = urand(5000, 7000);
         	ConjureEternalKilnTimer = urand(10000, 12000);
         	FieryChargeTimer = 5000;
@@ -953,7 +989,10 @@ public:
                     if (Creature* Kilns = Unit::GetCreature(*me, EternalKilnGUID[i]))
                     {
                         if (Kilns->GetOwnerGUID() == me->GetGUID()) // make sure we're using the owner's guid and not some other lol xD
+                        {
+                        	EternalKilnGUID[i] = 0;
                             Kilns->DespawnOrUnsummon(); // Gets all kilns alive, and despawns them :P
+                        }
 
                         else
                             return;
@@ -1065,6 +1104,48 @@ public:
 
         void Reset() OVERRIDE
         {
+        	for (uint32 i = 0; i <= FlareCoreGolemAlive; ++i)
+            {
+                if (FlareCoreGolemAlive == 0)
+                    return;
+
+                else
+                {
+                    if (Creature* Golems = Unit::GetCreature(*me, FlareCoreGolemGUID[i]))
+                    {
+                        if (Golems->GetOwnerGUID() == me->GetGUID())
+                        {
+                        	FlareCoreGolemGUID[i] = 0;
+                            Golems->DespawnOrUnsummon();
+                        }
+
+                        else
+                            return;
+                    }
+                }
+            }
+
+            for (uint32 i = 0; i <= EternalKilnAlive; ++i)
+            {
+                if (EternalKilnAlive == 0)
+                    return;
+
+                else
+                {
+                    if (Creature* Kilns = Unit::GetCreature(*me, EternalKilnGUID[i]))
+                    {
+                        if (Kilns->GetOwnerGUID() == me->GetGUID())
+                        {
+                        	EternalKilnGUID[i] = 0;
+                            Kilns->DespawnOrUnsummon();
+                        }
+
+                        else
+                            return;
+                    }
+                }
+            }
+
             BlazingBlowTimer = urand(5000, 7500);
             CauterizeTimer = urand(15000, 30000);
             ConjureEternalKilnTimer = 20000;
@@ -1095,7 +1176,10 @@ public:
                     if (Creature* Golems = Unit::GetCreature(*me, FlareCoreGolemGUID[i]))
                     {
                         if (Golems->GetOwnerGUID() == me->GetGUID())
+                        {
+                        	FlareCoreGolemGUID[i] = 0;
                             Golems->DespawnOrUnsummon();
+                        }
 
                         else
                             return;
@@ -1113,7 +1197,10 @@ public:
                     if (Creature* Kilns = Unit::GetCreature(*me, EternalKilnGUID[i]))
                     {
                         if (Kilns->GetOwnerGUID() == me->GetGUID())
+                        {
+                        	EternalKilnGUID[i] = 0;
                             Kilns->DespawnOrUnsummon();
+                        }
 
                         else
                             return;

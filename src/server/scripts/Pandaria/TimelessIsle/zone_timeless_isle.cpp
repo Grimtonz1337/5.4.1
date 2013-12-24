@@ -44,27 +44,6 @@ enum TimeLostShrine
     SPELL_ORDOS_BURNING_SACRIFICE       = 147285,
 };
 
-class player_on_enter_ti : public PlayerScript
-{
-public:
-	player_on_enter_ti() : PlayerScript("player_on_enter_ti") {	}
-
-	void OnUpdateZone(Player* player, uint32 Zone, uint32 newArea)
-	{
-		if (Zone == 6757)
-		{
-			if (player->HasAura(145389))
-				return;
-
-			else if (!player->HasAura(145389))
-				player->CastSpell(player, 145389, true);
-		}
-
-		else
-			player->RemoveAurasDueToSpell(145389);
-	}
-};
-
 class npc_eternal_kiln : public CreatureScript
 {
 public:
@@ -400,7 +379,6 @@ public:
 
 void AddSC_zone_timeless_isle()
 {
-	new player_on_enter_ti();
     new npc_eternal_kiln();
     new npc_flarecore_golem();
     new go_time_lost_shrine_ti();

@@ -27,25 +27,42 @@
 #include "GossipDef.h"
 #include "timeless_isle.h"
 
+enum TimeLostShrine
+{
+    // Says
+    SAY_BLESSING_NIUZAO                 = 0,
+    SAY_BLESSING_YULON                  = 1,
+    SAY_BLESSING_CHI_JI                 = 2,
+    SAY_BLESSING_XUEN                   = 3,
+    SAY_CORRUPTION_ORDOS                = 4,
+
+    // Spells
+    SPELL_FORTITUDE_OF_NIUZAO           = 147281,
+    SPELL_WISDOM_OF_YULON               = 147282,
+    SPELL_CHI_JIS_HOPE                  = 147283,
+    SPELL_XUENS_STRENGTH                = 147284,
+    SPELL_ORDOS_BURNING_SACRIFICE       = 147285,
+};
+
 class player_on_enter_ti : public PlayerScript
 {
-	public:
-		player_on_enter_ti() : PlayerScript("player_on_enter_ti") {	}
+public:
+	player_on_enter_ti() : PlayerScript("player_on_enter_ti") {	}
 
-		void OnUpdateZone(Player* player, uint32 Zone, uint32 newArea)
+	void OnUpdateZone(Player* player, uint32 Zone, uint32 newArea)
+	{
+		if (Zone == 6757)
 		{
-			if (Zone == 6757)
-			{
-				if (player->HasAura(145389))
-					return;
+			if (player->HasAura(145389))
+				return;
 
-				else if (!player->HasAura(145389))
-					player->CastSpell(player, 145389, true);
-			}
-
-			else
-				player->RemoveAurasDueToSpell(145389);
+			else if (!player->HasAura(145389))
+				player->CastSpell(player, 145389, true);
 		}
+
+		else
+			player->RemoveAurasDueToSpell(145389);
+	}
 };
 
 class npc_eternal_kiln : public CreatureScript
@@ -128,273 +145,257 @@ public:
     }
 };
 
-enum TimeLostShrine
-{
-	// Says
-	SAY_BLESSING_NIUZAO					= 0,
-	SAY_BLESSING_YULON					= 1,
-	SAY_BLESSING_CHI_JI					= 2,
-	SAY_BLESSING_XUEN					= 3,
-	SAY_CORRUPTION_ORDOS				= 4,
-
-	// Spells
-	SPELL_FORTITUDE_OF_NIUZAO			= 147281,
-	SPELL_WISDOM_OF_YULON				= 147282,
-	SPELL_CHI_JIS_HOPE					= 147283,
-	SPELL_XUENS_STRENGTH				= 147284,
-	SPELL_ORDOS_BURNING_SACRIFICE		= 147285,
-};
-
 class go_time_lost_shrine_ti : public GameObjectScript
 {
-    public:
-        go_time_lost_shrine_ti() : GameObjectScript("go_time_lost_shrine_ti") { }
+public:
+    go_time_lost_shrine_ti() : GameObjectScript("go_time_lost_shrine_ti") { }
 
-        struct go_time_lost_shrine_tiAI : public GameObjectAI
+    struct go_time_lost_shrine_tiAI : public GameObjectAI
+    {
+        go_time_lost_shrine_tiAI(GameObject* go) : GameObjectAI(go) { }
+
+        bool OnGossipHello(Player* player, GameObject* go) OVERRIDE
         {
-            go_time_lost_shrine_tiAI(GameObject* go) : GameObjectAI(go) { }
+        	player->CLOSE_GOSSIP_MENU();
 
-            EventMap _events;
-
-            bool OnGossipHello(Player* player, GameObject* go) OVERRIDE
+        	if (used == false)
         	{
-            	player->CLOSE_GOSSIP_MENU();
+            	used = true;
 
-            	if (used == false)
-            	{
-            		used = true;
-
-            		Choice = urand(1, 5);
-            	}
-
-            	if (player->HasAura(SPELL_FORTITUDE_OF_NIUZAO))
-            		player->RemoveAurasDueToSpell(SPELL_FORTITUDE_OF_NIUZAO);
-
-            	if (player->HasAura(SPELL_WISDOM_OF_YULON))
-            		player->RemoveAurasDueToSpell(SPELL_WISDOM_OF_YULON);
-
-            	if (player->HasAura(SPELL_CHI_JIS_HOPE))
-            		player->RemoveAurasDueToSpell(SPELL_CHI_JIS_HOPE);
-
-            	if (player->HasAura(SPELL_XUENS_STRENGTH))
-            		player->RemoveAurasDueToSpell(SPELL_XUENS_STRENGTH);
-
-            	Creature* trigger = go->FindNearestCreature(NPC_TIME_LOST_SHRINE_TRIGGER, 5.0f); // An npc needs to be spawned in the same coordinates for the shrine
-
-            	if (Choice == 1)
-            	{
-            		go->CastSpell(player, SPELL_FORTITUDE_OF_NIUZAO);
-            		trigger->AI()->Talk(SAY_BLESSING_NIUZAO, player->GetGUID());
-            	}
-
-            	if (Choice == 2)
-            	{
-            		go->CastSpell(player, SPELL_WISDOM_OF_YULON);
-            		trigger->AI()->Talk(SAY_BLESSING_YULON, player->GetGUID());
-            	}
-
-            	if (Choice == 3)
-            	{
-            		go->CastSpell(player, SPELL_CHI_JIS_HOPE);
-            		trigger->AI()->Talk(SAY_BLESSING_CHI_JI, player->GetGUID());
-            	}
-
-            	if (Choice == 4)
-            	{
-            		go->CastSpell(player, SPELL_XUENS_STRENGTH);
-            		trigger->AI()->Talk(SAY_BLESSING_XUEN, player->GetGUID());
-            	}
-
-            	if (Choice == 5)
-            	{
-            		go->CastSpell(player, SPELL_ORDOS_BURNING_SACRIFICE);
-            		trigger->AI()->Talk(SAY_CORRUPTION_ORDOS, player->GetGUID());
-            	}
-
-            	BackToUse = 300000;
-
-            	return true;
+        		Choice = urand(1, 5);
         	}
 
-            void UpdateAI(uint32 diff) OVERRIDE
+        	if (player->HasAura(SPELL_FORTITUDE_OF_NIUZAO))
+        		player->RemoveAurasDueToSpell(SPELL_FORTITUDE_OF_NIUZAO);
+
+        	if (player->HasAura(SPELL_WISDOM_OF_YULON))
+            	player->RemoveAurasDueToSpell(SPELL_WISDOM_OF_YULON);
+
+        	if (player->HasAura(SPELL_CHI_JIS_HOPE))
+            	player->RemoveAurasDueToSpell(SPELL_CHI_JIS_HOPE);
+
+        	if (player->HasAura(SPELL_XUENS_STRENGTH))
+            	player->RemoveAurasDueToSpell(SPELL_XUENS_STRENGTH);
+
+        	Creature* trigger = go->FindNearestCreature(NPC_TIME_LOST_SHRINE_TRIGGER, 5.0f); // An npc needs to be spawned in the same coordinates for the shrine
+
+        	if (Choice == 1)
             {
-                if (used == false)
-                	return;
-
-                if (BackToUse <= diff)
-                {
-                   	go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND);
-                    used = false; // this will stop/prevent it from updating it
-                }
-
-                else
-                	BackToUse -= diff;
+            	go->CastSpell(player, SPELL_FORTITUDE_OF_NIUZAO);
+            	trigger->AI()->Talk(SAY_BLESSING_NIUZAO, player->GetGUID());
             }
 
-        private:
-        	uint32 BackToUse;
-        	uint8 Choice;
-        	bool used;
-        };
+        	if (Choice == 2)
+        	{
+            	go->CastSpell(player, SPELL_WISDOM_OF_YULON);
+            	trigger->AI()->Talk(SAY_BLESSING_YULON, player->GetGUID());
+            }
 
-        GameObjectAI* GetAI(GameObject* go) const OVERRIDE
-        {
-            return new go_time_lost_shrine_tiAI(go);
+            if (Choice == 3)
+            {
+            	go->CastSpell(player, SPELL_CHI_JIS_HOPE);
+            	trigger->AI()->Talk(SAY_BLESSING_CHI_JI, player->GetGUID());
+        	}
+
+        	if (Choice == 4)
+        	{
+        		go->CastSpell(player, SPELL_XUENS_STRENGTH);
+        		trigger->AI()->Talk(SAY_BLESSING_XUEN, player->GetGUID());
+        	}
+
+        	if (Choice == 5)
+        	{
+            	go->CastSpell(player, SPELL_ORDOS_BURNING_SACRIFICE);
+            	trigger->AI()->Talk(SAY_CORRUPTION_ORDOS, player->GetGUID());
+            }
+
+            BackToUse = 300000;
+
+            return true;
         }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+            if (used == false)
+                return;
+
+            if (BackToUse <= diff)
+            {
+               	go->RemoveFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND);
+                used = false; // this will stop/prevent it from updating it
+            }
+
+            else
+            	BackToUse -= diff;
+        }
+
+    private:
+    	uint32 BackToUse;
+
+    	uint8 Choice;
+
+    	bool used;
+    };
+
+    GameObjectAI* GetAI(GameObject* go) const OVERRIDE
+    {
+        return new go_time_lost_shrine_tiAI(go);
+    }
 };
 
 class go_gleaming_crane_statue_ti : public GameObjectScript
 {
-    public:
-        go_gleaming_crane_statue_ti() : GameObjectScript("go_gleaming_crane_statue_ti") { }
+public:
+    go_gleaming_crane_statue_ti() : GameObjectScript("go_gleaming_crane_statue_ti") { }
 
-        struct go_gleaming_crane_statue_tiAI : public GameObjectAI
+    struct go_gleaming_crane_statue_tiAI : public GameObjectAI
+    {
+        go_gleaming_crane_statue_tiAI(GameObject* go) : GameObjectAI(go) { }
+
+        uint64 playerGUID;
+        uint32 WingsTimer;
+
+        bool OnGossipHello(Player* player, GameObject* go) OVERRIDE
         {
-            go_gleaming_crane_statue_tiAI(GameObject* go) : GameObjectAI(go) { }
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Touch the statue.", GOSSIP_SENDER_MAIN, 1);
 
-            uint64 playerGUID;
-            uint32 WingsTimer;
+            player->SEND_GOSSIP_MENU(player->GetGossipTextId(go), go->GetGUID());
 
-            bool OnGossipHello(Player* player, GameObject* go) OVERRIDE
+            return true;
+        }
+
+        bool OnGossipSelect(Player* player, GameObject* go, uint32 /*sender*/, uint32 action) OVERRIDE
+        {
+        	player->PlayerTalkClass->ClearMenus();
+        	player->CLOSE_GOSSIP_MENU();
+
+        	switch (action)
         	{
-            	player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, "Touch the statue.", GOSSIP_SENDER_MAIN, 1);
-
-            	player->SEND_GOSSIP_MENU(player->GetGossipTextId(go), go->GetGUID());
-
-            	return true;
+        		case 1:
+        			player->CastSpell(player, 144387, true); // knockback in the air
+        			playerGUID = player->GetGUID();
+        			used = true;
+        			WingsTimer = 6000;
+        			break;
+        		default:
+        			break;
         	}
 
-        	bool OnGossipSelect(Player* player, GameObject* go, uint32 /*sender*/, uint32 action) OVERRIDE
-        	{
-        		player->PlayerTalkClass->ClearMenus();
-        		player->CLOSE_GOSSIP_MENU();
+        	return true;
+        }
 
-        		switch (action)
-        		{
-        			case 1:
-        				player->CastSpell(player, 144387, true); // knockback in the air
-        				playerGUID = player->GetGUID();
-        				used = true;
-        				WingsTimer = 6000;
-        				break;
-        			default:
-        				break;
-        		}
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+            if (used == false)
+            	return;
 
-        		return true;
-        	}
-
-        	void UpdateAI(uint32 diff) OVERRIDE
+            if (WingsTimer <= diff)
             {
-                if (used == false)
-                	return;
-
-                if (WingsTimer <= diff)
+                if (Player* player = ObjectAccessor::GetPlayer(*go, playerGUID))
                 {
-                	if (Player* player = ObjectAccessor::GetPlayer(*go, playerGUID))
-                	{
-                		player->CastSpell(player, 144385, true);
-                		used = false;
-                	}
+                	player->CastSpell(player, 144385, true);
+                	used = false;
                 }
-
-                else WingsTimer -= diff;
             }
 
-        private:
-        	bool used;
-       	};
-
-       	GameObjectAI* GetAI(GameObject* go) const OVERRIDE
-        {
-            return new go_gleaming_crane_statue_tiAI(go);
+            else 
+                WingsTimer -= diff;
         }
+
+    private:
+        bool used;
+    };
+
+    GameObjectAI* GetAI(GameObject* go) const OVERRIDE
+    {
+        return new go_gleaming_crane_statue_tiAI(go);
+    }
 };
 
 class spell_timeless_isle_crane_wings : public SpellScriptLoader
 {
-    public:
-        spell_timeless_isle_crane_wings() : SpellScriptLoader("spell_timeless_isle_crane_wings") { }
+public:
+    spell_timeless_isle_crane_wings() : SpellScriptLoader("spell_timeless_isle_crane_wings") { }
 
-        class spell_timeless_isle_crane_wings_AuraScript : public AuraScript
+    class spell_timeless_isle_crane_wings_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_timeless_isle_crane_wings_AuraScript);
+
+        void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
         {
-            PrepareAuraScript(spell_timeless_isle_crane_wings_AuraScript);
-
-            void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
-            {
-                 if (Unit* caster = GetCaster())
-                 	caster->CastSpell(caster, 144391, true);
-            }
-
-            void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
-            {
-                if (Unit* caster = GetCaster())
-                	caster->CastSpell(caster, 148162, true);
-            }
-
-            void Register() OVERRIDE
-            {
-            	OnEffectApply += AuraEffectApplyFn(spell_timeless_isle_crane_wings_AuraScript::OnApply, EFFECT_0, SPELL_AURA_FEATHER_FALL, AURA_EFFECT_HANDLE_REAL);
-                OnEffectRemove += AuraEffectRemoveFn(spell_timeless_isle_crane_wings_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
-            }
-        };
-
-        AuraScript* GetAuraScript() const OVERRIDE
-        {
-            return new spell_timeless_isle_crane_wings_AuraScript();
+            if (Unit* caster = GetCaster())
+             	caster->CastSpell(caster, 144391, true);
         }
+
+        void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+        {
+            if (Unit* caster = GetCaster())
+            	caster->CastSpell(caster, 148162, true);
+        }
+
+        void Register() OVERRIDE
+        {
+            OnEffectApply += AuraEffectApplyFn(spell_timeless_isle_crane_wings_AuraScript::OnApply, EFFECT_0, SPELL_AURA_FEATHER_FALL, AURA_EFFECT_HANDLE_REAL);
+            OnEffectRemove += AuraEffectRemoveFn(spell_timeless_isle_crane_wings_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_DUMMY, AURA_EFFECT_HANDLE_REAL);
+        }
+    };
+
+    AuraScript* GetAuraScript() const OVERRIDE
+    {
+        return new spell_timeless_isle_crane_wings_AuraScript();
+    }
 };
 
 class spell_timeless_isle_cauterize : public SpellScriptLoader
 {
-    public:
-        spell_timeless_isle_cauterize() : SpellScriptLoader("spell_timeless_isle_cauterize") { }
+public:
+    spell_timeless_isle_cauterize() : SpellScriptLoader("spell_timeless_isle_cauterize") { }
 
-        class spell_timeless_isle_cauterize_AuraScript : public AuraScript
+    class spell_timeless_isle_cauterize_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_timeless_isle_cauterize_AuraScript);
+
+        void OnPeriodic(AuraEffect const* /*aurEff*/)
         {
-            PrepareAuraScript(spell_timeless_isle_cauterize_AuraScript);
-
-            void OnPeriodic(AuraEffect const* /*aurEff*/)
-            {
-                GetCaster()->SetMaxHealth(GetCaster()->GetHealthPct() - 1.0f);
-            }
-
-            void Register() OVERRIDE
-            {
-                OnEffectPeriodic += AuraEffectPeriodicFn(spell_timeless_isle_cauterize_AuraScript::OnPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
-            }
-        };
-
-        AuraScript* GetAuraScript() const OVERRIDE
-        {
-            return new spell_timeless_isle_cauterize_AuraScript();
+            GetCaster()->SetMaxHealth(GetCaster()->GetHealthPct() - 1.0f);
         }
+
+        void Register() OVERRIDE
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_timeless_isle_cauterize_AuraScript::OnPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
+        }
+    };
+
+    AuraScript* GetAuraScript() const OVERRIDE
+    {
+        return new spell_timeless_isle_cauterize_AuraScript();
+    }
 };
 
 class spell_timeless_isle_burning_fury : public SpellScriptLoader
 {
-    public:
-        spell_timeless_isle_burning_fury() : SpellScriptLoader("spell_timeless_isle_burning_fury") { }
+public:
+    spell_timeless_isle_burning_fury() : SpellScriptLoader("spell_timeless_isle_burning_fury") { }
 
-        class spell_timeless_isle_burning_fury_AuraScript : public AuraScript
+    class spell_timeless_isle_burning_fury_AuraScript : public AuraScript
+    {
+        PrepareAuraScript(spell_timeless_isle_burning_fury_AuraScript);
+
+        void OnPeriodic(AuraEffect const* /*aurEff*/)
         {
-            PrepareAuraScript(spell_timeless_isle_burning_fury_AuraScript);
-
-            void OnPeriodic(AuraEffect const* /*aurEff*/)
-            {
-                GetCaster()->DealDamage(GetCaster(), 50000, NULL, SELF_DAMAGE, SPELL_SCHOOL_MASK_FIRE);
-            }
-
-            void Register() OVERRIDE
-            {
-                OnEffectPeriodic += AuraEffectPeriodicFn(spell_timeless_isle_burning_fury_AuraScript::OnPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
-            }
-        };
-
-        AuraScript* GetAuraScript() const OVERRIDE
-        {
-            return new spell_timeless_isle_burning_fury_AuraScript();
+            GetCaster()->DealDamage(GetCaster(), 50000, NULL, SELF_DAMAGE, SPELL_SCHOOL_MASK_FIRE);
         }
+
+        void Register() OVERRIDE
+        {
+            OnEffectPeriodic += AuraEffectPeriodicFn(spell_timeless_isle_burning_fury_AuraScript::OnPeriodic, EFFECT_0, SPELL_AURA_PERIODIC_DUMMY);
+        }
+    };
+
+    AuraScript* GetAuraScript() const OVERRIDE
+    {
+        return new spell_timeless_isle_burning_fury_AuraScript();
+    }
 };
 
 void AddSC_zone_timeless_isle()

@@ -63,6 +63,9 @@ public:
         	if (!UpdateVictim())
         		return;
 
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
+
         	if (!InCombat)
         		return;
 
@@ -143,6 +146,9 @@ public:
         	if (!UpdateVictim())
         		return;
 
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
+
         	if (!InCombat)
         		return;
 
@@ -216,6 +222,9 @@ public:
         	if (!UpdateVictim())
         		return;
 
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
+
         	if (!InCombat)
         		return;
 
@@ -275,6 +284,9 @@ public:
         void UpdateAI(uint32 diff) OVERRIDE
         {
         	if (!UpdateVictim())
+        		return;
+
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
         		return;
 
         	if (!InCombat)
@@ -368,6 +380,9 @@ public:
         void UpdateAI(uint32 diff) OVERRIDE
         {
         	if (!UpdateVictim())
+        		return;
+
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
         		return;
 
         	if (!InCombat)
@@ -472,6 +487,9 @@ public:
         	if (!UpdateVictim())
         		return;
 
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
+
         	if (!InCombat)
         		return;
 
@@ -557,6 +575,9 @@ public:
         void UpdateAI(uint32 diff) OVERRIDE
         {
         	if (!UpdateVictim())
+        		return;
+
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
         		return;
 
         	if (!InCombat)
@@ -651,6 +672,9 @@ public:
         	if (!UpdateVictim())
         		return;
 
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
+
         	if (!InCombat)
         		return;
 
@@ -720,6 +744,9 @@ public:
         	if (!UpdateVictim())
         		return;
 
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
+
         	if (!InCombat)
         		return;
 
@@ -777,6 +804,9 @@ public:
         void UpdateAI(uint32 diff) OVERRIDE
         {
         	if (!UpdateVictim())
+        		return;
+
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
         		return;
 
         	if (!InCombat)
@@ -866,6 +896,9 @@ public:
         void UpdateAI(uint32 diff) OVERRIDE
         {
         	if (!UpdateVictim())
+        		return;
+
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
         		return;
 
         	if (!InCombat)
@@ -1022,6 +1055,9 @@ public:
         void UpdateAI(uint32 diff) OVERRIDE
         {
         	if (!UpdateVictim())
+        		return;
+
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
         		return;
 
         	if (!InCombat)
@@ -1250,6 +1286,9 @@ public:
             if (!UpdateVictim())
                 return;
 
+            if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
+
             if (!InCombat)
                 return;
 
@@ -1360,6 +1399,9 @@ public:
             if (!UpdateVictim())
                 return;
 
+            if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
+
             if (!InCombat)
                 return;
 
@@ -1450,6 +1492,9 @@ public:
             if (!UpdateVictim())
                 return;
 
+            if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
+
             if (!InCombat)
                 return;
 
@@ -1520,6 +1565,7 @@ public:
         void Reset() OVERRIDE
         {
             DoCast(me, SPELL_STEALTH);
+            DoCast(me, SPELL_HUNGRY);
 
             BiteMorselTimer = urand(6000, 10000);
             ClawTimer = urand(7000, 11500);
@@ -1540,6 +1586,9 @@ public:
         {
             if (!UpdateVictim())
                 return;
+
+            if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
 
             if (!InCombat)
                 return;
@@ -1595,6 +1644,206 @@ public:
     }
 };
 
+class npc_jakur_of_ordon : public CreatureScript
+{
+public:
+    npc_jakur_of_ordon() : CreatureScript("npc_jakur_of_ordon") { }
+
+    struct npc_jakur_of_ordonAI : public ScriptedAI
+    {
+        npc_jakur_of_ordonAI(Creature* creature) : ScriptedAI(creature) { }
+
+        uint32 CrackingBlowTimer;
+        uint32 DefensiveShieldTimer;
+        uint32 OathofGuardianshipTimer;
+
+        void Reset() OVERRIDE
+        {
+        	CrackingBlowTimer = urand(5000, 8000);
+        	DefensiveShieldTimer = urand(12000, 15500);
+        	OathofGuardianshipTimer = 18000;
+
+        	InCombat = false;
+
+        	me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/) OVERRIDE
+        {
+        	InCombat = true;
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+        	if (!UpdateVictim())
+        		return;
+
+        	if (me->HasUnitState(UNIT_STATE_CASTING)
+        		return;
+
+        	if (!InCombat)
+        		return;
+
+        	if (me->isDead())
+        		return;
+
+        	if (CrackingBlowTimer <= diff)
+        	{
+        		DoCastAOE(SPELL_CRACKING_BLOW, false);
+
+        		CrackingBlowTimer = urand(8000, 11000);
+        	}
+
+        	else
+        		CrackingBlowTimer -= diff;
+
+        	if (DefensiveShieldTimer <= diff)
+        	{
+        		DoCast(me, SPELL_DEFENSIVE_SHIELD);
+
+        		DefensiveShieldTimer = urand(15000, 17000);
+        	}
+
+        	else
+        		DefensiveShieldTimer -= diff;
+
+        	if (OathofGuardianshipTimer <= diff)
+        	{
+        		DoCast(me, SPELL_OATH_OF_GUARDIANSHIP);
+
+        		OathofGuardianshipTimer = urand(18000, 20000);
+        	}
+
+        	else
+        		OathofGuardianshipTimer -= diff;
+
+        	DoMeleeAttackIfReady();
+        }
+
+    private:
+    	bool InCombat;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+    	return new npc_jakur_of_ordonAI(creature);
+    }
+};
+
+class npc_bufo : public CreatureScript
+{
+public:
+    npc_bufo() : CreatureScript("npc_bufo") { }
+
+    struct npc_bufoAI : public ScriptedAI
+    {
+        npc_bufoAI(Creature* creature) : ScriptedAI(creature) { }
+
+        // REALLY simple rare... barely even worth a C++ script...
+
+        uint32 GulpFrogToxinTimer;
+
+        void Reset() OVERRIDE
+        {
+        	DoCast(me, SPELL_TOXIC_SKIN);
+
+        	GulpFrogToxinTimer = 2800;
+
+        	InCombat = false;
+
+        	me->SetReactState(REACT_AGGRESSIVE);
+        }
+
+        void EnterCombat(Unit* /*target*/) OVERRIDE
+        {
+        	InCombat = true;
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+        	if (!UpdateVictim())
+        		return;
+
+        	if (me->HasUnitState(UNIT_STATE_CASTING))
+        		return;
+
+        	if (!InCombat)
+        		return;
+
+        	if (me->isDead())
+        		return;
+
+        	if (GulpFrogToxinTimer <= diff)
+        	{
+        		if (me->IsWithinMeleeRange(me->GetVictim()))
+        			DoCastVictim(SPELL_GULP_FROG_TOXIN);
+
+        		else
+        			return;
+
+        		GulpFrogToxinTimer = urand(2800, 4000);
+        	}
+
+        	else
+        		GulpFrogToxinTimer -= diff;
+        }
+
+    private:
+    	bool InCombat;
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+    	return new npc_bufoAI(creature);
+    }
+};
+
+class npc_evermaw : public CreatureScript
+{
+public:
+    npc_evermaw() : CreatureScript("npc_evermaw") { }
+
+    struct npc_evermawAI : public ScriptedAI
+    {
+        npc_evermawAI(Creature* creature) : ScriptedAI(creature) { }
+
+        uint32 DevourTimer;
+
+        void Reset() OVERRIDE
+        {
+        	DevourTimer = 500;
+
+        	me->SetReactState(REACT_PASSIVE);
+        	me->AddUnitState(UNIT_STATE_CANNOT_AUTOATTACK);
+        }
+
+        void UpdateAI(uint32 diff) OVERRIDE
+        {
+        	if (DevourTimer <= diff)
+        	{
+        		if (Unit* unit = SelectTarget(SELECT_TARGET_NEAREST, 0, 0.0f, true)) // I don't know how to define it good. :(
+        		{
+        			if (me->IsWithinMeleeRange(unit) && unit->isInFront(me)) // make sure that the player is in front of Evermaw, and not behind him...
+        				DoCast(unit, SPELL_DEVOUR);
+
+        			else
+        				return;
+        		}
+
+        		DevourTimer = 1;
+        	}
+
+        	else
+        		DevourTimer -= diff;
+        }
+    };
+
+    CreatureAI* GetAI(Creature* creature) const OVERRIDE
+    {
+    	return new npc_evermawAI(creature);
+    }
+};
+
 void AddSC_timeless_isle()
 {
 	new npc_cinderfall();
@@ -1613,4 +1862,7 @@ void AddSC_timeless_isle()
     new npc_champion_of_the_black_flame();
     new npc_chelon();
     new npc_cranegnasher();
+    new npc_jakur_of_ordon();
+    new npc_bufo();
+    new npc_evermaw();
 }

@@ -104,6 +104,8 @@ enum SharedSpells
 	SPELL_POUNCE 						= 147394,
 	SPELL_RAKE 							= 147396,
 	SPELL_STEALTH						= 128933,
+	SPELL_TOXIC_SKIN					= 147654,
+	SPELL_GULP_FROG_TOXIN				= 147655,
 };
 
 // Scripts information
@@ -188,4 +190,21 @@ enum Kilnfire
 enum ArchiereusOfFlame
 {
 	SAY_ARCHIEREUS_AGGRO				= 0, // Archiereus of Flame yells: Your challenge has been answered, outsider. Ordon, claim this area in the name of the Burning God!
+};
+
+enum Cranegnasher
+{
+	SPELL_HUNGRY						= 144747,
+};
+
+enum JakurOfOrdon
+{
+	SPELL_CRACKING_BLOW					= 147674,
+	SPELL_DEFENSIVE_SHIELD				= 147689,
+	SPELL_OATH_OF_GUARDIANSHIP			= 147682,
+};
+
+enum Evermaw
+{
+	SPELL_DEVOUR						= 147961,
 };

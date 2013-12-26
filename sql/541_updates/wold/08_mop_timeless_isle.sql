@@ -27,3 +27,12 @@ INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `text`, `type`, `language
 
 DELETE FROM `creature_text` WHERE `entry` = 73174;
 INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `text`, `type`, `language`, `probability`, `emote`, `duration`, `sound`, `comment`) VALUES (73174, 0, 0, 'Your challenge has been answered, outsider. Ordon, claim this area in the name of the Burning God!', 14, 0, 100, 0, 0, 0, 'Archiereus of Flame Aggro');
+
+DELETE FROM `spell_script_names` WHERE `spell_id` = 144385;
+INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES (144385, 'spell_timeless_isle_crane_wings');
+
+DELETE FROM `spell_script_names` WHERE `spell_id` = 147997;
+INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES (147997, 'spell_timeless_isle_crane_wings');
+
+DELETE FROM `spell_script_names` WHERE `spell_id` = 147703;
+INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES (147703, 'spell_timeless_isle_crane_wings');

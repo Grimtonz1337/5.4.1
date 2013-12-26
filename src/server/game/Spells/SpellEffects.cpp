@@ -956,6 +956,12 @@ void Spell::EffectJump(SpellEffIndex effIndex)
     float speedXY, speedZ;
     CalculateJumpSpeeds(effIndex, m_caster->GetExactDist2d(x, y), speedXY, speedZ);
     m_caster->GetMotionMaster()->MoveJump(x, y, z, speedXY, speedZ);
+
+    if (m_spellInfo->Id == 71809)
+    {
+        if (Creature* TheLichKing = m_caster->FindNearestCreature(36597, 50.0f)) // This is a script JUST for this spell. It will requiere this exact ID.
+            m_caster->GetMotionMaster()->MoveJump(TheLichKing->GetPositionX(), TheLichKing->GetPositionY(), TheLichKing->GetPositionZ(), 18.10f, 18.20f);
+    }
 }
 
 void Spell::EffectJumpDest(SpellEffIndex effIndex)

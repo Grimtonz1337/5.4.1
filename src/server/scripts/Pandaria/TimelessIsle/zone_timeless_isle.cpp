@@ -69,7 +69,6 @@ public:
                 case NPC_HIGH_PRIEST_OF_ORDOS:
                     DoCast(summoner, SPELL_KILNFIRE);
                     me->SetReactState(REACT_PASSIVE);
-                    me->AddUnitMovementFlag(MOVEMENTFLAG_ROOT);
                     break;
                 default:
                     break;
@@ -109,8 +108,7 @@ public:
                     me->SetWalk(true);
                     me->GetMotionMaster()->MoveChase(summoner->GetVictim(), 0.0f, 0.0f);
                     me->SetInCombatWith(summoner->GetVictim());
-                    me->AddThreat(summoner->GetVictim(), 100.0f);
-                    me->SetReactState(REACT_PASSIVE);
+                    me->SetReactState(REACT_AGGRESSIVE);
                     break;
                 default:
                     break;
@@ -139,6 +137,8 @@ public:
 
         	if (used == false)
         	{
+                go->SetFlag(GAMEOBJECT_FIELD_FLAGS, GO_FLAG_INTERACT_COND);
+
             	used = true;
 
         		Choice = urand(1, 5);
